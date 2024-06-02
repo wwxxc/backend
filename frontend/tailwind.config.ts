@@ -17,7 +17,7 @@ const config = {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
+        border: "#403b4a",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
@@ -35,11 +35,11 @@ const config = {
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
+          DEFAULT: "#403b4a",
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "#403b4a",
+          DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
@@ -54,7 +54,6 @@ const config = {
       backgroundImage: theme => ({
         'gradient-primary': 'linear-gradient(to right, #8a858f, #2e2e45)',
         'gradient-secondary': 'linear-gradient(to right, #d1c1d1, #2e2e45)',
-        
       }),
       // borderRadius: {
       //   lg: "var(--radius)",

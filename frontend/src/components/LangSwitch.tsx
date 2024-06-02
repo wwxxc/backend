@@ -24,7 +24,7 @@ const LangSwitch = ({lang, currentUrl}:{lang:string, currentUrl:string}) => {
     return(
         <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="inline-flex w-full items-center justify-center gap-x-2 rounded-lg border border-border/50 bg-transparent py-2 pl-4 pr-3 text-sm font-semibold uppercase text-foreground duration-300 ease-in-out hover:bg-muted/50">
+        <button className="inline-flex w-full items-center justify-center gap-x-2 rounded-lg border border-border/100 bg-transparent py-2 pl-4 pr-3 text-sm font-semibold uppercase text-foreground duration-300 ease-in-out hover:bg-muted/50">
           {/* <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" /> */}
           {lang} <ChevronDown className="h-[1.3rem] w-[1.3rem] " />

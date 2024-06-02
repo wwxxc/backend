@@ -41,7 +41,7 @@ const SearchToggle = () => {
 
     return (
       <>
-        <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/50 bg-transparent px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-muted/50 sm:pl-3 sm:pr-4" onClick={() => setOpen(true)}>
+        <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-transparent px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-muted/50 sm:pl-3 sm:pr-4" onClick={() => setOpen(true)}>
             <Search width={20} height={20}  />
             <span className="hidden lg:block">
                 Search

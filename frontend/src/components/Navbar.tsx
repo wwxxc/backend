@@ -58,7 +58,7 @@ const Navbar = () => {
                 <SearchToggle />
               </div>
               <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-2">
-                <Link href={"/login"} className="inline-flex items-center justify-center rounded-lg border border-border/50 px-4 py-2 text-sm font-medium text-foreground duration-300 ease-in-out hover:bg-muted/75">
+                <Link href={"/login"} className="inline-flex items-center justify-center rounded-lg border border-border/100 px-4 py-2 text-sm font-medium text-foreground duration-300 ease-in-out hover:bg-muted/75">
                     Masuk
                 </Link>
                 <Link href={"/register"} className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground duration-300 hover:bg-primary/75"> 
