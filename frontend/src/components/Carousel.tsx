@@ -5,7 +5,7 @@ interface InfinitySliderProps {
   images: string[];
 }
 
-const InfinitySlider: React.FC<InfinitySliderProps> = ({ images }) => {
+const Carousel: React.FC<InfinitySliderProps> = ({ images }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [autoSlide, setAutoSlide] = useState(true);
@@ -27,7 +27,7 @@ const InfinitySlider: React.FC<InfinitySliderProps> = ({ images }) => {
       slideInterval.current = setInterval(() => {
         setIsTransitioning(true);
         setCurrentIndex((prevIndex) => (prevIndex + 1));
-      }, 3000);
+      }, 8000);
     };
   
     const stopSlide = () => {
@@ -116,4 +116,4 @@ const InfinitySlider: React.FC<InfinitySliderProps> = ({ images }) => {
     );
   };
   
-  export default InfinitySlider;
+  export default Carousel;
