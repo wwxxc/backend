@@ -31,7 +31,7 @@ const LangSwitch = ({lang, currentUrl}:{lang:string, currentUrl:string}) => {
           <span className="sr-only">Toggle SwitchLang</span>
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-black" align="end">
+      <DropdownMenuContent className="bg-muted" align="end">
         <DropdownMenuItem>
           <span>
           <a href={"/id/" + fixCurrentUrl} className="inline-flex px-2 text-sm">

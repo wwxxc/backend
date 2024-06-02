@@ -40,7 +40,7 @@ const Navbar = () => {
                 </Link>
                 <Link className="relative z-10 -mb-px flex items-center space-x-2 border-b-2 pt-px text-sm font-medium text-foreground transition-colors duration-200 ease-out text-white hover:text-primary-300 border-transparent hover:border-primary" href={"/invoice"}>
                   <Search width={20} widths={20} />
-                  <span>Cek transaksi</span>
+                  <span>Cek Transaksi</span>
                 </Link>
                 <Link className="relative z-10 -mb-px flex items-center space-x-2 border-b-2 pt-px text-sm font-medium text-foreground transition-colors duration-200 ease-out hover:text-primary-300 border-transparent hover:border-primary" href={"/invoice"}>
                   <Calculator width={20} height={20} />
