@@ -1,8 +1,9 @@
 import InfinitySlider from "@/components/InfinitySlider";
 import Image from "next/image";
+import { HomeIcon, Search, Calculator } from 'lucide-react'
 import Link from "next/link";
 
-export default function Home() {
+export default function HomePage() {
   const images = [
     'https://via.placeholder.com/800x400?text=Slide+1',
     'https://via.placeholder.com/800x400?text=Slide+2',
@@ -17,20 +18,20 @@ export default function Home() {
 
             </button>
             <div className="ml-3 mr-2 flex lg:ml-0">
-              <img src="/logo.png" alt="logo" />
+              <img src="/assets/img/logo.png" alt="logo" width={90} />
             </div>
-            <div className="hidden lg:ml-10 lg:block lg:self-stretch">
+            <div className="hidden lg:ml-[250px] lg:block lg:self-stretch">
               <div className="flex h-full space-x-6">
                 <Link className="relative z-10 -mb-px flex items-center space-x-2 border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out border-primary text-primary" href={"/"}>
-                  {/* svgicon */}
-                  <span>Home</span>
+                  <HomeIcon width={20} height={20} />
+                  <span>Beranda</span>
                 </Link>
-                <Link className="relative z-10 -mb-px flex items-center space-x-2 border-b-2 pt-px text-sm font-medium text-foreground transition-colors duration-200 ease-out hover:text-primary-300 border-transparent hover:border-primary" href={"/invoice"}>
-                  {/* svgicon */}
+                <Link className="relative z-10 -mb-px flex items-center space-x-2 border-b-2 pt-px text-sm font-medium text-foreground transition-colors duration-200 ease-out text-white hover:text-primary-300 border-transparent hover:border-primary" href={"/invoice"}>
+                  <Search width={20} widths={20} />
                   <span>Cek transaksi</span>
                 </Link>
                 <Link className="relative z-10 -mb-px flex items-center space-x-2 border-b-2 pt-px text-sm font-medium text-foreground transition-colors duration-200 ease-out hover:text-primary-300 border-transparent hover:border-primary" href={"/invoice"}>
-                  {/* svgicon */}
+                  <Calculator width={20} height={20} />
                   <span>Kalkulator</span>
                 </Link>
               </div>
@@ -45,7 +46,8 @@ export default function Home() {
                   </div>
                 </div>
                 <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/50 bg-transparent px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-muted/50 sm:pl-3 sm:pr-4">
-                  search
+                  <Search width={20} widths={20} /> 
+                  <span>Search</span>
                 </button>
               </div>
               <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-2">
@@ -60,8 +62,8 @@ export default function Home() {
           </div>
         </div>
       </nav>
-      <main className="relative bg-black">
-        <section className="relative flex items-center overflow-hidden bg-/50 px-4 py-4 lg:min-h-[521.96px]">
+      <main className="relative">
+        <section className="relative flex items-center overflow-hidden px-4 py-4 lg:min-h-[521.96px]">
           <div className="swiper swiper-initialized swiper-horizontal container swiper-backface-hidden">
           <InfinitySlider images={images}/>
           </div>

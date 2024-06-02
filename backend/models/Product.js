@@ -9,7 +9,6 @@ const Product = sequelize.define('product', {
   product_slug: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
   product_img: {
     type: DataTypes.STRING,
@@ -22,7 +21,6 @@ const Product = sequelize.define('product', {
   product_code: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
   product_type: {
     type: DataTypes.STRING,
@@ -31,6 +29,11 @@ const Product = sequelize.define('product', {
   product_price: {
     type: DataTypes.FLOAT,
     allowNull: false,
+  },
+  isPopular: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
   },
 });
 
