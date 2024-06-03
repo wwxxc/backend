@@ -30,6 +30,9 @@ const Product = sequelize.define('product', {
     type: DataTypes.FLOAT,
     allowNull: false,
   },
+  product_provider: {
+    type: DataTypes.STRING,
+  },
   isPopular: {
     type: DataTypes.BOOLEAN,
     allowNull: false,

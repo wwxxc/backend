@@ -50,8 +50,8 @@ const SearchToggle = () => {
         <CommandDialog open={open} onOpenChange={setOpen}>
           <CommandInput placeholder="Search..." />
           <CommandList>
-            <CommandEmpty>Surah tidak ditemukan.</CommandEmpty>
-            <CommandGroup heading="Quran surah">
+            <CommandEmpty>Produk tidak ditemukan.</CommandEmpty>
+            <CommandGroup>
               {/* {surah.map((item, index) => (
                 <Link onClick={() => setOpen(false)} key={index} href={`/${CurrentLang}/${item.name.transliteration[CurrentLang].toLocaleLowerCase().replace(/\s+/g, '-')}/${item.number}`}>
                 <CommandItem >

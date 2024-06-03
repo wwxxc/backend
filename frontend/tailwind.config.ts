@@ -52,7 +52,7 @@ const config = {
         },
       },
       backgroundImage: theme => ({
-        'gradient-primary': 'linear-gradient(to right, #8a858f, #2e2e45)',
+        'gradient-primary': 'linear-gradient(to right, #8a858f, #1b1b26)',
         'gradient-secondary': 'linear-gradient(to right, #d1c1d1, #2e2e45)',
       }),
       // borderRadius: {
