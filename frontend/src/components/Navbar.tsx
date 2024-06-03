@@ -2,7 +2,9 @@
 import { HomeIcon, Search, Calculator, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import SearchToggle from "./Search";
+import Image from "next/image";
 import LangSwitch from "./LangSwitch";
+import Logo from "../../public/assets/img/logo-1.png"
 
 const Navbar = () => {
     return(
@@ -29,7 +31,7 @@ const Navbar = () => {
             </button>
             <div className="ml-3 mr-2 flex lg:ml-0">
               <Link href={"/"}>
-                <img src="/assets/img/logo-1.png" alt="logo" width={90} />
+                <Image src={Logo.src} alt="Logo" width={90} height={90} />
               </Link>
             </div>
             <div className="hidden lg:ml-[250px] lg:block lg:self-stretch">

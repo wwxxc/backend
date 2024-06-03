@@ -1,16 +1,17 @@
 import Link from "next/link"
-
+import Image from "next/image"
+import Logo from "../../public/assets/img/logo-1.png"
 const Footer = () => {
     return(
 <footer className="bg-black">
     <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div className="md:flex mt-6 md:justify-between">
-          <div className="mb-6 md:mb-0">
+          <div className="mb-6 md:mb-0 lg:w-[55%]">
               <Link href="/" className="flex items-center mb-3">
-                  <img src="/assets/img/logo-1.png" className="h-8 me-3" alt="FlowBite Logo" />
+                <Image src={Logo.src} alt="Logo" width={100} height={100} />
                   {/* <span className="self-center text-2xl font-semibold whitespace-nowrap">Yustore</span> */}
               </Link>
-              <span>Platform Topup games</span>
+              <span className="text-gray-500">Platform online terpercaya yang menyediakan layanan top-up untuk berbagai kebutuhan digital Anda. Kami menawarkan kemudahan dan kenyamanan dalam melakukan top-up game, pembelian voucher, isi ulang e-wallet, serta pembelian pulsa dan paket data.</span>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
               <div>
@@ -56,7 +57,7 @@ const Footer = () => {
       </div>
       <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
       <div className="sm:flex sm:items-center sm:justify-between">
-          <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <Link href="https://flowbite.com/" className="hover:underline">Yustore</Link>. All Rights Reserved.
+          <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <Link href="/" className="hover:underline">Yustore</Link>. All Rights Reserved.
           </span>
           <div className="flex mt-4 sm:justify-center sm:mt-0">
               <Link href="#" className="text-gray-500 hover:text-gray-900 dark:hover:text-white">
