@@ -54,6 +54,7 @@ const config = {
       backgroundImage: theme => ({
         'gradient-primary': 'linear-gradient(to right, #8a858f, #1b1b26)',
         'gradient-secondary': 'linear-gradient(to right, #d1c1d1, #2e2e45)',
+        'gradient-to-top': 'linear-gradient(to top, rgba(45, 43, 44, 1), rgba(46, 46, 69, 0.1))',
       }),
       // borderRadius: {
       //   lg: "var(--radius)",

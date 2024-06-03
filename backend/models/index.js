@@ -3,6 +3,7 @@ const User = require('./User');
 const Transaction = require('./Transaction');
 const Product = require('./Product');
 const Slider = require('./Slider');
+const Category = require('./Category');
 sequelize.sync({ force: false }).then(() => {
   console.log('Database & tables created!');
 });
@@ -12,4 +13,5 @@ module.exports = {
   Transaction,
   Product,
   Slider,
+  Category,
 };

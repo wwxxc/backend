@@ -1,5 +1,6 @@
 'use client'
 import React from "react";
+import CardProduct from "./Card";
 
 const Tabs = () => {
   const [openTab, setOpenTab] = React.useState(1);
@@ -91,18 +92,11 @@ const Tabs = () => {
               </li>
             </ul>
           </div>
-          <div className="relative flex flex-col min-w-0 break-words bg-black w-full mb-6 shadow-lg rounded">
-            <div className="px-4 py-5 flex-auto">
-              <div className="tab-content tab-space">
+          <div className="relative ">
+            <div>
+              <div className="mt-5">
                 <div className={openTab === 1 ? "block" : "hidden"} id="link1">
-                  <p>
-                    Collaboratively administrate empowered markets via
-                    plug-and-play networks. Dynamically procrastinate B2C users
-                    after installed base benefits.
-                    <br />
-                    <br /> Dramatically visualize customer directed convergence
-                    without revolutionary ROI.
-                  </p>
+                  <CardProduct />
                 </div>
                 <div className={openTab === 2 ? "block" : "hidden"} id="link2">
                   <p>
