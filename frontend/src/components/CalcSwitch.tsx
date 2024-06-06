@@ -2,6 +2,7 @@ import { Calculator } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { useParams, usePathname } from "next/navigation";
 import { useState } from "react";
+import Link from "next/link";
 
 
 const CalcSwitch = () => {
@@ -35,31 +36,35 @@ const CalcSwitch = () => {
                 </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-black" align="end">
-                <DropdownMenuItem className="hover:bg-gray-200">
-                    <span>
-                        <a href={"/id/"} className="inline-flex px-2 text-sm">
-                            {/* <IndonesiaFlag width={20} height={20}/> */}
-                            {/* <Image src={IndonesiaFlag.src} width={20} height={20} alt="Indonesia Flag"/> */}
-                        </a>
-                    </span>
-                    <span className="ml-1">
-                        <a href={"/id/"}>
-                            Indonesia
-                        </a>
-                    </span>
+                <DropdownMenuItem className="">
+                    <Link href={"/id/"} className="w-full p-2 rounded-md inline-flex px-2 text-sm hover:bg-muted">
+                        <Calculator width={20} height={20} />
+                        <span className="ml-3">
+                            <h1 className="text-md ">
+                                Win Rate
+                            </h1>
+                        </span>
+                    </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="hover:bg-gray-200">
-                    <span>
-                        <a href={"/en/"} className="inline-flex px-2 py-1 text-sm">
-                            {/* <EnglishFlag width={20} height={20}/> */}
-                            {/* <Image src={EnglishFlag.src} width={20} height={20} alt="English Flag"/> */}
-                        </a>
-                    </span>
-                    <span className="ml-1">
-                        <a href={"/en/"}>
-                            English
-                        </a>
-                    </span>
+                <DropdownMenuItem className="">
+                    <Link href={"/id/"} className="w-full p-2 rounded-md inline-flex px-2 text-sm hover:bg-muted">
+                        <Calculator width={20} height={20} />
+                        <span className="ml-3">
+                            <h1 className="text-md ">
+                                Magic Wheel
+                            </h1>
+                        </span>
+                    </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="">
+                    <Link href={"/id/"} className="w-full p-2 rounded-md inline-flex px-2 text-sm hover:bg-muted">
+                        <Calculator width={20} height={20} />
+                        <span className="ml-3">
+                            <h1 className="text-md ">
+                                Zodiac
+                            </h1>
+                        </span>
+                    </Link>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
