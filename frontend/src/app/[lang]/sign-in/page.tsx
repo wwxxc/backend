@@ -1,6 +1,5 @@
 import { X } from "lucide-react"
 import Link from "next/link"
-import { Lock } from "lucide-react"
 
 const SignIn = () => {
     return(
