@@ -10,7 +10,7 @@ const DetailProduct = async ({ params }: { params: { lang: string, slug: string}
     return(
         <main className="relative bg-gradient-secondary">
             <div className="relative h-56 w-full bg-muted lg:h-[340px]">
-                <img src="https://via.placeholder.com/800x400" alt="" />
+                {/* <img src="https://via.placeholder.com/800x400" alt="" /> */}
             </div>
             <div className="bg-title-product flex min-h-32 w-full items-center border-y bg-muted lg:min-h-[160px] bg-order-header-image bg-cover bg-center">
                 <div className="container flex items-center gap-2">
