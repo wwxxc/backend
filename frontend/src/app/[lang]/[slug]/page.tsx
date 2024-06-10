@@ -93,7 +93,49 @@ const DetailProduct = async ({ params }: { params: { lang: string, slug: string}
                                 <section></section>
                                 <section>
                                     <h3 className="pb-4 text-sm/6 font-semibold text-card-foreground">Diamonds</h3>
+                                    <div>
+                                        <label className="sr-only">Select a variant list</label>
+                                        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
+                                            <div className="relative flex cursor-pointer rounded-xl border border-transparent bg-muted/75 p-2.5 text-background shadow-sm outline-none md:p-4 bg-order-variant-background text-order-variant-foreground">
+                                                <span className="flex flex-1">
+                                                    <span className="flex flex-col justify-between">
+                                                        <span className="block text-xs font-semibold ">DM</span>
+                                                        <div>
+                                                            <span className="mt-1 flex items-center text-xs font-semibold">
+                                                                harga
+                                                            </span>
+                                                        </div>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                            <div className="relative flex cursor-pointer rounded-xl border border-transparent bg-muted/75 p-2.5 text-background shadow-sm outline-none md:p-4 bg-order-variant-background text-order-variant-foreground">
+                                                <span className="flex flex-1">
+                                                    <span className="flex flex-col justify-between">
+                                                        <span className="block text-xs font-semibold ">DM</span>
+                                                        <div>
+                                                            <span className="mt-1 flex items-center text-xs font-semibold">
+                                                                harga
+                                                            </span>
+                                                        </div>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </section>
+                            </div>
+                        </div>
+                    </section>
+                    <section className="relative rounded-xl bg-card/50 shadow-2xl">
+                        <div className="flex items-center overflow-hidden rounded-t-xl bg-card">
+                            <div className="flex h-10 w-10 items-center justify-center bg-primary font-semibold text-primary-foreground">3</div>
+                            <h2 className="px-4 py-2 text-sm/6 font-semibold text-card-foreground">Pilih Pembayaran</h2>
+                        </div>
+                        <div className="p-4">
+                            <div className="flex w-full flex-col space-y-4">
+                                <div>
+                                    
+                                </div>
                             </div>
                         </div>
                     </section>
