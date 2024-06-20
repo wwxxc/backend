@@ -54,7 +54,7 @@ const DetailProduct = async ({ params }: { params: { lang: string, slug: string}
                         </div>
                     </div>
                 </div>
-                <form action="#" className="col-span-3 col-start-1 flex flex-col gap-4 lg:col-span-2 lg:gap-8">
+                <form action="#" className="col-span-3 col-start-1 flex flex-col gap-4 mb-10 lg:col-span-2 lg:gap-8">
                     <section className="relative rounded-xl bg-card/50 shadow-2xl">
                         <div className="flex items-center overflow-hidden rounded-t-xl bg-muted/60">
                             <div className="flex h-10 w-10 items-center justify-center bg-primary font-semibold text-primary-foreground">
@@ -134,7 +134,24 @@ const DetailProduct = async ({ params }: { params: { lang: string, slug: string}
                         <div className="p-4">
                             <div className="flex w-full flex-col space-y-4">
                                 <div>
-                                    
+                                    <div id="radio-group" role="radio-group">
+                                        <label className="sr-only" htmlFor="radio-1">Select an option</label>
+                                        <div className="flex flex-col gap-4">
+                                            <div className="relative flex cursor-pointer rounded-lg border border-transparent bg-foreground/75 p-2.5 text-background shadow-sm outline-none md:px-5 md:py-3">
+                                                <div className="flex w-full flex-col items-start justify-between py-1 md:flex-row md:items-center">
+                                                    <div>
+                                                        <span className="block pb-2.5 text-xs font-semibold sm:text-sm">QRIS (All Payment)</span>
+                                                        <img src="https://cdn.takapedia.com/common/d075c7ba-1b81-4d15-82be-61fd50a3b2f9.png" alt="" className="max-h-6" />
+                                                    </div>
+                                                    <div className="mt-3 w-full md:mt-0">
+                                                        <div className="relative mr-8 text-sm font-semibold sm:text-base w-full rounded-md border border-dashed py-1 text-center md:w-auto md:border-none md:text-right">
+                                                        Rp  606.000
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
