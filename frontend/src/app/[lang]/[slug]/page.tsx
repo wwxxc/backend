@@ -137,23 +137,61 @@ const DetailProduct = async ({ params }: { params: { lang: string, slug: string}
                                     <div id="radio-group" role="radio-group">
                                         <label className="sr-only" htmlFor="radio-1">Select an option</label>
                                         <div className="flex flex-col gap-4">
-                                            <div className="relative flex cursor-pointer rounded-lg border border-transparent bg-foreground/75 p-2.5 text-background shadow-sm outline-none md:px-5 md:py-3">
+                                            <div className="relative flex cursor-pointer rounded-lg border border-transparent bg-muted/75 p-2.5 text-background shadow-sm outline-none md:px-5 md:py-3">
                                                 <div className="flex w-full flex-col items-start justify-between py-1 md:flex-row md:items-center">
                                                     <div>
                                                         <span className="block pb-2.5 text-xs font-semibold sm:text-sm">QRIS (All Payment)</span>
                                                         <img src="https://cdn.takapedia.com/common/d075c7ba-1b81-4d15-82be-61fd50a3b2f9.png" alt="" className="max-h-6" />
-                                                    </div>
                                                     <div className="mt-3 w-full md:mt-0">
                                                         <div className="relative mr-8 text-sm font-semibold sm:text-base w-full rounded-md border border-dashed py-1 text-center md:w-auto md:border-none md:text-right">
-                                                        Rp  606.000
+                                                        {/* Rp  10.000 */}
                                                         </div>
                                                     </div>
+                                                    </div>
+                                                    
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex w-full transform flex-col justify-between rounded-xl bg-muted text-left text-sm font-medium duration-300 focus:outline-none">
+                                    <button className="w-full rounded-t-xl bg-card text-card-foreground disabled:opacity-75">
+                                        <div className="flex w-full items-center justify-between px-4 py-2">
+                                            <span className="transform text-sm/6 font-medium leading-7 duration-300">
+                                                E-Wallet
+                                            </span>
+                                            <span className="ml-6 flex h-7 items-center">
+                                                arrowbove
+                                            </span>
+                                        </div>
+                                    </button>
+                                    <div className="overflow-hidden transform max-h-screen">
+                                        <div className="w-full rounded-b-xl bg-white/50 px-4 py-3">
+                                            <div className="flex justify-end gap-x-2">
+                                                <div className="relative aspect-[6/2] w-10">
+                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Logo_dana_blue.svg/1280px-Logo_dana_blue.svg.png" alt="Dana Logo" />
+                                                </div>
+                                                <div className="relative aspect-[6/2] w-10">
+                                                    <img src="https://antinomi.org/wp-content/uploads/2022/03/logo-gopay-vector.png" alt="Gopay Logo" />
+                                                </div>
+                                                <div className="relative aspect-[6/2] w-10">
+                                                    <img src="https://i.postimg.cc/VkWfmD46/shopepay.png" alt="ShopeePay Logo" />
+                                                </div>
+                                                <div className="relative aspect-[6/2] w-10">
+                                                    <img src="https://i.pinimg.com/originals/28/fd/ed/28fdedc2022b5de9ae5a7f2507eb5f2d.png" alt="Ovo Logo" />
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </section>
+                    <section className="relative scroll-mt-20 rounded-xl bg-card/50 shadow-2xl md:scroll-mt-[5.75rem]">
+                        <div className="flex items-center overflow-hidden rounded-t-xl bg-card">
+                            <div className="flex h-10 w-10 items-center justify-center bg-primary font-semibold text-primary-foreground">4</div>
+                            <h2 className="px-4 py-2 text-sm/6 font-semibold text-card-foreground">Detail Kontak</h2>
                         </div>
                     </section>
                 </form>
