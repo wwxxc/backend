@@ -3,7 +3,7 @@ import Image from "next/image"
 import Logo from "../../public/assets/img/logo-1.png"
 const Footer = () => {
     return(
-<footer className="bg-black bottom-0">
+<footer className="bg-background-foreground/80 bottom-0">
         <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
             <div className="md:flex mt-6 md:justify-between">
                 <div className="mb-6 md:mb-0 lg:w-[55%]">

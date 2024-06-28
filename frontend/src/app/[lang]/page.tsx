@@ -12,14 +12,14 @@ export default function HomePage() {
   ];
   return (
     <div>
-      <main className="relative bg-gradient-primary">
+      <main className="relative bg-background-foreground">
         <section className="relative flex items-center overflow-hidden px-4 py-4 lg:min-h-[521.96px]">
           <div className="container">
           <Carousel images={images}/>
           </div>
         </section>
       </main>
-      <main className="h-screen w-full bg-gradient-secondary">
+      <main className="h-screen w-full bg-background">
         <div className="flex flex-col gap-y-8 pt-8">
           <div className="container">
             <PopularPage />

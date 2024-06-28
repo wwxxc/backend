@@ -15,7 +15,7 @@ const Navbar = () => {
     const currentPage = asPath ? asPath.split('/')[2] : null;
     return(
         <>
-        <nav className="sticky top-0 z-40 w-full flex-none border-b border-[#000000]/50 bg-black/80 backdrop-blur print:hidden">
+        <nav className="sticky top-0 z-40 w-full flex-none border-b border-[#000000]/50 bg-background-foreground/80 backdrop-blur print:hidden">
         <div className="container">
           <div className="flex h-[60px] items-center">
             <button className="rounded-md bg-secondary p-2 text-foreground lg:hidden">
