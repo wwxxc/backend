@@ -37,7 +37,7 @@ const CalcSwitch = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-black" align="end">
                 <DropdownMenuItem className="">
-                    <Link href={"/id/"} className="w-full p-2 rounded-md inline-flex px-2 text-sm hover:bg-muted">
+                    <Link href={"/id/"} className="w-full p-2 rounded-md inline-flex px-2 text-sm">
                         <Calculator width={20} height={20} />
                         <span className="ml-3">
                             <h1 className="text-md ">
@@ -47,7 +47,7 @@ const CalcSwitch = () => {
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="">
-                    <Link href={"/id/"} className="w-full p-2 rounded-md inline-flex px-2 text-sm hover:bg-muted">
+                    <Link href={"/id/"} className="w-full p-2 rounded-md inline-flex px-2 text-sm">
                         <Calculator width={20} height={20} />
                         <span className="ml-3">
                             <h1 className="text-md ">
@@ -57,7 +57,7 @@ const CalcSwitch = () => {
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="">
-                    <Link href={"/id/"} className="w-full p-2 rounded-md inline-flex px-2 text-sm hover:bg-muted">
+                    <Link href={"/id/"} className="w-full p-2 rounded-md inline-flex px-2 text-sm">
                         <Calculator width={20} height={20} />
                         <span className="ml-3">
                             <h1 className="text-md ">
