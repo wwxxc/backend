@@ -10,6 +10,7 @@ import Api from '@/utils/service';
 import { useEffect, useState } from "react";
 
 export default function HomePage() {
+ 
   const [sliders, setSliders] = useState<Slider[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -17,6 +18,7 @@ export default function HomePage() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
+    
     const fetchImg = async () => {
       try {
         const response = await axios.get(API_URL + '/slider');

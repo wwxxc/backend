@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import Logo from "../../public/assets/img/logo-1.png"
-const Footer = () => {
+const Footer = (home: Home) => {
     return(
 <footer className="bg-background-foreground/80 bottom-0">
         <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
@@ -11,7 +11,7 @@ const Footer = () => {
                         <Image src={Logo.src} alt="Logo" width={100} height={100} />
                         {/* <span className="self-center text-2xl font-semibold whitespace-nowrap">Yustore</span> */}
                     </Link>
-                    <span className="text-gray-500">Platform online terpercaya yang menyediakan layanan top-up untuk berbagai kebutuhan digital Anda. Kami menawarkan kemudahan dan kenyamanan dalam melakukan top-up game, pembelian voucher, isi ulang e-wallet, serta pembelian pulsa dan paket data.</span>
+                    <span className="text-gray-500">{home.description}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
                     <div>
@@ -57,7 +57,7 @@ const Footer = () => {
             </div>
             <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
             <div className="sm:flex sm:items-center sm:justify-between">
-                <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <Link href="/" className="hover:underline">Yustore</Link>. All Rights Reserved.
+                <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <Link href="/" className="hover:underline">{home.title}</Link>. All Rights Reserved.
                 </span>
                 <div className="flex mt-4 sm:justify-center sm:mt-0">
                     <Link href="#" className="text-gray-500 hover:text-gray-900 dark:hover:text-white">
