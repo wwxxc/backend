@@ -5,7 +5,7 @@ interface InfinitySliderProps {
   images: string[];
 }
 
-const Carousel: React.FC<InfinitySliderProps> = ({ images }) => {
+const Carousel = ({ images }: { images: Slider[] }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [autoSlide, setAutoSlide] = useState(true);
@@ -94,20 +94,20 @@ const Carousel: React.FC<InfinitySliderProps> = ({ images }) => {
         >
           {images.concat(images[0]).map((image, index) => (
             <div key={index} className="min-w-full">
-              <img src={image} alt={`Slide ${index}`} className="relative w-full h-full lg:h-[500px] rounded-lg object-cover" />
+              <img src={image.slider_img} alt={`Slide ${index}`} className="relative w-full h-full lg:h-[500px] rounded-lg object-cover" />
             </div>
           ))}
         </div>
         <button
           onClick={prevSlide}
-          className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full"
+          className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-700 opacity-50 text-white p-2 rounded-full"
           disabled={!buttonEnabled}
         >
           &lt;
         </button>
         <button
           onClick={nextSlide}
-          className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full"
+          className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-700 opacity-50 text-white p-2 rounded-full"
           disabled={!buttonEnabled}
         >
           &gt;

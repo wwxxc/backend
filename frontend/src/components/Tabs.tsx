@@ -2,7 +2,7 @@
 import React from "react";
 import CardProduct from "./Card";
 
-const Tabs = () => {
+const Tabs = ({ProductData}: {ProductData: Product[]}) => {
   const [openTab, setOpenTab] = React.useState(1);
   return (
     <>
@@ -96,7 +96,7 @@ const Tabs = () => {
             <div>
               <div className="mt-5">
                 <div className={openTab === 1 ? "block" : "hidden"} id="link1">
-                  <CardProduct />
+                  <CardProduct ProductData={ProductData} />
                 </div>
                 <div className={openTab === 2 ? "block" : "hidden"} id="link2">
                   <p>
