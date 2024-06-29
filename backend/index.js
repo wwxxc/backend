@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const sequelize = require('./config/database');
 
 const authRouter = require('./routes/auth');
+const sliderRouter = require('./routes/slider');
 const transactionRouter = require('./routes/transactions');
 const dashboardRouter = require('./routes/dashboard');
 
@@ -11,8 +12,9 @@ const port = 4000;
 
 app.use(bodyParser.json());
 app.use('/auth', authRouter);
-app.use('/transactions', transactionRouter);
-app.use('/dashboard', dashboardRouter);
+app.use('/slider', sliderRouter);
+// app.use('/transactions', transactionRouter);
+// app.use('/dashboard', dashboardRouter);
 
 sequelize.authenticate().then(() => {
   console.log('Database connected...');
