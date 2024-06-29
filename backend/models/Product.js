@@ -20,14 +20,9 @@ const Product = sequelize.define('product', {
   },
   product_code: {
     type: DataTypes.STRING,
-    allowNull: false,
   },
   product_type: {
     type: DataTypes.STRING,
-    allowNull: false,
-  },
-  product_price: {
-    type: DataTypes.FLOAT,
     allowNull: false,
   },
   product_provider: {
