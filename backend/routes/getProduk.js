@@ -36,14 +36,44 @@ router.post('/games', async (req, res) => {
 
     axios(config)
         .then(function (response) {
-            
+            const filteredData = response.data.data.filter(item => item.price.basic <= 20000 && item.price.basic > 1000);
+            const formattedData = filteredData.map(item => ({
+                ...item,
+                normal_price: {
+                    ...item.price,
+                    basic: item.price.basic,
+                    premium: item.price.premium,
+                    special: item.price.special
+                },
+                price: {
+                    ...item.price,
+                    basic: item.price.basic.toLocaleString('id-ID', {
+                        style: 'currency',
+                        currency: 'IDR',
+                        maximumFractionDigits: 0
+                    }),
+                    premium: item.price.premium.toLocaleString('id-ID', {
+                        style: 'currency',
+                        currency: 'IDR',
+                        maximumFractionDigits: 0
+                    }),
+                    special: item.price.special.toLocaleString('id-ID', {
+                        style: 'currency',
+                        currency: 'IDR',
+                        maximumFractionDigits: 0
+                    })
+                }
+            }));
             res.json({
                 status: true,
-                data: response.data
+                data: formattedData
             })
         })
         .catch(function (error) {
-            console.log(error);
+            res.json({
+                status: false,
+                data: error
+            })
         });
 });
 
@@ -90,5 +120,7 @@ router.post('/prepaid', async (req, res) => {
             console.log(error);
         });
 });
+
+
 
 module.exports = router;
