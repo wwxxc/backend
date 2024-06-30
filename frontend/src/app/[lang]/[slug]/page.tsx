@@ -7,6 +7,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     const API_URL = process.env.NEXT_PUBLIC_API_URL
     const [product, setProduct] = useState<Product>();
     const [listProduct, setListProduct] = useState<ListProduk[]>([]);
+    const [listPayment, setListPayment] = useState<ListPayment[]>([]);
     
     useEffect(() => {
         axios.post(`${API_URL}/products/${slug}`)
@@ -36,6 +37,16 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
         }
     
     }, [product]);
+
+    useEffect(() => {
+        axios.post(`${API_URL}/payment/list`)
+            .then(response => {
+                setListPayment(response.data);
+            })
+            .catch(error => {
+                console.error("Error fetching payment:", error);
+            });
+    }, []);
     
     
     return(
@@ -128,7 +139,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                         <label className="sr-only">Select a variant list</label>
                                         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
                                             {listProduct.map((data) => (
-                                                <div key={data.id} className="relative flex cursor-pointer rounded-xl border border-transparent bg-accent/75 p-2.5 text-background shadow-sm outline-none md:p-4 bg-order-variant-background text-order-variant-foreground">
+                                                <div key={data.id} className="relative flex cursor-pointer rounded-xl border border-transparent bg-accent/75 p-2.5 text-background shadow-sm outline-none md:p-4 ">
                                                 <span className="flex flex-1">
                                                     <span className="flex flex-col justify-between text-white">
                                                         <span className="block text-xs font-semibold">{data.name}</span>
