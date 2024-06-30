@@ -7,7 +7,7 @@ const authRouter = require('./routes/auth');
 const sliderRouter = require('./routes/slider');
 const productRouter = require('./routes/products');
 const HomeRouter = require('./routes/home');
-const getProdukRouter = require('./routes/getProduk');
+const layananRouter = require('./routes/getProduk');
 const transactionRouter = require('./routes/transactions');
 const dashboardRouter = require('./routes/dashboard');
 
@@ -25,12 +25,13 @@ const checkOrigin = (req, res, next) => {
     }
 };
 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/auth', checkOrigin, authRouter);
 app.use('/slider', checkOrigin, sliderRouter);
 app.use('/products', checkOrigin, productRouter);
 app.use('/home', checkOrigin, HomeRouter);
-app.use('/getproduk',  getProdukRouter);
+app.use('/layanan',  layananRouter);
 // app.use('/transactions', transactionRouter);
 // app.use('/dashboard', dashboardRouter);
 
