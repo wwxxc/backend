@@ -1,12 +1,43 @@
+'use client'
+import axios from "axios"
+import { useEffect, useState } from "react"
 
-
-type Props = {
-    params: { surah: string };
-};
-
-
-const DetailProduct = async ({ params }: { params: { lang: string, slug: string} }) =>{
+const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>{
     const slug = params.slug
+    const API_URL = process.env.NEXT_PUBLIC_API_URL
+    const [product, setProduct] = useState<Product>();
+    const [listProduct, setListProduct] = useState<ListProduk[]>([]);
+    
+    useEffect(() => {
+        axios.post(`${API_URL}/products/${slug}`)
+            .then(response => {
+                setProduct(response.data);
+            })
+            .catch(error => {
+                console.error("Error fetching product:", error);
+            });
+
+    }, [slug]);
+
+    useEffect(() => {
+        if (product) {
+            const data = {
+                filter_type: 'game',
+                filter_value: product.product_code
+            };
+            
+            axios.post(`${API_URL}/layanan/games`, data)
+                .then(response => {
+                    setListProduct(response.data.data); 
+                })
+                .catch(error => {
+                    console.error("Error fetching layanan/games:", error);
+                });
+        }
+    
+    }, [product]);
+    
+    
     return(
         <main className="relative bg-[#393E46]">
             <div className="relative h-56 w-full bg-muted lg:h-[340px]">
@@ -17,13 +48,13 @@ const DetailProduct = async ({ params }: { params: { lang: string, slug: string}
                     <div>
                         <div className="flex items-start gap-4">
                             <div className="product-thumbnail-container relative -top-28">
-                                <img className="z-20 -mb-14 aspect-square w-32 rounded-2xl object-cover shadow-2xl md:-mb-20 md:w-60" src="https://www.takapedia.com/_next/image?url=https%3A%2F%2Fcdn.takapedia.com%2F1e1016e8-4847-49c8-8141-51ac4a9e03e0.webp&w=1920&q=75" width={300} height={300} alt="" />
+                                <img className="z-20 -mb-14 aspect-square w-32 rounded-2xl object-cover shadow-2xl md:-mb-20 md:w-60" src={product?.product_img} width={300} height={300} alt="" />
                             </div>
                         </div>
                     </div>
                     <div className="py-4 sm:py-0">
-                        <h1 className="text-xs font-bold uppercase leading-7 tracking-wider sm:text-lg">Mobile Legends</h1>
-                        <p className="text-xs font-medium sm:text-base/6">Mooonton</p>
+                        <h1 className="text-xs font-bold uppercase leading-7 tracking-wider sm:text-lg">{product?.product_name}</h1>
+                        <p className="text-xs font-medium sm:text-base/6">{product?.product_provider}</p>
                         <div className="mt-4 flex flex-col gap-2 text-xs sm:flex-row sm:items-center sm:gap-8 sm:text-sm/6">
                             <div className="flex items-center gap-2">
                                 {/* svg */}
@@ -96,30 +127,20 @@ const DetailProduct = async ({ params }: { params: { lang: string, slug: string}
                                     <div>
                                         <label className="sr-only">Select a variant list</label>
                                         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
-                                            <div className="relative flex cursor-pointer rounded-xl border border-transparent bg-accent/75 p-2.5 text-background shadow-sm outline-none md:p-4 bg-order-variant-background text-order-variant-foreground">
+                                            {listProduct.map((data) => (
+                                                <div key={data.id} className="relative flex cursor-pointer rounded-xl border border-transparent bg-accent/75 p-2.5 text-background shadow-sm outline-none md:p-4 bg-order-variant-background text-order-variant-foreground">
                                                 <span className="flex flex-1">
-                                                    <span className="flex flex-col justify-between">
-                                                        <span className="block text-xs font-semibold ">DM</span>
+                                                    <span className="flex flex-col justify-between text-white">
+                                                        <span className="block text-xs font-semibold">{data.name}</span>
                                                         <div>
-                                                            <span className="mt-1 flex items-center text-xs font-semibold">
-                                                                harga
+                                                            <span className="mt-1 flex items-center text-xs text-foreground font-semibold">
+                                                                {data.price.basic}
                                                             </span>
                                                         </div>
                                                     </span>
                                                 </span>
-                                            </div>
-                                            <div className="relative flex cursor-pointer rounded-xl border border-transparent bg-accent/75 p-2.5 text-background shadow-sm outline-none md:p-4 bg-order-variant-background text-order-variant-foreground">
-                                                <span className="flex flex-1">
-                                                    <span className="flex flex-col justify-between">
-                                                        <span className="block text-xs font-semibold ">DM</span>
-                                                        <div>
-                                                            <span className="mt-1 text-foreground flex items-center text-xs font-semibold">
-                                                                harga
-                                                            </span>
-                                                        </div>
-                                                    </span>
-                                                </span>
-                                            </div>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
                                 </section>
