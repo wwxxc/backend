@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/auth', checkOrigin, authRouter);
 app.use('/slider', checkOrigin, sliderRouter);
-app.use('/products', checkOrigin, productRouter);
+app.use('/products',  productRouter);
 app.use('/home', checkOrigin, HomeRouter);
 app.use('/layanan',  layananRouter);
 // app.use('/transactions', transactionRouter);

@@ -11,4 +11,13 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.post('/:id', async (req, res) => {
+    try {
+        const products = await Product.findOne({ where: { product_slug: req.params.id } });
+        res.json(products);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 module.exports = router;
