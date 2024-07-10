@@ -1,6 +1,8 @@
 'use client'
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { ChevronDown, ChevronUp } from 'lucide-react'
+import { motion } from "framer-motion"
 
 const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>{
     const slug = params.slug
@@ -8,6 +10,22 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     const [product, setProduct] = useState<Product>();
     const [listProduct, setListProduct] = useState<ListProduk[]>([]);
     const [listPayment, setListPayment] = useState<ListPayment[]>([]);
+    const [selectedProduct, setSelectedProduct] = useState<ListProduk>();
+    const [selectedPayment, setSelectedPayment] = useState<ListPayment>();
+    const [isCollapsed1, setIsCollapsed1] = useState(true);
+    const [isCollapsed2, setIsCollapsed2] = useState(true);
+    const [isCollapsed3, setIsCollapsed3] = useState(true);
+
+    const toggleCollapse1 = () => {
+        setIsCollapsed1(!isCollapsed1);
+    };
+    const toggleCollapse2 = () => {
+        setIsCollapsed2(!isCollapsed2);
+    };
+    const toggleCollapse3 = () => {
+        setIsCollapsed3(!isCollapsed3);
+    };
+    
     
     useEffect(() => {
         axios.post(`${API_URL}/products/${slug}`)
@@ -47,6 +65,14 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                 console.error("Error fetching payment:", error);
             });
     }, []);
+
+    const handleSelectProduct = (product: any) => {
+        setSelectedProduct(product);
+    };
+    const handleSelectPayment = (payment: any) => {
+        setSelectedPayment(payment);
+    };
+    console.log(listPayment);
     
     
     return(
@@ -124,35 +150,44 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                         </div>
                     </section>
                     <section className="relative rounded-xl bg-card/50 shadow-2xl">
-                        <div className="flex items-center overflow-hidden rounded-t-xl bg-accent/60">
-                            <div className="flex h-10 w-10 items-center justify-center bg-primary font-semibold text-primary-foreground">
-                                2
-                            </div>
-                            <h2 className="px-4 py-2 text-sm/6 font-semibold text-card-foreground">Pilih nominal</h2>
-                        </div>
-                        <div className="p-4">
-                            <div className="flex flex-col space-y-4">
-                                <section></section>
-                                <section>
-                                    <h3 className="pb-4 text-sm/6 font-semibold text-card-foreground">Diamonds</h3>
-                                    <div>
-                                        <label className="sr-only">Select a variant list</label>
-                                        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
-                                            {listProduct.map((data) => (
-                                                <div key={data.id} className="relative flex cursor-pointer rounded-xl border border-transparent bg-accent/75 p-2.5 text-background shadow-sm outline-none md:p-4 ">
-                                                <span className="flex flex-1">
-                                                    <span className="flex flex-col justify-between text-white">
-                                                        <span className="block text-xs font-semibold">{data.name}</span>
-                                                        <div>
-                                                            <span className="mt-1 flex items-center text-xs text-foreground font-semibold">
-                                                                {data.price.basic}
-                                                            </span>
-                                                        </div>
+            <div className="flex items-center overflow-hidden rounded-t-xl bg-accent/60">
+                <div className="flex h-10 w-10 items-center justify-center bg-primary font-semibold text-primary-foreground">
+                    2
+                </div>
+                <h2 className="px-4 py-2 text-sm/6 font-semibold text-card-foreground">Pilih nominal</h2>
+            </div>
+            <div className="p-4">
+                <div className="flex flex-col space-y-4">
+                    <section></section>
+                    <section>
+                        <h3 className="pb-4 text-sm/6 font-semibold text-card-foreground">Diamonds</h3>
+                        <div>
+                            <label className="sr-only">Select a variant list</label>
+                            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
+                            {listProduct.map((data) => (
+                                    <label key={data.code} htmlFor={`product-${data.code}`} className={`relative flex cursor-pointer rounded-xl p-2.5 text-background shadow-sm outline-none bg-accent/60 md:p-4 ${selectedProduct?.code === data.code ? 'ring-2 ring-offset-background ring-offset-2 ring-primary' : 'border-transparent'}`}>
+                                        <input
+                                            type="radio"
+                                            id={`product-${data.code}`}
+                                            name="product"
+                                            value={data.code}
+                                            checked={selectedProduct?.code === data.code}
+                                            onChange={() => handleSelectProduct(data)}
+                                            className="absolute opacity-0"
+                                        />
+                                        <span className="flex flex-1">
+                                            <span className="flex flex-col justify-between text-white">
+                                                <span className="block text-xs font-semibold">{data.name}</span>
+                                                <div>
+                                                    <span className={`mt-1 flex items-center text-xs ${selectedProduct?.code === data.code ? 'text-foreground' : 'text-foreground'} font-semibold`}>
+                                                        {data.price.basic}
                                                     </span>
-                                                </span>
                                                 </div>
-                                            ))}
-                                        </div>
+                                            </span>
+                                        </span>
+                                    </label>
+                                ))}
+                                    </div>
                                     </div>
                                 </section>
                             </div>
@@ -165,48 +200,104 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                         </div>
                         <div className="p-4">
                             <div className="flex w-full flex-col space-y-4">
-                                <div>
-                                    <div id="radio-group" role="radio-group">
-                                        <label className="sr-only" htmlFor="radio-1">Select an option</label>
-                                        <div className="flex flex-col gap-4">
-                                            <div className="relative flex cursor-pointer rounded-lg border border-transparent bg-accent/75 p-2.5 text-white shadow-sm outline-none md:px-5 md:py-3">
-                                                <div className="flex w-full flex-col items-start justify-between py-1 md:items-center">
-                                                    <div className="w-full">
-                                                        <span className="block pb-2.5 text-xs font-semibold sm:text-sm">QRIS (All Payment)</span>
-                                                        <img src="https://cdn.takapedia.com/common/d075c7ba-1b81-4d15-82be-61fd50a3b2f9.png" alt="" className="max-h-6" />
-                                                        
-                                                    </div>
-                                                    <div className="mt-3 w-full">
+                                {listPayment.map((data) => (
+                                    <>
+                                    {data.code === 'QRIS2' && (
+                                        <div key={data.code} >
+                                        <div id="radio-group" role="radio-group">
+                                            <label className="sr-only" htmlFor="radio-1">Select an option</label>
+                                            <div className="flex flex-col gap-4">
+                                                <div className="relative flex cursor-pointer rounded-lg border border-transparent bg-accent/75 p-2.5 text-white shadow-sm outline-none md:px-5 md:py-3">
+                                                    <div className="flex w-full flex-col items-start justify-between py-1 md:items-center">
+                                                        <div className="w-full">
+                                                            <span className="block pb-2.5 text-xs font-semibold sm:text-sm">QRIS (All Payment)</span>
+                                                            <img src="https://cdn.takapedia.com/common/d075c7ba-1b81-4d15-82be-61fd50a3b2f9.png" alt="" className="max-h-6" />
+
+                                                        </div>
+                                                        <div className="mt-3 w-full">
                                                             <div className="text-sm font-semibold sm:text-base w-full rounded-md border border-dashed py-1 text-center ">
-                                                            <span className="w-full md:text-sm">
-                                                                Rp 100.000
-                                                            </span>
+                                                                <span className="w-full md:text-sm">
+                                                                    {selectedProduct?.price.basic}
+                                                                </span>
                                                             </div>
                                                         </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                    )}
+                                    
+                                    </>
+                                ))}
+
+                                {/* E-wallet */}
                                 <div className="flex w-full transform flex-col justify-between rounded-xl bg-accent/60 text-left text-sm font-medium duration-300 focus:outline-none">
-                                    <button className="w-full rounded-t-xl bg-card text-card-foreground disabled:opacity-75">
+                                    <button type="button" disabled={!selectedProduct} onClick={toggleCollapse1} className="w-full rounded-t-xl bg-card text-card-foreground disabled:opacity-75">
                                         <div className="flex w-full items-center justify-between px-4 py-2">
                                             <span className="transform text-sm/6 font-medium leading-7 duration-300">
                                                 E-Wallet
                                             </span>
                                             <span className="ml-6 flex h-7 items-center">
-                                                arrowbove
+                                                {isCollapsed1 ? <ChevronDown /> : <ChevronUp />}
                                             </span>
                                         </div>
                                     </button>
-                                    <div className="overflow-hidden transform max-h-screen">
+                                    <motion.div
+                                        initial={{ height: 0 }}
+                                        animate={{ height: isCollapsed1 ? 0 : 'auto' }}
+                                        transition={{ duration: 0.4, ease: 'easeInOut' }}
+                                        className="overflow-hidden"
+                                        >
+                                        <div className="px-4 pb-4 pt-2 text-sm">
+                                        <div id="radio-group" role="radio-group">
+                                            <label className="sr-only" htmlFor="radio-1">Select an option</label>
+                                            <div className="grid grid-cols-2 gap-4 pt-2 sm:grid-cols-3 md:grid-cols-2 xl:grid-cols-3">
+                                                {listPayment.map((data) => (
+                                                    <>
+                                                        {data.group.includes('E-Wallet') && data.code !== 'QRIS2' && (
+                                                            <div key={data.id} onClick={() => handleSelectPayment(data)} className={`relative flex cursor-pointer rounded-xl bg-white/50 p-2.5 shadow-sm outline-none md:p-3 ${selectedPayment?.code === data.code ? 'ring-2 ring-primary ring-offset-2 ring-offset-background/60' : 'border-transparent'}`}>
+                                                            <span className="flex w-full">
+                                                                <span className="flex w-full flex-col justify-between">
+                                                                    <div>
+                                                                        <img className={`${selectedPayment?.code === data.code ? 'grayscale-0' : 'grayscale'}`} src={data.icon_url} alt="" width={40} />
+                                                                    </div>
+                                                                    <div className="flex w-full items-center justify-between">
+                                                                        <div className="mt-2 w-full">
+                                                                            <div className="mt-1.5 flex items-center gap-2">
+                                                                                <div className="relative z-30 text-xs font-semibold leading-4 text-background">
+                                                                                    {selectedProduct?.price.basic}
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="mt-0.5 h-px w-full bg-border"></div>
+                                                                            <div>
+                                                                                <span className="block text-[0.625rem] italic text-background">
+                                                                                Dicek Otomatis
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                        )}
+                                                    </>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </motion.div>
+                                    <motion.div
+                                        initial={{ height: 0 }}
+                                        animate={{ height: isCollapsed1 ? 'auto' : 0 }}
+                                        transition={{ duration: 0.3, }}
+                                        className="overflow-hidden"
+                                    >
+                                    <div className="transform max-h-screen">
                                         <div className="w-full rounded-b-xl bg-white/50 px-4 py-3">
                                             <div className="flex justify-end gap-x-2">
                                                 <div className="relative aspect-[6/2] w-10">
                                                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Logo_dana_blue.svg/1280px-Logo_dana_blue.svg.png" alt="Dana Logo" />
-                                                </div>
-                                                <div className="relative aspect-[6/2] w-10">
-                                                    <img src="https://antinomi.org/wp-content/uploads/2022/03/logo-gopay-vector.png" alt="Gopay Logo" />
                                                 </div>
                                                 <div className="relative aspect-[6/2] w-10">
                                                     <img src="https://i.postimg.cc/VkWfmD46/shopepay.png" alt="ShopeePay Logo" />
@@ -217,7 +308,175 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                             </div>
                                         </div>
                                     </div>
+                                    </motion.div>
                                 </div>
+                                
+                                {/* Virtual Account */}
+                                <div className="flex w-full transform flex-col justify-between rounded-xl bg-accent/60 text-left text-sm font-medium duration-300 focus:outline-none">
+                                    <button type="button" disabled={!selectedProduct} onClick={toggleCollapse2} className="w-full rounded-t-xl bg-card text-card-foreground disabled:opacity-75">
+                                        <div className="flex w-full items-center justify-between px-4 py-2">
+                                            <span className="transform text-sm/6 font-medium leading-7 duration-300">
+                                                Virtual Account
+                                            </span>
+                                            <span className="ml-6 flex h-7 items-center">
+                                                {isCollapsed2 ? <ChevronDown /> : <ChevronUp />}
+                                            </span>
+                                        </div>
+                                    </button>
+                                    <motion.div
+                                        initial={{ height: 0 }}
+                                        animate={{ height: isCollapsed2 ? 0 : 'auto' }}
+                                        transition={{ duration: 0.4, ease: 'easeInOut' }}
+                                        className="overflow-hidden"
+                                        >
+                                        <div className="px-4 pb-4 pt-2 text-sm">
+                                        <div id="radio-group" role="radio-group">
+                                            <label className="sr-only" htmlFor="radio-1">Select an option</label>
+                                            <div className="grid grid-cols-2 gap-4 pt-2 sm:grid-cols-3 md:grid-cols-2 xl:grid-cols-3">
+                                                {listPayment.map((data) => (
+                                                    <>
+                                                        {data.group.includes('Virtual Account') && data.code !== 'QRIS2' && (
+                                                            <div key={data.id} onClick={() => handleSelectPayment(data)} className={`relative flex cursor-pointer rounded-xl bg-white/50 p-2.5 shadow-sm outline-none md:p-3 ${selectedPayment?.code === data.code ? 'ring-2 ring-primary ring-offset-2 ring-offset-background/60' : 'border-transparent'}`}>
+                                                            <span className="flex w-full">
+                                                                <span className="flex w-full flex-col justify-between">
+                                                                    <div>
+                                                                        <img className={`${selectedPayment?.code === data.code ? 'grayscale-0' : 'grayscale'}`} src={data.icon_url} alt="" width={40} />
+                                                                    </div>
+                                                                    <div className="flex w-full items-center justify-between">
+                                                                        <div className="mt-2 w-full">
+                                                                            <div className="mt-1.5 flex items-center gap-2">
+                                                                                <div className="relative z-30 text-xs font-semibold leading-4 text-background">
+                                                                                    {selectedProduct?.price.basic}
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="mt-0.5 h-px w-full bg-border"></div>
+                                                                            <div>
+                                                                                <span className="block text-[0.625rem] italic text-background">
+                                                                                Dicek Otomatis
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                        )}
+                                                    </>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </motion.div>
+                                    <motion.div
+                                        initial={{ height: 0 }}
+                                        animate={{ height: isCollapsed2 ? 'auto' : 0 }}
+                                        transition={{ duration: 0.3, }}
+                                        className="overflow-hidden"
+                                    >
+                                    <div className="transform max-h-screen">
+                                        <div className="w-full rounded-b-xl bg-white/50 px-4 py-3">
+                                            <div className="flex justify-end gap-x-2">
+                                                <div className="relative aspect-[6/2] w-10">
+                                                    <img src="https://assets.tripay.co.id/upload/payment-icon/8WQ3APST5s1579461828.png" alt="Briva Logo" />
+                                                </div>
+                                                <div className="relative aspect-[6/2] w-10">
+                                                    <img src="https://assets.tripay.co.id/upload/payment-icon/ytBKvaleGy1605201833.png" alt="BCA Logo" />
+                                                </div>
+                                                <div className="relative aspect-[6/2] w-10">
+                                                    <img src="https://assets.tripay.co.id/upload/payment-icon/n22Qsh8jMa1583433577.png" alt="BNI Logo" />
+                                                </div>
+                                                <div className="relative aspect-[6/2] w-10">
+                                                    <img src="https://assets.tripay.co.id/upload/payment-icon/ZT91lrOEad1582929126.png" alt="MAYBANK Logo" />
+                                                </div>
+                                                <div className="relative aspect-[6/2] w-10">
+                                                    <img src="https://assets.tripay.co.id/upload/payment-icon/szezRhAALB1583408731.png" alt="PERMATABANK Logo" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </motion.div>
+                                </div>
+
+                                {/* Convenience Store */}
+                                <div className="flex w-full transform flex-col justify-between rounded-xl bg-accent/60 text-left text-sm font-medium duration-300 focus:outline-none">
+                                    <button type="button" disabled={!selectedProduct} onClick={toggleCollapse3} className="w-full rounded-t-xl bg-card text-card-foreground disabled:opacity-75">
+                                        <div className="flex w-full items-center justify-between px-4 py-2">
+                                            <span className="transform text-sm/6 font-medium leading-7 duration-300">
+                                                Convenience Store
+                                            </span>
+                                            <span className="ml-6 flex h-7 items-center">
+                                                {isCollapsed3 ? <ChevronDown /> : <ChevronUp />}
+                                            </span>
+                                        </div>
+                                    </button>
+                                    <motion.div
+                                        initial={{ height: 0 }}
+                                        animate={{ height: isCollapsed3 ? 0 : 'auto' }}
+                                        transition={{ duration: 0.4, ease: 'easeInOut' }}
+                                        className="overflow-hidden"
+                                        >
+                                        <div className="px-4 pb-4 pt-2 text-sm">
+                                        <div id="radio-group" role="radio-group">
+                                            <label className="sr-only" htmlFor="radio-1">Select an option</label>
+                                            <div className="grid grid-cols-2 gap-4 pt-2 sm:grid-cols-3 md:grid-cols-2 xl:grid-cols-3">
+                                                {listPayment.map((data) => (
+                                                    <>
+                                                        {data.group.includes('Convenience Store') && data.code !== 'QRIS2' && (
+                                                            <div key={data.id} onClick={() => handleSelectPayment(data)} className={`relative flex cursor-pointer rounded-xl bg-white/50 p-2.5 shadow-sm outline-none md:p-3 ${selectedPayment?.code === data.code ? 'ring-2 ring-primary ring-offset-2 ring-offset-background/60' : 'border-transparent'}`}>
+                                                            <span className="flex w-full">
+                                                                <span className="flex w-full flex-col justify-between">
+                                                                    <div>
+                                                                        <img className={`${selectedPayment?.code === data.code ? 'grayscale-0' : 'grayscale'}`} src={data.icon_url} alt="" width={40} />
+                                                                    </div>
+                                                                    <div className="flex w-full items-center justify-between">
+                                                                        <div className="mt-2 w-full">
+                                                                            <div className="mt-1.5 flex items-center gap-2">
+                                                                                <div className="relative z-30 text-xs font-semibold leading-4 text-background">
+                                                                                    {selectedProduct?.price.basic}
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="mt-0.5 h-px w-full bg-border"></div>
+                                                                            <div>
+                                                                                <span className="block text-[0.625rem] italic text-background">
+                                                                                Dicek Otomatis
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                        )}
+                                                    </>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </motion.div>
+                                    <motion.div
+                                        initial={{ height: 0 }}
+                                        animate={{ height: isCollapsed3 ? 'auto' : 0 }}
+                                        transition={{ duration: 0.3, }}
+                                        className="overflow-hidden"
+                                    >
+                                    <div className="transform max-h-screen">
+                                        <div className="w-full rounded-b-xl bg-white/50 px-4 py-3">
+                                            <div className="flex justify-end gap-x-2">
+                                                <div className="relative aspect-[6/2] w-10">
+                                                    <img src="https://assets.tripay.co.id/upload/payment-icon/jiGZMKp2RD1583433506.png" alt="ALFA Logo" />
+                                                </div>
+                                                <div className="relative aspect-[6/2] w-10">
+                                                    <img src="https://assets.tripay.co.id/upload/payment-icon/zNzuO5AuLw1583513974.png" alt="INDOMART Logo" />
+                                                </div>
+                                                <div className="relative aspect-[6/2] w-10">
+                                                    <img src="https://assets.tripay.co.id/upload/payment-icon/aQTdaUC2GO1593660384.png" alt="ALFAMIDI Logo" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </motion.div>
+                                </div>
+                                
                             </div>
                         </div>
                     </section>
