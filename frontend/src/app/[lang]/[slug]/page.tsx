@@ -72,7 +72,6 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     const handleSelectPayment = (payment: any) => {
         setSelectedPayment(payment);
     };
-    console.log(listPayment);
     
     
     return(
@@ -203,11 +202,11 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                 {listPayment.map((data) => (
                                     <>
                                     {data.code === 'QRIS2' && (
-                                        <div key={data.code} >
+                                        <div key={data.code} onClick={() => handleSelectPayment(data)} >
                                         <div id="radio-group" role="radio-group">
                                             <label className="sr-only" htmlFor="radio-1">Select an option</label>
                                             <div className="flex flex-col gap-4">
-                                                <div className="relative flex cursor-pointer rounded-lg border border-transparent bg-accent/75 p-2.5 text-white shadow-sm outline-none md:px-5 md:py-3">
+                                                <div className={`relative flex cursor-pointer rounded-lg border border-transparent bg-accent/75 p-2.5 text-white shadow-sm outline-none md:px-5 md:py-3 ${selectedPayment?.code === data.code ? 'ring-2 ring-primary ring-offset-2 ring-offset-background/60' : 'border-transparent'}`}>
                                                     <div className="flex w-full flex-col items-start justify-between py-1 md:items-center">
                                                         <div className="w-full">
                                                             <span className="block pb-2.5 text-xs font-semibold sm:text-sm">QRIS (All Payment)</span>
@@ -422,7 +421,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                                 {listPayment.map((data) => (
                                                     <>
                                                         {data.group.includes('Convenience Store') && data.code !== 'QRIS2' && (
-                                                            <div key={data.id} onClick={() => handleSelectPayment(data)} className={`relative flex cursor-pointer rounded-xl bg-white/50 p-2.5 shadow-sm outline-none md:p-3 ${selectedPayment?.code === data.code ? 'ring-2 ring-primary ring-offset-2 ring-offset-background/60' : 'border-transparent'}`}>
+                                                            <div key={data.id} onClick={ selectedProduct && selectedProduct?.normal_price.basic <= data.minimum_amount ? () => handleSelectPayment(null) : () => handleSelectPayment(data)} className={`relative flex cursor-pointer rounded-xl bg-white/50 p-2.5 shadow-sm outline-none md:p-3 ${selectedPayment?.code === data.code ? 'ring-2 ring-primary ring-offset-2 ring-offset-background/60' : 'border-transparent'}`}>
                                                             <span className="flex w-full">
                                                                 <span className="flex w-full flex-col justify-between">
                                                                     <div>
@@ -431,8 +430,8 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                                                     <div className="flex w-full items-center justify-between">
                                                                         <div className="mt-2 w-full">
                                                                             <div className="mt-1.5 flex items-center gap-2">
-                                                                                <div className="relative z-30 text-xs font-semibold leading-4 text-background">
-                                                                                    {selectedProduct?.price.basic}
+                                                                                <div className={`relative z-30 text-xs font-semibold leading-4 ${selectedProduct && selectedProduct?.normal_price.basic <= data.minimum_amount ? 'text-red-00' : 'text-background'}`}>
+                                                                                    { selectedProduct && selectedProduct?.normal_price.basic <= data.minimum_amount ? `Min. Rp ${data.minimum_amount.toLocaleString('id-ID')}` : selectedProduct?.price.basic }
                                                                                 </div>
                                                                             </div>
                                                                             <div className="mt-0.5 h-px w-full bg-border"></div>

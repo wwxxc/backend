@@ -3,6 +3,7 @@ interface ListProduk {
     code: string,
     name: string,
     price: priceList,
+    normal_price: priceList,
 }
 
 interface priceList {
