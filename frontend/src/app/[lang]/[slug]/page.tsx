@@ -72,6 +72,9 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     const handleSelectPayment = (payment: any) => {
         setSelectedPayment(payment);
     };
+
+    console.log(selectedPayment);
+    
     
     
     return(
@@ -216,7 +219,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                                         <div className="mt-3 w-full">
                                                             <div className="text-sm font-semibold sm:text-base w-full rounded-md border border-dashed py-1 text-center ">
                                                                 <span className="w-full md:text-sm">
-                                                                    {selectedProduct?.price.basic}
+                                                                    { selectedProduct && (selectedProduct?.normal_price.basic <= data.minimum_amount ? `Min. Rp ${data.minimum_amount.toLocaleString('id-ID')}` :  'Rp ' + ( selectedProduct.normal_price.basic + data.total_fee.flat + (selectedProduct?.normal_price.basic * parseFloat(data.total_fee.percent) / 100)).toLocaleString('id-ID', {maximumFractionDigits: 0}) )}
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -265,7 +268,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                                                         <div className="mt-2 w-full">
                                                                             <div className="mt-1.5 flex items-center gap-2">
                                                                                 <div className="relative z-30 text-xs font-semibold leading-4 text-background">
-                                                                                    {selectedProduct?.price.basic}
+                                                                                    { selectedProduct && (selectedProduct?.normal_price.basic <= data.minimum_amount ? `Min. Rp ${data.minimum_amount.toLocaleString('id-ID')}` :  'Rp ' + ( selectedProduct.normal_price.basic + data.total_fee.flat + (selectedProduct?.normal_price.basic * parseFloat(data.total_fee.percent) / 100)).toLocaleString('id-ID', {maximumFractionDigits: 0}) )}
                                                                                 </div>
                                                                             </div>
                                                                             <div className="mt-0.5 h-px w-full bg-border"></div>
@@ -335,7 +338,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                                 {listPayment.map((data) => (
                                                     <>
                                                         {data.group.includes('Virtual Account') && data.code !== 'QRIS2' && (
-                                                            <div key={data.id} onClick={() => handleSelectPayment(data)} className={`relative flex cursor-pointer rounded-xl bg-white/50 p-2.5 shadow-sm outline-none md:p-3 ${selectedPayment?.code === data.code ? 'ring-2 ring-primary ring-offset-2 ring-offset-background/60' : 'border-transparent'}`}>
+                                                            <div key={data.id} onClick={ selectedProduct && selectedProduct?.normal_price.basic <= data.minimum_amount ? () => handleSelectPayment(null) : () => handleSelectPayment(data)} className={`relative flex cursor-pointer rounded-xl bg-white/50 p-2.5 shadow-sm outline-none md:p-3 ${selectedPayment?.code === data.code ? 'ring-2 ring-primary ring-offset-2 ring-offset-background/60' : 'border-transparent'}`}>
                                                             <span className="flex w-full">
                                                                 <span className="flex w-full flex-col justify-between">
                                                                     <div>
@@ -344,8 +347,8 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                                                     <div className="flex w-full items-center justify-between">
                                                                         <div className="mt-2 w-full">
                                                                             <div className="mt-1.5 flex items-center gap-2">
-                                                                                <div className="relative z-30 text-xs font-semibold leading-4 text-background">
-                                                                                    {selectedProduct?.price.basic}
+                                                                            <div className={`relative z-30 text-xs font-semibold leading-4 ${selectedProduct && selectedProduct?.normal_price.basic <= data.minimum_amount ? 'text-red-700' : 'text-background'}`}>
+                                                                                { selectedProduct && (selectedProduct?.normal_price.basic <= data.minimum_amount ? `Min. Rp ${data.minimum_amount.toLocaleString('id-ID')}` :  'Rp ' + ( selectedProduct.normal_price.basic + data.total_fee.flat + (parseFloat(data.total_fee.percent) * selectedProduct?.normal_price.basic / 100) ).toLocaleString('id-ID', {maximumFractionDigits: 0}) )}
                                                                                 </div>
                                                                             </div>
                                                                             <div className="mt-0.5 h-px w-full bg-border"></div>
@@ -430,8 +433,8 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                                                     <div className="flex w-full items-center justify-between">
                                                                         <div className="mt-2 w-full">
                                                                             <div className="mt-1.5 flex items-center gap-2">
-                                                                                <div className={`relative z-30 text-xs font-semibold leading-4 ${selectedProduct && selectedProduct?.normal_price.basic <= data.minimum_amount ? 'text-red-00' : 'text-background'}`}>
-                                                                                    { selectedProduct && selectedProduct?.normal_price.basic <= data.minimum_amount ? `Min. Rp ${data.minimum_amount.toLocaleString('id-ID')}` : selectedProduct?.price.basic }
+                                                                                <div className={`relative z-30 text-xs font-semibold leading-4 ${selectedProduct && selectedProduct?.normal_price.basic <= data.minimum_amount ? 'text-red-700' : 'text-background'}`}>
+                                                                                    { selectedProduct && (selectedProduct?.normal_price.basic <= data.minimum_amount ? `Min. Rp ${data.minimum_amount.toLocaleString('id-ID')}` :  'Rp ' + ( selectedProduct.normal_price.basic + data.total_fee.flat + (parseFloat(data.total_fee.percent) * selectedProduct?.normal_price.basic / 100) ).toLocaleString('id-ID') )}
                                                                                 </div>
                                                                             </div>
                                                                             <div className="mt-0.5 h-px w-full bg-border"></div>
