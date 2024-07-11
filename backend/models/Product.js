@@ -33,6 +33,11 @@ const Product = sequelize.define('product', {
     allowNull: false,
     defaultValue: false,
   },
+  isServer: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  }
 });
 
 module.exports = Product;
