@@ -7,4 +7,6 @@ interface Product {
     product_code: string
     product_type: string
     product_provider: string
+    isPopular: boolean
+    isServer: boolean
 }

@@ -76,7 +76,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
         setSelectedPayment(payment);
     };
 
-    console.log(selectedProduct);
+    console.log(product);
     
     
     
@@ -145,12 +145,14 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                         <input type="text" placeholder="Masukkan ID" className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
                                     </div>
                                 </div>
+                                {product?.isServer && (
                                 <div>
                                     <label htmlFor="" className="block text-xs font-medium text-foreground pb-2">Server</label>
                                     <div className="flex flex-col items-start">
                                         <input type="text" placeholder="Masukkan Server" className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
                                     </div>
                                 </div>
+                                )}
                             </div>
                         </div>
                     </section>
