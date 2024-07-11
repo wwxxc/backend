@@ -14,6 +14,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     const [listPayment, setListPayment] = useState<ListPayment[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<ListProduk>();
     const [selectedPayment, setSelectedPayment] = useState<ListPayment>();
+    const [totalPrice, setTotalPrice] = useState('');
     const [isCollapsed1, setIsCollapsed1] = useState(true);
     const [isCollapsed2, setIsCollapsed2] = useState(true);
     const [isCollapsed3, setIsCollapsed3] = useState(true);
@@ -74,9 +75,14 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     };
     const handleSelectPayment = (payment: any) => {
         setSelectedPayment(payment);
+        setTotalPrice(( selectedProduct && selectedProduct?.normal_price.basic + payment.total_fee.flat + (parseFloat(payment.total_fee.percent) * selectedProduct?.normal_price.basic / 100) ).toLocaleString('id-ID', { maximumFractionDigits: 0} ))
     };
 
-    console.log(product);
+    const handleSubmit = () => {
+        console.log('form berhasil submit');
+        
+    }
+
     
     
     
@@ -127,7 +133,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                         </div>
                     </div>
                 </div>
-                <form action="#" className="col-span-3 col-start-1 flex flex-col gap-4 mb-10 lg:col-span-2 lg:gap-8">
+                <form action="#" onSubmit={handleSubmit} className="col-span-3 col-start-1 flex flex-col gap-4 mb-10 lg:col-span-2 lg:gap-8">
                     <section className="relative rounded-xl bg-card/50 shadow-2xl">
                         <div className="flex items-center overflow-hidden rounded-t-xl bg-[#7F8487]/60">
                             <div className="flex h-10 w-10 items-center justify-center bg-primary font-semibold text-primary-foreground">
@@ -555,12 +561,12 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                 </div>
                                 <div>
                                     <div className="text-sm font-medium">{selectedProduct?.name}</div>
-                                    <div className="text-sm text-foreground/50">{selectedProduct?.price.basic} {selectedPayment && '- ' + selectedPayment?.name}</div>
+                                    <div className="text-sm text-foreground/50">{!totalPrice ? selectedProduct?.price.basic : 'Rp ' + totalPrice} {selectedPayment && '- ' + selectedPayment?.name}</div>
                                     <span className="text-[0.625rem] italic text-card-foreground">**Proses Otomatis</span>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 w-full gap-2">
+                        <button className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 w-full gap-2">
                                 <span className="">
                                     Pesan Sekarang!
                                 </span>
