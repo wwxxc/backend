@@ -547,8 +547,9 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                     ): (
                         <div className="sticky bottom-0 pb-4 flex flex-col gap-4 bg-background">
                         <div className="rounded-lg border border-dashed bg-secondary p-4 text-sm text-secondary-foreground">
-                            <div className="text-center">
-                            {selectedProduct.name} dengan metode pembayaran {selectedPayment?.name}
+                            <div className="flex items-center gap-4">
+                                <img src={product?.product_img} width={50} className="rounded" alt="" />
+                                <span className="text-xs">{selectedProduct?.name}</span>
                             </div>
                         </div>
                         <button type="submit" className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 w-full gap-2">
