@@ -3,6 +3,8 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { motion } from "framer-motion"
+import { PhoneInput } from 'react-international-phone';
+import 'react-international-phone/style.css';
 
 const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>{
     const slug = params.slug
@@ -15,6 +17,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     const [isCollapsed1, setIsCollapsed1] = useState(true);
     const [isCollapsed2, setIsCollapsed2] = useState(true);
     const [isCollapsed3, setIsCollapsed3] = useState(true);
+    const [phone, setPhone] = useState('');
 
     const toggleCollapse1 = () => {
         setIsCollapsed1(!isCollapsed1);
@@ -73,7 +76,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
         setSelectedPayment(payment);
     };
 
-    console.log(selectedPayment);
+    console.log(selectedProduct);
     
     
     
@@ -195,9 +198,29 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                             </div>
                         </div>
                     </section>
-                    <section className="relative rounded-xl bg-card/50 shadow-2xl">
+
+                    <section className="relative scroll-mt-20 rounded-xl bg-card/50 shadow-2xl md:scroll-mt-[5.75rem]">
                         <div className="flex items-center overflow-hidden rounded-t-xl bg-accent/60">
                             <div className="flex h-10 w-10 items-center justify-center bg-primary font-semibold text-primary-foreground">3</div>
+                            <h2 className="px-4 py-2 text-sm/6 font-semibold text-card-foreground">Kode Promo</h2>
+                        </div>
+                        <div className="p-4">
+                            <div className="flex flex-col gap-4">
+                                <div className="flex items-center gap-x-4">
+                                    <div className="flex-1">
+                                        <div className="flex flex-col items-start">
+                                        <input type="text" placeholder="Masukkan Kode Voucher" className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
+                                        </div>
+                                    </div>
+                                    <button className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3">Gunakan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className="relative rounded-xl bg-card/50 shadow-2xl">
+                        <div className="flex items-center overflow-hidden rounded-t-xl bg-accent/60">
+                            <div className="flex h-10 w-10 items-center justify-center bg-primary font-semibold text-primary-foreground">4</div>
                             <h2 className="px-4 py-2 text-sm/6 font-semibold text-card-foreground">Pilih Pembayaran</h2>
                         </div>
                         <div className="p-4">
@@ -482,9 +505,10 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                             </div>
                         </div>
                     </section>
+
                     <section className="relative scroll-mt-20 rounded-xl bg-card/50 shadow-2xl md:scroll-mt-[5.75rem]">
                         <div className="flex items-center overflow-hidden rounded-t-xl bg-accent/60">
-                            <div className="flex h-10 w-10 items-center justify-center bg-primary font-semibold text-primary-foreground">4</div>
+                            <div className="flex h-10 w-10 items-center justify-center bg-primary font-semibold text-primary-foreground">5</div>
                             <h2 className="px-4 py-2 text-sm/6 font-semibold text-card-foreground">Detail Kontak</h2>
                         </div>
                         <div className="p-4">
@@ -492,16 +516,23 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                 <div className="flex flex-col gap-2">
                                     <label className="block text-xs font-medium text-foreground">No. WhatsApp</label>
                                     <div>
-                                        <div className="react-international-phone-input-container">
-
-                                        </div>
+                                        <PhoneInput
+                                        defaultCountry="id"
+                                        
+                                        value={phone}
+                                        style={{
+                                            width: '100%',
+                                        }}
+                                        onChange={(phone : any) => setPhone(phone)}
+                                        />
                                     </div>
                                     <span className="text-xs italic text-card-foreground">**Nomor ini akan dihubungi jika terjadi masalah</span>
                                 </div>
                             </div>
                         </div>
                     </section>
-                    <div className="sticky bottom-0 pb-4 flex flex-col gap-4 bg-background">
+                    {!selectedProduct ? (
+                        <div className="bottom-0 pb-4 flex flex-col gap-4 bg-background">
                         <div className="rounded-lg border border-dashed bg-secondary p-4 text-sm text-secondary-foreground">
                             <div className="text-center">
                             Belum ada item produk yang dipilih.
@@ -513,6 +544,21 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                 </span>
                         </button>
                     </div>
+                    ): (
+                        <div className="sticky bottom-0 pb-4 flex flex-col gap-4 bg-background">
+                        <div className="rounded-lg border border-dashed bg-secondary p-4 text-sm text-secondary-foreground">
+                            <div className="text-center">
+                            {selectedProduct.name} dengan metode pembayaran {selectedPayment?.name}
+                            </div>
+                        </div>
+                        <button type="submit" className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 w-full gap-2">
+                                <span className="">
+                                    Pesan Sekarang!
+                                </span>
+                        </button>
+                    </div>
+                    )}
+                    
                 </form>
             </div>
         </main>
