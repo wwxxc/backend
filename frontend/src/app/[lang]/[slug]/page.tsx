@@ -26,7 +26,6 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     const [isCollapsed3, setIsCollapsed3] = useState(true);
     const [phone, setPhone] = useState('');
     const [isModalOpen, setModalOpen] = useState(false);
-    const formRef = useRef(null);
 
     const notifyError = (msg: string) => toast.error(msg);
     let completeButtonRef = useRef(null)
@@ -34,14 +33,14 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
         if (id === '') {
             notifyError('Silahkan lengkapi data akun terlebih dahulu')
             window.scrollTo({ top: 200, behavior: 'smooth' });
-        } else if (server === '') {
+        } else if (product?.isServer && server === '') {
             notifyError('Silahkan lengkapi data akun terlebih dahulu')
-            window.scrollTo({ top: 200, behavior: 'smooth' });
+            window.scrollTo({ top: 200, behavior: 'smooth' })
         } else if (selectedProduct === undefined) {
             notifyError('Silahkan pilih item terlebih dahulu')
         } else if (selectedPayment === undefined) {
             notifyError('Silahkan pilih metode pembayaran terlebih dahulu')
-            window.scrollTo({ top: 1650, behavior: 'smooth' });
+            window.scrollTo({ top: 1710, behavior: 'smooth' });
         } else if (phone.length < 9) {
             notifyError('Silahkan lengkapi No Whatsapp terlebih dahulu')
             window.scrollTo({ top: 2200, behavior: 'smooth' });
@@ -75,7 +74,6 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
             .catch(error => {
                 console.error("Error fetching product:", error);
             });
-
     }, [slug]);
 
     useEffect(() => {
