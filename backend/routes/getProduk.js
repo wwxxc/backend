@@ -4,44 +4,6 @@ const axios = require('axios');
 const crypto = require('crypto');
 require('dotenv').config();
 
-router.post('/akun', async (req, res) => {
-    var API_ID = VIP_API_ID
-    var API_KEY = VIP_API_KEY
-
-    var sign = crypto.createHash('md5')
-        .update(API_ID + API_KEY)
-        .digest('hex');
-
-    var axios = require('axios');
-    var FormData = require('form-data');
-    var data = new FormData();
-    data.append('key', API_KEY);
-    data.append('sign', sign);
-
-
-    var config = {
-        method: 'post',
-        maxBodyLength: Infinity,
-        url: 'https://vip-reseller.co.id/api/profile',
-        headers: {
-            ...data.getHeaders()
-        },
-        data: data
-    };
-
-    axios(config)
-        .then(function (response) {
-            console.log(JSON.stringify(response.data));
-            res.json({
-                status: true,
-                data: response.data.data
-            })
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-})
-
 router.post('/games', async (req, res) => {
     const API_URL = process.env.API_URL;
     const vip_ApiId = process.env.VIP_API_ID;

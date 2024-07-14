@@ -51,8 +51,6 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     
     function completeOrder() {
         notifyError('Pesanan anda sedang diproses, silahkan tungungi wa admin kami')
-        console.log(phone);
-        
     }
 
     const toggleCollapse1 = () => {
