@@ -5,7 +5,6 @@ import { ChevronDown, ChevronUp, CheckCircle } from 'lucide-react'
 import { motion } from "framer-motion"
 import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
-import {  Modal,   ModalContent,   ModalHeader,   ModalBody,   ModalFooter, useDisclosure} from "@nextui-org/modal";
 import { Description, Dialog, DialogPanel, DialogTitle, Transition } from '@headlessui/react'
 import toast, { Toaster } from 'react-hot-toast';
 import React from "react"
@@ -13,6 +12,9 @@ import React from "react"
 const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>{
     const slug = params.slug
     const API_URL = process.env.NEXT_PUBLIC_API_URL
+    const [id, setId] = useState('')
+    const [server, setServer] = useState('')
+    const [username, setUsername] = useState('')
     const [product, setProduct] = useState<Product>();
     const [listProduct, setListProduct] = useState<ListProduk[]>([]);
     const [listPayment, setListPayment] = useState<ListPayment[]>([]);
@@ -24,17 +26,34 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     const [isCollapsed3, setIsCollapsed3] = useState(true);
     const [phone, setPhone] = useState('');
     const [isModalOpen, setModalOpen] = useState(false);
+    const formRef = useRef(null);
 
-    
-    const notifyError = () => toast.error('Here is your toast.');
-    const notifySuccess = () => toast.success('Here is your toast.');
-    const notify = () => toast.error('Here is your toast.');
-    
-
+    const notifyError = (msg: string) => toast.error(msg);
     let completeButtonRef = useRef(null)
-
+    function sumbitOrder() {
+        if (id === '') {
+            notifyError('Silahkan lengkapi data akun terlebih dahulu')
+            window.scrollTo({ top: 200, behavior: 'smooth' });
+        } else if (server === '') {
+            notifyError('Silahkan lengkapi data akun terlebih dahulu')
+            window.scrollTo({ top: 200, behavior: 'smooth' });
+        } else if (selectedProduct === undefined) {
+            notifyError('Silahkan pilih item terlebih dahulu')
+        } else if (selectedPayment === undefined) {
+            notifyError('Silahkan pilih metode pembayaran terlebih dahulu')
+            window.scrollTo({ top: 1650, behavior: 'smooth' });
+        } else if (phone.length < 9) {
+            notifyError('Silahkan lengkapi No Whatsapp terlebih dahulu')
+            window.scrollTo({ top: 2200, behavior: 'smooth' });
+        } else {
+            setModalOpen(true)
+        }
+    }
+    
     function completeOrder() {
-        notify()
+        notifyError('Pesanan anda sedang diproses, silahkan tungungi wa admin kami')
+        console.log(phone);
+        
     }
 
     const toggleCollapse1 = () => {
@@ -159,14 +178,14 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                 <div>
                                     <label htmlFor="" className="block text-xs font-medium text-foreground pb-2">ID</label>
                                     <div className="flex flex-col items-start">
-                                        <input type="text" placeholder="Masukkan ID" className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
+                                        <input onChange={(e) => setId(e.target.value)} type="number" placeholder="Masukkan ID" className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
                                     </div>
                                 </div>
                                 {product?.isServer && (
                                 <div>
                                     <label htmlFor="" className="block text-xs font-medium text-foreground pb-2">Server</label>
                                     <div className="flex flex-col items-start">
-                                        <input type="text" placeholder="Masukkan Server" className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
+                                        <input onChange={(e) => setServer(e.target.value)} type="number" placeholder="Masukkan Server" className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
                                     </div>
                                 </div>
                                 )}
@@ -577,7 +596,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                 </div>
                             </div>
                         </div>
-                        <button onClick={() => setModalOpen(true)} className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 w-full gap-2">
+                        <button onClick={sumbitOrder} className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 w-full gap-2">
                                 <span className="">
                                     Pesan Sekarang!
                                 </span>
@@ -615,13 +634,15 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                     <div className="flex flex-row">
                                         <span className="w-24">id</span>
                                         <span className="w-4 text-center">:</span>
-                                        <span>email</span>
+                                        <span>{id}</span>
                                     </div>
-                                    <div className="flex flex-row">
+                                    {product?.isServer && (
+                                        <div className="flex flex-row">
                                         <span className="w-24">server</span>
                                         <span className="w-4 text-center">:</span>
-                                        <span>email</span>
+                                        <span>{server}</span>
                                     </div>
+                                    )}
                                     <div className="flex flex-row">
                                         <span className="w-24">Item</span>
                                         <span className="w-4 text-center">:</span>
