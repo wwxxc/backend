@@ -9,4 +9,6 @@ interface Product {
     product_provider: string
     isPopular: boolean
     isServer: boolean
+    isCheckUsername: boolean
+    checkUsername_code: string
 }
