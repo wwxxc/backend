@@ -37,7 +37,16 @@ const Product = sequelize.define('product', {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false,
-  }
+  },
+  isCheckUsername: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
+  checkUsername_code: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
 module.exports = Product;
