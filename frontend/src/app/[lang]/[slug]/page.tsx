@@ -26,28 +26,50 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     const [isCollapsed3, setIsCollapsed3] = useState(true);
     const [phone, setPhone] = useState('');
     const [isModalOpen, setModalOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const notifyError = (msg: string) => toast.error(msg);
     let completeButtonRef = useRef(null)
-    function sumbitOrder() {
+    async function submitOrder() {
         if (id === '') {
-            notifyError('Silahkan lengkapi data akun terlebih dahulu')
+            notifyError('Silahkan lengkapi data akun terlebih dahulu');
             window.scrollTo({ top: 200, behavior: 'smooth' });
         } else if (product?.isServer && server === '') {
-            notifyError('Silahkan lengkapi data akun terlebih dahulu')
-            window.scrollTo({ top: 200, behavior: 'smooth' })
+            notifyError('Silahkan lengkapi data akun terlebih dahulu');
+            window.scrollTo({ top: 200, behavior: 'smooth' });
         } else if (selectedProduct === undefined) {
-            notifyError('Silahkan pilih item terlebih dahulu')
+            notifyError('Silahkan pilih item terlebih dahulu');
         } else if (selectedPayment === undefined) {
-            notifyError('Silahkan pilih metode pembayaran terlebih dahulu')
+            notifyError('Silahkan pilih metode pembayaran terlebih dahulu');
             window.scrollTo({ top: 1710, behavior: 'smooth' });
         } else if (phone.length < 9) {
-            notifyError('Silahkan lengkapi No Whatsapp terlebih dahulu')
+            notifyError('Silahkan lengkapi No Whatsapp terlebih dahulu');
             window.scrollTo({ top: 2200, behavior: 'smooth' });
         } else {
-            setModalOpen(true)
+            if (product?.isCheckUsername) {
+                try {
+                    const data = await checkUsername(product.checkUsername_code, id, server);
+                    if(data.result) {
+                        setUsername(data.data);
+                    } else {
+                        if(data.message === 'Akun game tidak dapat ditemukan.') {
+                            notifyError('ID Akun tidak ditemukan');
+                        } else {
+                            notifyError(data.message);
+                        }
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error checking username:', error);
+                    notifyError('Terjadi kesalahan saat memeriksa username');
+                    return;
+                }
+            }
+            setModalOpen(true);
         }
     }
+
+
     
     function completeOrder() {
         notifyError('Pesanan anda sedang diproses, silahkan tungungi wa admin kami')
@@ -91,6 +113,24 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
         }
     
     }, [product]);
+
+    async function checkUsername(code: string, id: string, server: string) {
+        const data = {
+            code: code,
+            id: id,
+            server: server
+        };
+    
+        try {
+            const response = await axios.post(`${API_URL}/account/check-game`, data);
+            console.log(response.data.data);
+            return response.data.data;
+            
+        } catch (error) {
+            console.error("Error fetching account", error);
+            return null; 
+        }
+    }
 
     useEffect(() => {
         axios.post(`${API_URL}/payment/list`)
@@ -260,8 +300,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                         <div className="p-4">
                             <div className="flex w-full flex-col space-y-4">
                                 {listPayment.map((data) => (
-                                    <>
-                                    {data.code === 'QRIS2' && (
+                                    data.code === 'QRIS2' && (
                                         <div key={data.code} onClick={() => handleSelectPayment(data)} >
                                         <div id="radio-group" role="radio-group">
                                             <label className="sr-only" htmlFor="radio-1">Select an option</label>
@@ -285,9 +324,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                             </div>
                                         </div>
                                     </div>
-                                    )}
-                                    
-                                    </>
+                                    )
                                 ))}
 
                                 {/* E-wallet */}
@@ -313,9 +350,8 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                             <label className="sr-only" htmlFor="radio-1">Select an option</label>
                                             <div className="grid grid-cols-2 gap-4 pt-2 sm:grid-cols-3 md:grid-cols-2 xl:grid-cols-3">
                                                 {listPayment.map((data) => (
-                                                    <>
-                                                        {data.group.includes('E-Wallet') && data.code !== 'QRIS2' && (
-                                                            <div key={data.id} onClick={() => handleSelectPayment(data)} className={`relative flex cursor-pointer rounded-xl bg-white/50 p-2.5 shadow-sm outline-none md:p-3 ${selectedPayment?.code === data.code ? 'ring-2 ring-primary ring-offset-2 ring-offset-background/60' : 'border-transparent'}`}>
+                                                        data.group.includes('E-Wallet') && data.code !== 'QRIS2' && (
+                                                            <div key={data.code} onClick={() => handleSelectPayment(data)} className={`relative flex cursor-pointer rounded-xl bg-white/50 p-2.5 shadow-sm outline-none md:p-3 ${selectedPayment?.code === data.code ? 'ring-2 ring-primary ring-offset-2 ring-offset-background/60' : 'border-transparent'}`}>
                                                             <span className="flex w-full">
                                                                 <span className="flex w-full flex-col justify-between">
                                                                     <div>
@@ -339,8 +375,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                                                 </span>
                                                             </span>
                                                         </div>
-                                                        )}
-                                                    </>
+                                                        )
                                                 ))}
                                             </div>
                                         </div>
@@ -393,9 +428,8 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                             <label className="sr-only" htmlFor="radio-1">Select an option</label>
                                             <div className="grid grid-cols-2 gap-4 pt-2 sm:grid-cols-3 md:grid-cols-2 xl:grid-cols-3">
                                                 {listPayment.map((data) => (
-                                                    <>
-                                                        {data.group.includes('Virtual Account') && data.code !== 'QRIS2' && (
-                                                            <div key={data.id} onClick={ selectedProduct && selectedProduct?.normal_price.basic <= data.minimum_amount ? () => handleSelectPayment(null) : () => handleSelectPayment(data)} className={`relative flex cursor-pointer rounded-xl bg-white/50 p-2.5 shadow-sm outline-none md:p-3 ${selectedPayment?.code === data.code ? 'ring-2 ring-primary ring-offset-2 ring-offset-background/60' : 'border-transparent'}`}>
+                                                        data.group.includes('Virtual Account') && data.code !== 'QRIS2' && (
+                                                            <div key={data.code} onClick={ selectedProduct && selectedProduct?.normal_price.basic <= data.minimum_amount ? () => handleSelectPayment(null) : () => handleSelectPayment(data)} className={`relative flex cursor-pointer rounded-xl bg-white/50 p-2.5 shadow-sm outline-none md:p-3 ${selectedPayment?.code === data.code ? 'ring-2 ring-primary ring-offset-2 ring-offset-background/60' : 'border-transparent'}`}>
                                                             <span className="flex w-full">
                                                                 <span className="flex w-full flex-col justify-between">
                                                                     <div>
@@ -419,8 +453,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                                                 </span>
                                                             </span>
                                                         </div>
-                                                        )}
-                                                    </>
+                                                        )
                                                 ))}
                                             </div>
                                         </div>
@@ -479,9 +512,8 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                             <label className="sr-only" htmlFor="radio-1">Select an option</label>
                                             <div className="grid grid-cols-2 gap-4 pt-2 sm:grid-cols-3 md:grid-cols-2 xl:grid-cols-3">
                                                 {listPayment.map((data) => (
-                                                    <>
-                                                        {data.group.includes('Convenience Store') && data.code !== 'QRIS2' && (
-                                                            <div key={data.id} onClick={ selectedProduct && selectedProduct?.normal_price.basic <= data.minimum_amount ? () => handleSelectPayment(null) : () => handleSelectPayment(data)} className={`relative flex cursor-pointer rounded-xl bg-white/50 p-2.5 shadow-sm outline-none md:p-3 ${selectedPayment?.code === data.code ? 'ring-2 ring-primary ring-offset-2 ring-offset-background/60' : 'border-transparent'}`}>
+                                                        data.group.includes('Convenience Store') && data.code !== 'QRIS2' && (
+                                                            <div key={data.code} onClick={ selectedProduct && selectedProduct?.normal_price.basic <= data.minimum_amount ? () => handleSelectPayment(null) : () => handleSelectPayment(data)} className={`relative flex cursor-pointer rounded-xl bg-white/50 p-2.5 shadow-sm outline-none md:p-3 ${selectedPayment?.code === data.code ? 'ring-2 ring-primary ring-offset-2 ring-offset-background/60' : 'border-transparent'}`}>
                                                             <span className="flex w-full">
                                                                 <span className="flex w-full flex-col justify-between">
                                                                     <div>
@@ -505,8 +537,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                                                 </span>
                                                             </span>
                                                         </div>
-                                                        )}
-                                                    </>
+                                                        )
                                                 ))}
                                             </div>
                                         </div>
@@ -592,7 +623,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                 </div>
                             </div>
                         </div>
-                        <button onClick={sumbitOrder} className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 w-full gap-2">
+                        <button onClick={submitOrder} className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 w-full gap-2">
                                 <span className="">
                                     Pesan Sekarang!
                                 </span>
@@ -622,11 +653,13 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                             </Dialog.Title>
                             <Dialog.Description className={'text-sm bg-background mb-4 rounded-lg p-4'}>
                                 <div className="flex flex-col gap-2">
-                                    <div className="flex flex-row">
+                                    {product?.isCheckUsername && (
+                                        <div className="flex flex-row">
                                         <span className="w-24">Username</span>
                                         <span className="w-4 text-center">:</span>
-                                        <span>Name</span>
+                                        <span>{username}</span>
                                     </div>
+                                    )}
                                     <div className="flex flex-row">
                                         <span className="w-24">id</span>
                                         <span className="w-4 text-center">:</span>
