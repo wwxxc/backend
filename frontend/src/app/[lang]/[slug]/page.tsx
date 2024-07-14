@@ -1,10 +1,14 @@
 'use client'
 import axios from "axios"
-import { useEffect, useState } from "react"
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { Fragment, useEffect, useRef, useState } from "react"
+import { ChevronDown, ChevronUp, CheckCircle } from 'lucide-react'
 import { motion } from "framer-motion"
 import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
+import {  Modal,   ModalContent,   ModalHeader,   ModalBody,   ModalFooter, useDisclosure} from "@nextui-org/modal";
+import { Description, Dialog, DialogPanel, DialogTitle, Transition } from '@headlessui/react'
+import toast, { Toaster } from 'react-hot-toast';
+import React from "react"
 
 const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>{
     const slug = params.slug
@@ -19,6 +23,19 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     const [isCollapsed2, setIsCollapsed2] = useState(true);
     const [isCollapsed3, setIsCollapsed3] = useState(true);
     const [phone, setPhone] = useState('');
+    const [isModalOpen, setModalOpen] = useState(false);
+
+    
+    const notifyError = () => toast.error('Here is your toast.');
+    const notifySuccess = () => toast.success('Here is your toast.');
+    const notify = () => toast.error('Here is your toast.');
+    
+
+    let completeButtonRef = useRef(null)
+
+    function completeOrder() {
+        notify()
+    }
 
     const toggleCollapse1 = () => {
         setIsCollapsed1(!isCollapsed1);
@@ -77,12 +94,6 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
         setSelectedPayment(payment);
         setTotalPrice(( selectedProduct && selectedProduct?.normal_price.basic + payment.total_fee.flat + (parseFloat(payment.total_fee.percent) * selectedProduct?.normal_price.basic / 100) ).toLocaleString('id-ID', { maximumFractionDigits: 0} ))
     };
-
-    const handleSubmit = () => {
-        console.log('form berhasil submit');
-        
-    }
-
     
     
     
@@ -133,7 +144,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                         </div>
                     </div>
                 </div>
-                <form action="#" onSubmit={handleSubmit} className="col-span-3 col-start-1 flex flex-col gap-4 mb-10 lg:col-span-2 lg:gap-8">
+                <div className="col-span-3 col-start-1 flex flex-col gap-4 mb-10 lg:col-span-2 lg:gap-8">
                     <section className="relative rounded-xl bg-card/50 shadow-2xl">
                         <div className="flex items-center overflow-hidden rounded-t-xl bg-[#7F8487]/60">
                             <div className="flex h-10 w-10 items-center justify-center bg-primary font-semibold text-primary-foreground">
@@ -566,15 +577,84 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                 </div>
                             </div>
                         </div>
-                        <button className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 w-full gap-2">
+                        <button onClick={() => setModalOpen(true)} className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 w-full gap-2">
                                 <span className="">
                                     Pesan Sekarang!
                                 </span>
                         </button>
-                    </div>
-                    )}
-                    
-                </form>
+                        
+                        <Transition show={isModalOpen} as={Fragment}>
+                            <Dialog
+                                open={isModalOpen}
+                                onClose={() => setModalOpen(true)}
+                                className="relative z-50"
+                            >
+                        <div className="fixed inset-0 bg-background bg-opacity-50" aria-hidden="true" />
+
+                        <div className="fixed bottom-0 sm:inset-0 flex w-screen items-center justify-center p-4">
+                            <motion.div
+                                initial={{ y: '100%', opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: '100%', opacity: 0 }}
+                                transition={{ duration: 0.3, ease: [0.25, 0.8, 0.5, 1] }}
+                                className="mx-auto max-w-sm w-full rounded-lg bg-accent p-4"
+                            >
+                            <Dialog.Panel>
+                            <Dialog.Title className={'flex-1 text-lg items-center mb-2 justify-center text-center'}>
+                                <div className="flex items-center justify-center mb-2"><CheckCircle color="#00FF00" size={50} /></div>
+                                <h1 className="font-bold">Buat Pesanan</h1>
+                                <span className="text-sm">Pastikan data anda sudah benar!</span>
+                            </Dialog.Title>
+                            <Dialog.Description className={'text-sm bg-background mb-4 rounded-lg p-4'}>
+                                <div className="flex flex-col gap-2">
+                                    <div className="flex flex-row">
+                                        <span className="w-24">Username</span>
+                                        <span className="w-4 text-center">:</span>
+                                        <span>Name</span>
+                                    </div>
+                                    <div className="flex flex-row">
+                                        <span className="w-24">id</span>
+                                        <span className="w-4 text-center">:</span>
+                                        <span>email</span>
+                                    </div>
+                                    <div className="flex flex-row">
+                                        <span className="w-24">server</span>
+                                        <span className="w-4 text-center">:</span>
+                                        <span>email</span>
+                                    </div>
+                                    <div className="flex flex-row">
+                                        <span className="w-24">Item</span>
+                                        <span className="w-4 text-center">:</span>
+                                        <span className="w-36">{selectedProduct?.name}</span>
+                                    </div>
+                                    <div className="flex flex-row">
+                                        <span className="w-24">Produk</span>
+                                        <span className="w-4 text-center">:</span>
+                                        <span>{product?.product_name}</span>
+                                    </div>
+                                    <div className="flex flex-row">
+                                        <span className="w-24">Payment</span>
+                                        <span className="w-4 text-center">:</span>
+                                        <span>{selectedPayment?.name}</span>
+                                    </div>
+                                </div>
+                            </Dialog.Description>
+                            <div className="flex items-center justify-between gap-2">
+                            <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-transparent px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-muted/50" onClick={() => setModalOpen(false)}>Batal </button>
+                            <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-transparent px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-muted/50" ref={completeButtonRef} onClick={completeOrder}>
+                                Pesan Sekarang
+                            </button>
+                        </div>
+                        </Dialog.Panel>
+                    </motion.div>
+                </div>
+            </Dialog>
+        </Transition>
+            </div>)}        
+            </div>
+            </div>
+            <div className="z-40">
+                <Toaster />
             </div>
         </main>
     )
