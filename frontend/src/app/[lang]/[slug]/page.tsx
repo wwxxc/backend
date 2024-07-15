@@ -26,7 +26,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     const [isCollapsed3, setIsCollapsed3] = useState(true);
     const [phone, setPhone] = useState('');
     const [isModalOpen, setModalOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const notifyError = (msg: string) => toast.error(msg);
     let completeButtonRef = useRef(null)
@@ -46,12 +46,15 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
             notifyError('Silahkan lengkapi No Whatsapp terlebih dahulu');
             window.scrollTo({ top: 2200, behavior: 'smooth' });
         } else {
+            setIsLoading(true);
             if (product?.isCheckUsername) {
                 try {
                     const data = await checkUsername(product.checkUsername_code, id, server);
                     if(data.result) {
                         setUsername(data.data);
+                        setIsLoading(false);
                     } else {
+                        setIsLoading(false);
                         if(data.message === 'Akun game tidak dapat ditemukan.') {
                             notifyError('ID Akun tidak ditemukan');
                         } else {
@@ -67,6 +70,11 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
             }
             setModalOpen(true);
         }
+    }
+
+    const handleTotalPrice = (data: ListPayment) => {
+        console.log(data);
+        
     }
 
 
@@ -252,6 +260,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                             value={data.code}
                                             checked={selectedProduct?.code === data.code}
                                             onChange={() => handleSelectProduct(data)}
+
                                             className="absolute opacity-0"
                                         />
                                         <span className="flex flex-1">
@@ -301,7 +310,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                             <div className="flex w-full flex-col space-y-4">
                                 {listPayment.map((data) => (
                                     data.code === 'QRIS2' && (
-                                        <div key={data.code} onClick={() => handleSelectPayment(data)} >
+                                        <div key={data.code} onClick={ !selectedProduct ? () => null : () => handleSelectPayment(data)} >
                                         <div id="radio-group" role="radio-group">
                                             <label className="sr-only" htmlFor="radio-1">Select an option</label>
                                             <div className="flex flex-col gap-4">
@@ -315,7 +324,8 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                                         <div className="mt-3 w-full">
                                                             <div className="text-sm font-semibold sm:text-base w-full rounded-md border border-dashed py-1 text-center ">
                                                                 <span className="w-full md:text-sm">
-                                                                    { selectedProduct && (selectedProduct?.normal_price.basic <= data.minimum_amount ? `Min. Rp ${data.minimum_amount.toLocaleString('id-ID')}` :  'Rp ' + ( selectedProduct.normal_price.basic + data.total_fee.flat + (selectedProduct?.normal_price.basic * parseFloat(data.total_fee.percent) / 100)).toLocaleString('id-ID', {maximumFractionDigits: 0}) )}
+                                                                    { selectedProduct ? (selectedProduct?.normal_price.basic <= data.minimum_amount ? `Min. Rp ${data.minimum_amount.toLocaleString('id-ID')}` :  'Rp ' + ( selectedProduct.normal_price.basic + data.total_fee.flat + (selectedProduct?.normal_price.basic * parseFloat(data.total_fee.percent) / 100)).toLocaleString('id-ID', {maximumFractionDigits: 0}) ): (<span className="text-red-400">Min. Rp 100</span>) }
+                                                                    
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -583,7 +593,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                     <div>
                                         <PhoneInput
                                         defaultCountry="id"
-                                        
+                                        inputStyle={{ width: '100%' }}
                                         value={phone}
                                         style={{
                                             width: '100%',
@@ -604,7 +614,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                             </div>
                         </div>
                         <button type="submit" className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 w-full gap-2">
-                                <span className="">
+                                <span>
                                     Pesan Sekarang!
                                 </span>
                         </button>
@@ -623,10 +633,12 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                 </div>
                             </div>
                         </div>
-                        <button onClick={submitOrder} className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 w-full gap-2">
-                                <span className="">
-                                    Pesan Sekarang!
-                                </span>
+                        <button onClick={submitOrder} disabled={isLoading} className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 w-full gap-2">
+                        {isLoading ? (
+                                <div className="loader border-t-transparent border-solid border-white border-4 rounded-full w-4 h-4 animate-spin"></div> 
+                            ) : (
+                                <span>Pesan Sekarang!</span>
+                        )}
                         </button>
                         
                         <Transition show={isModalOpen} as={Fragment}>
@@ -690,7 +702,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                 </div>
                             </Dialog.Description>
                             <div className="flex items-center justify-between gap-2">
-                            <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-transparent px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-muted/50" onClick={() => setModalOpen(false)}>Batal </button>
+                            <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-transparent px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-muted/50" onClick={() => {setModalOpen(false), setIsLoading(false)}}>Batal </button>
                             <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-transparent px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-muted/50" ref={completeButtonRef} onClick={completeOrder}>
                                 Pesan Sekarang
                             </button>
