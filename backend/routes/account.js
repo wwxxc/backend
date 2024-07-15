@@ -72,7 +72,6 @@ router.post('/check-game', async (req, res) => {
     
         axios(config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
                 res.json({
                     status: true,
                     data: response.data
