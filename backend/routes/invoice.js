@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Invoice = require('../models/invoice');
+const crypto = require('crypto');
+const axios = require('axios');
 
 function addThousandSeparators(value) {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -10,12 +12,18 @@ function addThousandSeparators(value) {
   const TRIPAY_PRIVATE_KEY = process.env.TRIPAY_PRIVATE_KEY;
   const TRIPAY_MERCHANT_CODE = process.env.TRIPAY_MERCHANT_CODE
   const TRIPAY_MERCHANT_REFF = process.env.TRIPAY_MERCHANT_REFF
+  const APP_NAME = process.env.APP_NAME
 
 router.post('/add', async (req, res) => {
+    const merchant_ref = TRIPAY_MERCHANT_REFF
+    const customer_name = `customer ${APP_NAME}`
+    const customer_email = `customer@${APP_NAME}.com`
+    const refid = crypto.randomBytes(4).toString('hex');
+    const status_transaksi = 'Pending'
     try {
-        const { amount, produk, item, method, merchant_ref, customer_name, customer_email, customer_phone, refid, status_transaksi, username, userid, userserver, payment_grup, nomor_whatsapp, kode_game, kategori } = req.body;
+        const { amount, produk, item, method, customer_phone, username, userid, userserver, payment_grup, nomor_whatsapp, kode_game, kategori } = req.body;
 
-        const expiry = Math.floor(Date.now() / 1000) + 3600; // 1 hour in seconds
+        const expiry = Math.floor(Date.now() / 1000) + 3600;
         var signature = crypto.createHmac('sha256', TRIPAY_PRIVATE_KEY)
         .update(TRIPAY_MERCHANT_CODE + merchant_ref + amount)
         .digest('hex');
@@ -51,7 +59,7 @@ router.post('/add', async (req, res) => {
             const order_detail = {
                 no_invoice: response.data.data.reference,
                 no_refid: refid,
-                status: response.data.data.status,
+                status_pembayaran: response.data.data.status,
                 produk,
                 status_transaksi,
                 item,
@@ -68,7 +76,7 @@ router.post('/add', async (req, res) => {
                 kategori
             };
 
-            await OrderModel.create(order_detail);
+            await Invoice.create(order_detail);
 
             res.json({
                 status: true,
@@ -84,11 +92,11 @@ router.post('/add', async (req, res) => {
             });
         }
     } catch (error) {
-        console.error("Error creating order", error);
+        console.error("Error creating order", error.response);
         res.status(500).json({
             status: false,
-            pesan: `Gagal order: ${error.message}`,
-            data: []
+            pesan: `Error creating order: ${error.message}`,
+            data: error.response
         });
     }
 })
