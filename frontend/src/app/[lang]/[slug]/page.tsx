@@ -72,15 +72,11 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
         }
     }
 
-    const handleTotalPrice = (data: ListPayment) => {
-        console.log(data);
-        
-    }
-
 
     
-    function completeOrder() {
+    async function completeOrder() {
         notifyError('Pesanan anda sedang diproses, silahkan tungungi wa admin kami')
+        const data = await addOrder();
     }
 
     const toggleCollapse1 = () => {
@@ -149,6 +145,30 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                 console.error("Error fetching payment:", error);
             });
     }, []);
+
+    const addOrder = async () => {
+        const data = {
+            userid: id,
+            userserver: server,
+            username: username,
+            amount: selectedProduct?.normal_price.basic,
+            method: selectedPayment?.code,
+            produk: product?.product_name,
+            item: selectedProduct?.name,
+            payment_name: selectedPayment?.name,
+            payment_code: selectedPayment?.code,
+            payment_grup: selectedPayment?.group,
+            nomor_whatsapp: phone,
+            kode_game: selectedProduct?.code
+        }
+
+        try {
+            const response = await axios.post(`${API_URL}/invoice/add`, data);
+            console.log(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const handleSelectProduct = (product: any) => {
         setSelectedProduct(product);
