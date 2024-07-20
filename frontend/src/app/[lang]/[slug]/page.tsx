@@ -65,6 +65,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                 } catch (error) {
                     console.error('Error checking username:', error);
                     notifyError('Terjadi kesalahan saat memeriksa username');
+                    setIsLoading(false);
                     return;
                 }
             }
@@ -75,8 +76,9 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
 
     
     async function completeOrder() {
-        notifyError('Pesanan anda sedang diproses, silahkan tungungi wa admin kami')
         const data = await addOrder();
+        setModalOpen(false);
+        window.location.href = '/invoice/' + data.data.reference
     }
 
     const toggleCollapse1 = () => {
@@ -127,7 +129,6 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     
         try {
             const response = await axios.post(`${API_URL}/account/check-game`, data);
-            console.log(response.data.data);
             return response.data.data;
             
         } catch (error) {
@@ -147,6 +148,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     }, []);
 
     const addOrder = async () => {
+        setIsLoading(true);
         const data = {
             userid: id,
             userserver: server,
@@ -164,7 +166,8 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
 
         try {
             const response = await axios.post(`${API_URL}/invoice/add`, data);
-            console.log(response.data);
+            setIsLoading(false);
+            return response.data.data;
         } catch (error) {
             console.log(error);
         }
@@ -724,7 +727,11 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                             <div className="flex items-center justify-between gap-2">
                             <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-transparent px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-muted/50" onClick={() => {setModalOpen(false), setIsLoading(false)}}>Batal </button>
                             <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-transparent px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-muted/50" ref={completeButtonRef} onClick={completeOrder}>
-                                Pesan Sekarang
+                            {isLoading ? (
+                                <div className="loader border-t-transparent border-solid border-white border-4 rounded-full w-4 h-4 animate-spin"></div> 
+                            ) : (
+                                <span>Pesan Sekarang!</span>
+                            )}
                             </button>
                         </div>
                         </Dialog.Panel>

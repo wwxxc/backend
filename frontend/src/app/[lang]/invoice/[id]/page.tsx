@@ -4,6 +4,10 @@ import axios from "axios"
 const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL
     const data = await axios.post(`${API_URL}/invoice/`+params.id)
+    const qr = data.data.response_tripay
+    console.log(qr.success);
+    
+    
     return (
         <main className="relative bg-[#393E46]">
             <div className="container pb-8 pt-12  md:pt-24">
@@ -33,7 +37,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                     <div>
                         <div>
                             <h3 className="text-base font-semibold leading-7 text-secondary-foreground print:text-black">Detail Pembelian</h3>
-                            <p className="text- mt-1 max-w-2xl text-sm leading-6">Pembelian produk {data.data.product_name} {data.data.product_provider} </p>
+                            <p className="text- mt-1 max-w-2xl text-sm leading-6">Pembelian produk {data.data.produk} {data.data.item} </p>
                         </div>
                     </div>
                     <div className="mt-4 border-t border-border/75">
@@ -44,15 +48,15 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                             </div>
                             <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
                                 <dt className="text-sm font-medium leading-6 text-secondary-foreground print:text-black">Status Transaksi</dt>
-                                <dd className="mt-1 text-sm leading-6 text-secondary-foreground sm:col-span-2 sm:mt-0 print:text-black">{params.id}</dd>
+                                <dd className="mt-1 text-sm leading-6 text-secondary-foreground sm:col-span-2 sm:mt-0 print:text-black">{data.data.status_transaksi}</dd>
                             </div>
                             <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
                                 <dt className="text-sm font-medium leading-6 text-secondary-foreground print:text-black">Status Pembayaran</dt>
-                                <dd className="mt-1 text-sm leading-6 text-secondary-foreground sm:col-span-2 sm:mt-0 print:text-black">{params.id}</dd>
+                                <dd className="mt-1 text-sm leading-6 text-secondary-foreground sm:col-span-2 sm:mt-0 print:text-black">{data.data.status_pembayaran}</dd>
                             </div>
                             <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
                                 <dt className="text-sm font-medium leading-6 text-secondary-foreground print:text-black">Pesan</dt>
-                                <dd className="mt-1 text-sm leading-6 text-secondary-foreground sm:col-span-2 sm:mt-0 print:text-black">{params.id}</dd>
+                                <dd className="mt-1 text-sm leading-6 text-secondary-foreground sm:col-span-2 sm:mt-0 print:text-black">{data.data.pesan}</dd>
                             </div>
                             <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
                                 <dt className="text-sm font-medium leading-6 text-secondary-foreground print:text-black">Rincian Pembayaran</dt>
@@ -61,7 +65,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                                         Total Pembayaran
                                     </div>
                                     <div>
-                                        Rp10
+                                        {data.data.harga}
                                     </div>
                                 </div>
                             </div>
@@ -84,7 +88,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                             Metode Pembayaran
                         </h2>
                         <h3 className="text-sm font-semibold leading-6">
-                            QRIS (All Payment)
+                            {data.data.payment_name}
                         </h3>
                     </div>
                     <div className="prose prose-sm">
@@ -114,7 +118,9 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                     <div className="flex flex-col">
                         <div className="relative flex h-64 w-64 items-center justify-center overflow-hidden rounded-lg bg-white sm:h-56 sm:w-56">
                             <div>
-
+                                <canvas className="h-64 w-64" width="256" height="256">
+                                    {data.data.qr_code}
+                                </canvas>
                             </div>
                         </div>
                         <div className="inline-flex items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground duration-300 hover:bg-primary/75 disabled:cursor-not-allowed disabled:opacity-75 mt-2 w-64 py-2 !text-xs sm:w-56 print:hidden">
@@ -128,7 +134,30 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                             <div>
                                 <h3 className="text-sm font-semibold leading-6">Informasi Akun</h3>
                                 <div className="divide-secondary-700/50 mt-4 divide-y border-t border-border/75 text-sm font-medium text-secondary-foreground print:text-black">
-                                    
+                                    <div className="grid grid-cols-3 gap-x-4 py-2">
+                                        <dt className="col-span-3 text-sm font-medium leading-6 text-secondary-foreground md:col-span-1 print:text-black">
+                                            Nickname
+                                        </dt>
+                                        <dd className="col-span-3 text-xs leading-6 text-secondary-foreground sm:col-span-2 md:text-sm print:text-black">
+                                            {data.data.username}
+                                        </dd>
+                                    </div>
+                                    <div className="grid grid-cols-3 gap-x-4 py-2">
+                                        <dt className="col-span-3 text-sm font-medium leading-6 text-secondary-foreground md:col-span-1 print:text-black">
+                                            ID
+                                        </dt>
+                                        <dd className="col-span-3 text-xs leading-6 text-secondary-foreground sm:col-span-2 md:text-sm print:text-black">
+                                            {data.data.userid}
+                                        </dd>
+                                    </div>
+                                    <div className="grid grid-cols-3 gap-x-4 py-2">
+                                        <dt className="col-span-3 text-sm font-medium leading-6 text-secondary-foreground md:col-span-1 print:text-black">
+                                            Server
+                                        </dt>
+                                        <dd className="col-span-3 text-xs leading-6 text-secondary-foreground sm:col-span-2 md:text-sm print:text-black">
+                                            {data.data.userserver}
+                                        </dd>
+                                    </div>
                                 </div>
                             </div>
                         </div>
