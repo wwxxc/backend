@@ -20,6 +20,7 @@ router.post('/add', async (req, res) => {
     const customer_email = `customer@${APP_NAME}.com`
     const refid = crypto.randomBytes(4).toString('hex');
     const status_transaksi = 'Pending'
+    const pesan = 'Menunggu pembayaran'
     try {
         const { amount, produk, item, method, customer_phone, username, userid, userserver, payment_name, payment_code, payment_grup, nomor_whatsapp, kode_game, kategori } = req.body;
 
@@ -75,6 +76,7 @@ router.post('/add', async (req, res) => {
                 nomor_whatsapp,
                 response_tripay: JSON.stringify(response.data),
                 kode_game,
+                pesan,
                 kategori
             };
 
