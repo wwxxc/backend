@@ -21,7 +21,7 @@ router.post('/add', async (req, res) => {
     const refid = crypto.randomBytes(4).toString('hex');
     const status_transaksi = 'Pending'
     try {
-        const { amount, produk, item, method, customer_phone, username, userid, userserver, payment_grup, nomor_whatsapp, kode_game, kategori } = req.body;
+        const { amount, produk, item, method, customer_phone, username, userid, userserver, payment_name, payment_code, payment_grup, nomor_whatsapp, kode_game, kategori } = req.body;
 
         const expiry = Math.floor(Date.now() / 1000) + 3600;
         var signature = crypto.createHmac('sha256', TRIPAY_PRIVATE_KEY)
@@ -69,6 +69,8 @@ router.post('/add', async (req, res) => {
                 userserver,
                 method,
                 payment: response.data.data.payment_name,
+                payment_name,
+                payment_code,
                 payment_grup,
                 nomor_whatsapp,
                 response_tripay: JSON.stringify(response.data),
@@ -103,7 +105,7 @@ router.post('/add', async (req, res) => {
 
 router.post('/:id', async (req, res) => {
     try {
-        const data = await Invoice.findOne({ where : { id : req.params.id }})
+        const data = await Invoice.findOne({ where : { no_invoice : req.params.id }})
         res.json(data);
     } catch (error) {
         res.status(500).json({ error: error.message });
