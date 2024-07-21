@@ -12,7 +12,9 @@ const Navbar = () => {
     const { lang, slug } = useParams() as { lang: string[], slug: string[] }; 
     const CurrentLang = lang ? lang.toString() : '';
     const asPath = usePathname();
-    const currentPage = asPath ? asPath.split('/')[2] : null;
+    const currentPage = asPath ? asPath : null;
+    console.log(currentPage);
+    
     return(
         <>
         <nav className="sticky top-0 z-40 w-full flex-none border-b border-[#000000]/50 bg-background-foreground/80 backdrop-blur print:hidden">
@@ -44,7 +46,7 @@ const Navbar = () => {
               <div className="flex h-full space-x-6">
               <Link
                 className={`relative z-10 -mb-px flex items-center space-x-2 border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out ${
-                  currentPage === undefined ? 'border-primary text-primary' : 'text-foreground text-white hover:text-primary-300 border-transparent hover:border-primary'
+                  currentPage === `/${lang}` ? 'border-primary text-primary' : 'text-foreground text-white hover:text-primary-300 border-transparent hover:border-primary'
                 }`}
                 href="/"
               >
@@ -53,7 +55,7 @@ const Navbar = () => {
               </Link>
               <Link
                 className={`relative z-10 -mb-px flex items-center space-x-2 border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out ${
-                  currentPage === 'invoice' ? 'border-primary text-primary' : 'text-foreground text-white hover:text-primary-300 border-transparent hover:border-primary'
+                  currentPage === `/${lang}/invoice` ? 'border-primary text-primary' : 'text-foreground text-white hover:text-primary-300 border-transparent hover:border-primary'
                 }`}
                 href="/invoice"
               >
