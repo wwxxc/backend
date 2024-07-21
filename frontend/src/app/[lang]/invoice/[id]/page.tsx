@@ -1,12 +1,16 @@
+import Countdown from "@/components/Countdown";
 import axios from "axios"
 
+interface Instruction {
+    title: string;
+    steps: string[];
+}
 
 const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL
     const data = await axios.post(`${API_URL}/invoice/`+params.id)
-    const qr = data.data.response_tripay
-    console.log(qr.success);
-    
+    const data_tripay = JSON.parse(data.data.response_tripay);
+    const qrisInstruction = data_tripay.data.instructions.find((instruction: Instruction) => instruction.title === "Pembayaran via QRIS");
     
     return (
         <main className="relative bg-[#393E46]">
@@ -21,7 +25,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                     <p className="mt-3.5 text-base text-secondary-foreground print:text-black">
                         Pesanan kamu
                         <button className="mx-1 rounded-md border border-border/75 bg-secondary/25 px-1 font-bold text-secondary-foreground print:text-black">
-                            {params.id}
+                        {params.id}
                         </button>
                         menunggu pembayaran sebelum dikirim.
                     </p>
@@ -79,7 +83,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                         </dt>
                         <dd className="text-primary-500 mt-2">
                             <div className="rounded-md bg-red-500 px-4 py-2 text-center text-foreground print:p-0 print:text-left print:text-slate-800">
-                                10 jam
+                                <Countdown targetTimestamp={data_tripay.data.expired_time} />
                             </div>
                         </dd>
                     </div>
@@ -99,28 +103,23 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                         </button>
                         <div className="mt-1 rounded-lg border border-border/75 bg-secondary/50 px-4 pb-1 pt-1 text-sm">
                             <div>
+                            {qrisInstruction && (
                                 <p className="selectable-text copyable-text x15bjb6t x1n2onr6">
-                                    <span className="selectable-text copyable-text">Cara Melakukan Pembayaran Dengan Upload Gambar QRIS Di Semua Aplikasi E-Wallet atau E-Banking</span>
-                                    <span><br /><br /><br /></span>
-                                    <span>
-                                        1.iejenf
-                                    </span>
-                                    <span>
-                                        2.iejenf
-                                    </span>
-                                    <span>
-                                        3.iejenf
-                                    </span>
+                                    {qrisInstruction.steps.map((step: string, stepIndex: number) => (
+                                        <span key={stepIndex} className="selectable-text copyable-text">
+                                            {stepIndex + 1}. {step}
+                                            <br /> 
+                                        </span>
+                                    ))}
                                 </p>
+                                )}
                             </div>
                         </div>
                     </div>
                     <div className="flex flex-col">
                         <div className="relative flex h-64 w-64 items-center justify-center overflow-hidden rounded-lg bg-white sm:h-56 sm:w-56">
                             <div>
-                                <canvas className="h-64 w-64" width="256" height="256">
-                                    {data.data.qr_code}
-                                </canvas>
+                                    <img src={data_tripay.data.qr_url} alt="" />
                             </div>
                         </div>
                         <div className="inline-flex items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground duration-300 hover:bg-primary/75 disabled:cursor-not-allowed disabled:opacity-75 mt-2 w-64 py-2 !text-xs sm:w-56 print:hidden">
