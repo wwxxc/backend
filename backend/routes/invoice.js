@@ -24,7 +24,7 @@ router.post('/add', async (req, res) => {
     try {
         const { amount, produk, item, method, customer_phone, username, userid, userserver, payment_name, payment_code, payment_grup, nomor_whatsapp, kode_game, kategori } = req.body;
 
-        const expiry = Math.floor(Date.now() / 1000) + 3600;
+        const expiry = Math.floor(Date.now() / 1000) + 10800;
         var signature = crypto.createHmac('sha256', TRIPAY_PRIVATE_KEY)
         .update(TRIPAY_MERCHANT_CODE + merchant_ref + amount)
         .digest('hex');
