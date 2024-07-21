@@ -1,4 +1,5 @@
 import Countdown from "@/components/Countdown";
+import PaymentButton from "@/components/PaymentButton";
 import axios from "axios"
 
 interface Instruction {
@@ -96,11 +97,13 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                         </h3>
                     </div>
                     <div className="prose prose-sm">
-                        <button className="flex w-full justify-between rounded-lg bg-secondary/50 px-4 py-3 text-left text-sm font-medium text-secondary-foreground focus:outline-none print:text-black">
-                            <span>
-                            Cara Melakukan Pembayaran
-                            </span>
-                        </button>
+                        {qrisInstruction && (
+                            <button className="flex w-full justify-between rounded-lg bg-secondary/50 px-4 py-3 text-left text-sm font-medium text-secondary-foreground focus:outline-none print:text-black">
+                                <span>
+                                Cara Melakukan Pembayaran
+                                </span>
+                            </button>
+                        )}
                         <div className="mt-1 rounded-lg border border-border/75 bg-secondary/50 px-4 pb-1 pt-1 text-sm">
                             <div>
                             {qrisInstruction && (
@@ -111,21 +114,37 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                                             <br /> 
                                         </span>
                                     ))}
+                                <br />
                                 </p>
                                 )}
                             </div>
-                        </div>
-                    </div>
-                    <div className="flex flex-col">
-                        <div className="relative flex h-64 w-64 items-center justify-center overflow-hidden rounded-lg bg-white sm:h-56 sm:w-56">
-                            <div>
+                            <div className="flex flex-col">
+                        {data_tripay.data.qr_url && (
+                            <><div className="relative flex h-64 w-64 items-center justify-center overflow-hidden rounded-lg bg-white sm:h-56 sm:w-56">
+                                <div>
                                     <img src={data_tripay.data.qr_url} alt="" />
+                                </div>
+                            </div><div className="inline-flex items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground duration-300 hover:bg-primary/75 disabled:cursor-not-allowed disabled:opacity-75 mt-2 w-64 py-2 !text-xs sm:w-56 print:hidden">
+                                    Unduh Kode QR
+                                </div></>
+                        )}
+
+                        {data_tripay.data.pay_code && (
+                            <div className="flex flex-col items-center justify-between">
+                                <div className="flex w-full items-center justify-between">
+                                    <div className="col-span-3 inline-flex items-center md:col-span-4">Nomor Pembayaran</div>
+                                    <button>{data_tripay.data.pay_code}</button>
+                                </div>
                             </div>
-                        </div>
-                        <div className="inline-flex items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground duration-300 hover:bg-primary/75 disabled:cursor-not-allowed disabled:opacity-75 mt-2 w-64 py-2 !text-xs sm:w-56 print:hidden">
-                        Unduh Kode QR
+                        )}
+
+                        {data_tripay.data.pay_url && (
+                            <PaymentButton payUrl={data_tripay.data.pay_url} />
+                        )}
+                    </div>
                         </div>
                     </div>
+                    
                 </div>
                 <div className="col-span-3 rounded-xl border border-border/75 bg-secondary/25 p-4 md:col-span-3">
                     <div className="flex flex-col gap-4 md:flex-row">
@@ -163,7 +182,6 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                     </div>
                 </div>
             </div>
-
         </main>
     )
 }

@@ -155,6 +155,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
             username: username,
             amount: selectedProduct?.normal_price.basic,
             method: selectedPayment?.code,
+            customer_phone: phone,
             produk: product?.product_name,
             item: selectedProduct?.name,
             payment_name: selectedPayment?.name,
@@ -614,15 +615,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                 <div className="flex flex-col gap-2">
                                     <label className="block text-xs font-medium text-foreground">No. WhatsApp</label>
                                     <div>
-                                        <PhoneInput
-                                        defaultCountry="id"
-                                        inputStyle={{ width: '100%' }}
-                                        value={phone}
-                                        style={{
-                                            width: '100%',
-                                        }}
-                                        onChange={(phone : any) => setPhone(phone)}
-                                        />
+                                        <input onChange={(e) => setPhone(e.target.value)} type="number" placeholder="08xxxxxxxxx" className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
                                     </div>
                                     <span className="text-xs italic text-card-foreground">**Nomor ini akan dihubungi jika terjadi masalah</span>
                                 </div>
