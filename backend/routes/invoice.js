@@ -13,9 +13,10 @@ function addThousandSeparators(value) {
   const TRIPAY_PRIVATE_KEY = process.env.TRIPAY_PRIVATE_KEY;
   const TRIPAY_MERCHANT_CODE = process.env.TRIPAY_MERCHANT_CODE
   const APP_NAME = process.env.APP_NAME
+  const BASE_URL = process.env.BASE_URL;
 
 router.post('/add', async (req, res) => {
-    const merchant_ref = generateInvoice('EPO', 16);
+    const merchant_ref = generateInvoice('EPO', 8);
     const customer_name = `customer ${APP_NAME}`
     const customer_email = `customer@${APP_NAME}.com`
     const status_transaksi = 'Pending'
@@ -107,6 +108,14 @@ router.post('/add', async (req, res) => {
 router.post('/:id', async (req, res) => {
     try {
         const data = await Invoice.findOne({ where : { no_refid : req.params.id }})
+        const response = await axios.post(`${BASE_URL}/transactions/${data.no_trxid}`)
+        if (response.data.data.result) {
+            if(response.data.data.data[0].status === 'success') {
+                await Invoice.update({status_transaksi: 'Completed'}, {
+                    where: {no_refid: req.params.id}
+                });   
+            }
+        }
         res.json(data);
     } catch (error) {
         res.status(500).json({ error: error.message });

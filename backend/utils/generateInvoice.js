@@ -14,7 +14,7 @@
     const randomString = generateRandomString(length);
     const timestamp = Date.now().toString(36); 
 
-    return `${prefix}${timestamp}${randomString}`;
+    return `${prefix}${timestamp.toUpperCase()}${randomString}`;
 }
 
 module.exports = generateInvoice
