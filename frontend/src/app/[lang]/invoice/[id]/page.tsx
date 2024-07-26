@@ -1,5 +1,6 @@
 import Countdown from "@/components/Countdown";
 import PaymentButton from "@/components/PaymentButton";
+import formatDateTime from "@/utils/formatDatetime";
 import axios from "axios"
 
 interface Instruction {
@@ -12,6 +13,24 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
     const data = await axios.post(`${API_URL}/invoice/`+params.id)
     const data_tripay = JSON.parse(data.data.response_tripay);
     const qrisInstruction = data_tripay.data.instructions.find((instruction: Instruction) => instruction.title === "Pembayaran via QRIS");
+    const getStatusClass = (status:string) => {
+        switch (status) {
+          case 'Completed':
+            return 'bg-green-300 text-green-800';
+          case 'Processing':
+            return 'bg-blue-300 text-blue-800'
+          case 'Error':
+            return 'bg-red-300 text-red-800';
+          case 'Failed':
+            return 'bg-red-300 text-red-800';
+          case 'Cancelled':
+            return 'bg-red-300 text-red-800';
+          case 'Pending':
+          default:
+            return 'bg-yellow-300 text-yellow-800';
+        }
+      };
+   
     
     return (
         <main className="relative bg-[#393E46]">
@@ -21,14 +40,14 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                         Terima Kasih!
                     </h1>
                     <p className="mt-2 text-2xl font-bold tracking-tight text-secondary-foreground md:text-4xl print:text-black">
-                        Harap lengkapi pembayaran.
+                        {data.data.status_pembayaran === 'UNPAID' ? 'Harap lengkapi pembayaran.' : 'Transaksi sudah selesai.'}
                     </p>
                     <p className="mt-3.5 text-base text-secondary-foreground print:text-black">
                         Pesanan kamu
                         <button className="mx-1 rounded-md border border-border/75 bg-secondary/25 px-1 font-bold text-secondary-foreground print:text-black">
                         {params.id}
                         </button>
-                        menunggu pembayaran sebelum dikirim.
+                        {data.data.status_pembayaran === 'UNPAID' ? 'menunggu pembayaran sebelum dikirim.' : 'telah berhasil!'}
                     </p>
                 </div>
             </div>
@@ -53,11 +72,19 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                             </div>
                             <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
                                 <dt className="text-sm font-medium leading-6 text-secondary-foreground print:text-black">Status Transaksi</dt>
-                                <dd className="mt-1 text-sm leading-6 text-secondary-foreground sm:col-span-2 sm:mt-0 print:text-black">{data.data.status_transaksi}</dd>
+                                <dd className="mt-1 text-sm leading-6 text-secondary-foreground sm:col-span-2 sm:mt-0 print:text-black">
+                                    <span className={`inline-flex rounded-sm px-2 text-xs font-semibold leading-5 print:p-0 ${getStatusClass(data.data.status_transaksi)}`}>
+                                        {data.data.status_transaksi}
+                                    </span>
+                                </dd>
                             </div>
                             <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
                                 <dt className="text-sm font-medium leading-6 text-secondary-foreground print:text-black">Status Pembayaran</dt>
-                                <dd className="mt-1 text-sm leading-6 text-secondary-foreground sm:col-span-2 sm:mt-0 print:text-black">{data.data.status_pembayaran}</dd>
+                                <dd className="mt-1 text-sm leading-6 text-secondary-foreground sm:col-span-2 sm:mt-0 print:text-black">
+                                    <span className={`inline-flex rounded-sm px-2 text-xs font-semibold leading-5 print:p-0 ${data.data.status_pembayaran === 'PAID' ? 'bg-green-300 text-green-800' : 'bg-rose-300 text-rose-800'}`}>
+                                        {data.data.status_pembayaran}
+                                    </span>
+                                </dd>
                             </div>
                             <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
                                 <dt className="text-sm font-medium leading-6 text-secondary-foreground print:text-black">Pesan</dt>
@@ -80,11 +107,11 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                 <div className="col-span-3 flex flex-col gap-4 rounded-xl border border-border/75 bg-secondary/25 p-4 md:col-span-1">
                     <div className="w-full text-center text-sm font-medium">
                         <dt className="text-secondary-foreground print:text-black">
-                            Pesanan ini akan kedaluwarsa pada
+                            {data.data.status_pembayaran === 'UNPAID' ? ' Pesanan ini akan kedaluwarsa pada' : 'Transaksi ini dibuat pada'}
                         </dt>
                         <dd className="text-primary-500 mt-2">
-                            <div className="rounded-md bg-red-500 px-4 py-2 text-center text-foreground print:p-0 print:text-left print:text-slate-800">
-                                <Countdown targetTimestamp={data_tripay.data.expired_time} />
+                            <div className={`rounded-md ${data.data.status_pembayaran === 'UNPAID' ? 'bg-red-500' : 'bg-green-500'} px-4 py-2 text-center text-foreground print:p-0 print:text-left print:text-slate-800`}>
+                                {data.data.status_pembayaran === 'UNPAID' ? <Countdown targetTimestamp={data_tripay.data.expired_time} /> :  formatDateTime(data.data.createdAt)}
                             </div>
                         </dd>
                     </div>
@@ -97,7 +124,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                         </h3>
                     </div>
                     <div className="prose prose-sm">
-                        {qrisInstruction && (
+                        {qrisInstruction && data.data.status_pembayaran === 'UNPAID' && (
                             <button className="flex w-full justify-between rounded-lg bg-secondary/50 px-4 py-3 text-left text-sm font-medium text-secondary-foreground focus:outline-none print:text-black">
                                 <span>
                                 Cara Melakukan Pembayaran
@@ -106,7 +133,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                         )}
                         <div className="mt-1 rounded-lg border border-border/75 bg-secondary/50 px-4 pb-1 pt-1 text-sm">
                             <div>
-                            {qrisInstruction && (
+                            {qrisInstruction && data.data.status_pembayaran === 'UNPAID' && (
                                 <p className="selectable-text copyable-text x15bjb6t x1n2onr6">
                                     {qrisInstruction.steps.map((step: string, stepIndex: number) => (
                                         <span key={stepIndex} className="selectable-text copyable-text">
@@ -119,7 +146,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                                 )}
                             </div>
                             <div className="flex flex-col">
-                        {data_tripay.data.qr_url && (
+                        {data_tripay.data.qr_url && data.data.status_pembayaran === 'UNPAID' && (
                             <><div className="relative flex h-64 w-64 items-center justify-center overflow-hidden rounded-lg bg-white sm:h-56 sm:w-56">
                                 <div>
                                     <img src={data_tripay.data.qr_url} alt="" />
@@ -129,7 +156,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                                 </div></>
                         )}
 
-                        {data_tripay.data.pay_code && (
+                        {data_tripay.data.pay_code && data.data.status_pembayaram === 'UNPAID' && (
                             <div className="flex flex-col items-center justify-between">
                                 <div className="flex w-full items-center justify-between">
                                     <div className="col-span-3 inline-flex items-center md:col-span-4">Nomor Pembayaran</div>
@@ -138,7 +165,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                             </div>
                         )}
 
-                        {data_tripay.data.pay_url && (
+                        {data_tripay.data.pay_url && data.data.status_pembayaran === 'UNPAID' && (
                             <PaymentButton payUrl={data_tripay.data.pay_url} />
                         )}
                     </div>

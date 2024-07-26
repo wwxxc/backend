@@ -3,8 +3,6 @@ import axios from "axios"
 import { Fragment, useEffect, useRef, useState } from "react"
 import { ChevronDown, ChevronUp, CheckCircle } from 'lucide-react'
 import { motion } from "framer-motion"
-import { PhoneInput } from 'react-international-phone';
-import 'react-international-phone/style.css';
 import { Description, Dialog, DialogPanel, DialogTitle, Transition } from '@headlessui/react'
 import toast, { Toaster } from 'react-hot-toast';
 import React from "react"
@@ -78,7 +76,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     async function completeOrder() {
         const data = await addOrder();
         setModalOpen(false);
-        window.location.href = '/invoice/' + data.data.reference
+        window.location.href = '/invoice/' + data.data.merchant_ref
     }
 
     const toggleCollapse1 = () => {
