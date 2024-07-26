@@ -3,6 +3,7 @@ const router = express.Router();
 const Invoice = require('../models/invoice');
 const crypto = require('crypto');
 const axios = require('axios');
+const generateInvoice = require('../utils/generateInvoice')
 
 function addThousandSeparators(value) {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -11,14 +12,12 @@ function addThousandSeparators(value) {
   const TRIPAY_API_KEY = process.env.TRIPAY_API_KEY;
   const TRIPAY_PRIVATE_KEY = process.env.TRIPAY_PRIVATE_KEY;
   const TRIPAY_MERCHANT_CODE = process.env.TRIPAY_MERCHANT_CODE
-  const TRIPAY_MERCHANT_REFF = process.env.TRIPAY_MERCHANT_REFF
   const APP_NAME = process.env.APP_NAME
 
 router.post('/add', async (req, res) => {
-    const merchant_ref = TRIPAY_MERCHANT_REFF
+    const merchant_ref = generateInvoice('EPO', 16);
     const customer_name = `customer ${APP_NAME}`
     const customer_email = `customer@${APP_NAME}.com`
-    const refid = crypto.randomBytes(4).toString('hex');
     const status_transaksi = 'Pending'
     const pesan = 'Menunggu pembayaran'
     try {
@@ -59,7 +58,7 @@ router.post('/add', async (req, res) => {
         if (response.data.success) {
             const order_detail = {
                 no_invoice: response.data.data.reference,
-                no_refid: refid,
+                no_refid: merchant_ref,
                 status_pembayaran: response.data.data.status,
                 produk,
                 status_transaksi,
@@ -107,7 +106,7 @@ router.post('/add', async (req, res) => {
 
 router.post('/:id', async (req, res) => {
     try {
-        const data = await Invoice.findOne({ where : { no_invoice : req.params.id }})
+        const data = await Invoice.findOne({ where : { no_refid : req.params.id }})
         res.json(data);
     } catch (error) {
         res.status(500).json({ error: error.message });

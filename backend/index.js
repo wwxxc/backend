@@ -11,6 +11,7 @@ const layananRouter = require('./routes/getProduk');
 const paymentRouter = require('./routes/getPayment');
 const accountRouter = require('./routes/account');
 const invoiceRouter = require('./routes/invoice');
+const callbackRouter = require('./routes/callback');
 const transactionRouter = require('./routes/transactions');
 const dashboardRouter = require('./routes/dashboard');
 
@@ -38,13 +39,14 @@ app.use('/layanan',  layananRouter);
 app.use('/payment',  paymentRouter);
 app.use('/account',  accountRouter);
 app.use('/invoice', invoiceRouter);
-// app.use('/transactions', transactionRouter);
+app.use('/callback', callbackRouter);
+app.use('/transactions', transactionRouter);
 // app.use('/dashboard', dashboardRouter);
 
 sequelize.authenticate().then(() => {
   console.log('Database connected...');
 }).catch(err => {
-  console.log('Error: ' + err);
+  console.log('Errorr: ' + err);
 });
 
 app.listen(port, () => {

@@ -19,7 +19,6 @@ const getServices = async (filter_type, filter_value, tipe) => {
     data.append('filter_type', filter_type);
     data.append('filter_value', filter_value);
     data.append('filter_status', 'available');
-
     var config = {
         method: 'post',
         maxBodyLength: Infinity,

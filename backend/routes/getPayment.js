@@ -11,8 +11,10 @@ router.post('/list', async (req, res) => {
                 return status < 999; // ignore http error
             },
         });
-
-        res.json(paymentMethodResponse.data.data)
+        console.log(paymentMethodResponse);
+        if(paymentMethodResponse.status == 200){
+            res.json(paymentMethodResponse.data.data)
+        }
 })
 
 module.exports = router
