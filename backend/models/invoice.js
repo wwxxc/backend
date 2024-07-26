@@ -10,6 +10,9 @@ const Invoice = sequelize.define('invoice', {
         type: DataTypes.TEXT,
         allowNull: false
     },
+    no_trxid: {
+        type: DataTypes.TEXT,
+    },
     produk: {
         type: DataTypes.TEXT,
         allowNull: false,
