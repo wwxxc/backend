@@ -13,6 +13,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
     const data = await axios.post(`${API_URL}/invoice/`+params.id)
     const data_tripay = JSON.parse(data.data.response_tripay);
     const qrisInstruction = data_tripay.data.instructions.find((instruction: Instruction) => instruction.title === "Pembayaran via QRIS");
+    
     const getStatusClass = (status:string) => {
         switch (status) {
           case 'Completed':
@@ -97,7 +98,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                                         Total Pembayaran
                                     </div>
                                     <div>
-                                        {data.data.harga}
+                                       Rp {data.data.harga}
                                     </div>
                                 </div>
                             </div>
@@ -156,7 +157,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string}}) => {
                                 </div></>
                         )}
 
-                        {data_tripay.data.pay_code && data.data.status_pembayaram === 'UNPAID' && (
+                        {data_tripay.data.pay_code && data.data.status_pembayaran === 'UNPAID' && (
                             <div className="flex flex-col items-center justify-between">
                                 <div className="flex w-full items-center justify-between">
                                     <div className="col-span-3 inline-flex items-center md:col-span-4">Nomor Pembayaran</div>

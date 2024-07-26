@@ -6,6 +6,8 @@ import { motion } from "framer-motion"
 import { Description, Dialog, DialogPanel, DialogTitle, Transition } from '@headlessui/react'
 import toast, { Toaster } from 'react-hot-toast';
 import React from "react"
+import calculateTotalFee from "@/utils/calculateFee"
+import calculateTotalWithFee from "@/utils/calculateWithFee"
 
 const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>{
     const slug = params.slug
@@ -18,6 +20,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     const [listPayment, setListPayment] = useState<ListPayment[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<ListProduk>();
     const [selectedPayment, setSelectedPayment] = useState<ListPayment>();
+    const [totalFee, setTotalFee] = useState(0);
     const [totalPrice, setTotalPrice] = useState('');
     const [isCollapsed1, setIsCollapsed1] = useState(true);
     const [isCollapsed2, setIsCollapsed2] = useState(true);
@@ -152,6 +155,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
             userserver: server,
             username: username,
             amount: selectedProduct?.normal_price.basic,
+            harga: totalPrice,
             method: selectedPayment?.code,
             customer_phone: phone,
             produk: product?.product_name,
@@ -173,13 +177,33 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
     }
 
     const handleSelectProduct = (product: any) => {
+        console.log(product.normal_price.basic);
+        const applicablePayment = listPayment.find(
+            (data) =>
+                (data.group.includes(`${selectedPayment?.group}`))&&
+                data.code === `${selectedPayment?.code}`
+        );
+
+        if (applicablePayment) {
+            if (applicablePayment.group === 'E-Wallet' && applicablePayment.code !== 'QRIS2') {
+                setTotalPrice(( product && product.normal_price.basic + 1000).toLocaleString('id-ID', { maximumFractionDigits: 0} ))
+            } else {
+                const totalPrice = calculateTotalWithFee(product.normal_price.basic, applicablePayment.total_fee).toLocaleString('id-ID', { maximumFractionDigits: 0} );
+                setTotalPrice(totalPrice);
+            }
+        }
         setSelectedProduct(product);
     };
     const handleSelectPayment = (payment: any) => {
         setSelectedPayment(payment);
-        setTotalPrice(( selectedProduct && selectedProduct?.normal_price.basic + payment.total_fee.flat + (parseFloat(payment.total_fee.percent) * selectedProduct?.normal_price.basic / 100) ).toLocaleString('id-ID', { maximumFractionDigits: 0} ))
+        if(selectedProduct){
+            if (payment.group === 'E-Wallet' && payment.code !== 'QRIS2') {
+                setTotalPrice(( selectedProduct && selectedProduct?.normal_price.basic + 1000).toLocaleString('id-ID', { maximumFractionDigits: 0} ))
+            } else {
+                setTotalPrice(( selectedProduct && selectedProduct?.normal_price.basic + payment.total_fee.flat + (parseFloat(payment.total_fee.percent) * selectedProduct?.normal_price.basic / 100) ).toLocaleString('id-ID', { maximumFractionDigits: 0} ))
+            }
+        }
     };
-    
     
     
     return(
@@ -393,7 +417,7 @@ const DetailProduct = ({ params }: { params: { lang: string, slug: string} }) =>
                                                                         <div className="mt-2 w-full">
                                                                             <div className="mt-1.5 flex items-center gap-2">
                                                                                 <div className="relative z-30 text-xs font-semibold leading-4 text-background">
-                                                                                    { selectedProduct && (selectedProduct?.normal_price.basic <= data.minimum_amount ? `Min. Rp ${data.minimum_amount.toLocaleString('id-ID')}` :  'Rp ' + ( selectedProduct.normal_price.basic + data.total_fee.flat + (selectedProduct?.normal_price.basic * parseFloat(data.total_fee.percent) / 100)).toLocaleString('id-ID', {maximumFractionDigits: 0}) )}
+                                                                                    { selectedProduct && (selectedProduct?.normal_price.basic <= data.minimum_amount ? `Min. Rp ${data.minimum_amount.toLocaleString('id-ID')}` :  'Rp ' + ( selectedProduct.normal_price.basic + 1000).toLocaleString('id-ID', {maximumFractionDigits: 0}) )}
                                                                                 </div>
                                                                             </div>
                                                                             <div className="mt-0.5 h-px w-full bg-border"></div>
