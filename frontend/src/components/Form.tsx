@@ -3,7 +3,7 @@ import calculateTotalWithFee from "@/utils/calculateWithFee"
 import { Dialog, Transition } from '@headlessui/react'
 import axios from "axios"
 import { motion } from "framer-motion"
-import { ChevronDown, ChevronUp, CheckCircle } from "lucide-react"
+import { ChevronDown, ChevronUp, CheckCircle, ShoppingBag } from "lucide-react"
 import { Fragment, useRef, useState } from "react"
 import toast from "react-hot-toast"
 
@@ -75,8 +75,6 @@ export default function Form({slug, product, listProduct,listPayment}:{slug:stri
             setModalOpen(true);
         }
     }
-
-
     
     async function completeOrder() {
         const data = await addOrder();
@@ -139,7 +137,6 @@ export default function Form({slug, product, listProduct,listPayment}:{slug:stri
         }
     }
     const handleSelectProduct = (product: any) => {
-        console.log(product.normal_price.basic);
         const applicablePayment = listPayment.find(
             (data) =>
                 (data.group.includes(`${selectedPayment?.group}`))&&
@@ -566,9 +563,8 @@ export default function Form({slug, product, listProduct,listPayment}:{slug:stri
                             </div>
                         </div>
                         <button type="submit" className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 w-full gap-2">
-                                <span>
-                                    Pesan Sekarang!
-                                </span>
+                                <ShoppingBag className="h-4 w-4" />
+                                <span>Pesan Sekarang!</span>
                         </button>
                     </div>
                     ): (
@@ -589,7 +585,7 @@ export default function Form({slug, product, listProduct,listPayment}:{slug:stri
                         {isLoading ? (
                                 <div className="loader border-t-transparent border-solid border-white border-4 rounded-full w-4 h-4 animate-spin"></div> 
                             ) : (
-                                <span>Pesan Sekarang!</span>
+                                <><ShoppingBag className="h-4 w-4" /><span>Pesan Sekarang!</span></>
                         )}
                         </button>
                         
@@ -654,8 +650,8 @@ export default function Form({slug, product, listProduct,listPayment}:{slug:stri
                                 </div>
                             </Dialog.Description>
                             <div className="flex items-center justify-between gap-2">
-                            <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-transparent px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-muted/50" onClick={() => {setModalOpen(false), setIsLoading(false)}}>Batal </button>
-                            <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-transparent px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-muted/50" ref={completeButtonRef} onClick={completeOrder}>
+                            <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-muted/60 px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-muted/50" onClick={() => {setModalOpen(false), setIsLoading(false)}}>Batal </button>
+                            <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-primary/60 px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-primary/50" ref={completeButtonRef} onClick={completeOrder}>
                             {isLoading ? (
                                 <div className="loader border-t-transparent border-solid border-white border-4 rounded-full w-4 h-4 animate-spin"></div> 
                             ) : (
