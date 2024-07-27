@@ -1,10 +1,10 @@
 "use client"	
 import calculateTotalWithFee from "@/utils/calculateWithFee"
-import { Description, Dialog, DialogPanel, DialogTitle, Transition } from '@headlessui/react'
+import { Dialog, Transition } from '@headlessui/react'
 import axios from "axios"
 import { motion } from "framer-motion"
 import { ChevronDown, ChevronUp, CheckCircle } from "lucide-react"
-import { Fragment, useEffect, useRef, useState } from "react"
+import { Fragment, useRef, useState } from "react"
 import toast from "react-hot-toast"
 
 export default function Form({slug, product, listProduct,listPayment}:{slug:string, product:Product, listPayment:ListPayment[], listProduct:ListProduk[]}) {
@@ -12,11 +12,8 @@ export default function Form({slug, product, listProduct,listPayment}:{slug:stri
     const [id, setId] = useState('')
     const [server, setServer] = useState('')
     const [username, setUsername] = useState('')
-    // const [listProduct, setListProduct] = useState<ListProduk[]>([]);
-    // const [listPayment, setListPayment] = useState<ListPayment[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<ListProduk>();
     const [selectedPayment, setSelectedPayment] = useState<ListPayment>();
-    const [totalFee, setTotalFee] = useState(0);
     const [totalPrice, setTotalPrice] = useState('');
     const [isCollapsed1, setIsCollapsed1] = useState(true);
     const [isCollapsed2, setIsCollapsed2] = useState(true);
@@ -96,35 +93,6 @@ export default function Form({slug, product, listProduct,listPayment}:{slug:stri
     const toggleCollapse3 = () => {
         setIsCollapsed3(!isCollapsed3);
     };
-    
-    
-    // useEffect(() => {
-    //     axios.post(`${API_URL}/products/${slug}`)
-    //         .then(response => {
-    //             setProduct(response.data);
-    //         })
-    //         .catch(error => {
-    //             console.error("Error fetching product:", error);
-    //         });
-    // }, [slug]);
-
-    // useEffect(() => {
-    //     if (product) {
-    //         const data = {
-    //             filter_type: 'game',
-    //             filter_value: product.product_code
-    //         };
-            
-    //         axios.post(`${API_URL}/layanan/games`, data)
-    //             .then(response => {
-    //                 setListProduct(response.data.data); 
-    //             })
-    //             .catch(error => {
-    //                 console.error("Error fetching layanan/games:", error);
-    //             });
-    //     }
-    
-    // }, [product]);
 
     async function checkUsername(code: string, id: string, server: string) {
         const data = {
@@ -142,16 +110,6 @@ export default function Form({slug, product, listProduct,listPayment}:{slug:stri
             return null; 
         }
     }
-
-    // useEffect(() => {
-    //     axios.post(`${API_URL}/payment/list`)
-    //         .then(response => {
-    //             setListPayment(response.data);
-    //         })
-    //         .catch(error => {
-    //             console.error("Error fetching payment:", error);
-    //         });
-    // }, []);
 
     const addOrder = async () => {
         setIsLoading(true);
