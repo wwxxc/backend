@@ -11,7 +11,6 @@ router.post('/list', async (req, res) => {
                 return status < 999; // ignore http error
             },
         });
-        console.log(paymentMethodResponse);
         if(paymentMethodResponse.status == 200){
             res.json(paymentMethodResponse.data.data)
         }
