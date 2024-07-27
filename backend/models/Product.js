@@ -14,6 +14,9 @@ const Product = sequelize.define('product', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  product_banner: {
+    type: DataTypes.STRING,
+  },
   product_description: {
     type: DataTypes.STRING,
     allowNull: false,
