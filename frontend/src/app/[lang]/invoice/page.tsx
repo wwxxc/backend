@@ -20,7 +20,7 @@ const invoicePage = () => {
     }
     
     return ( 
-        <section className="min-h-[100vh] bg-gradient-secondary">
+        <section className="bg-[#393E46]">
             <div className="space-y-12">
                 <div className="relative overflow-hidden shadow-2xl">
 
@@ -33,7 +33,7 @@ const invoicePage = () => {
                     <div className="mt-6 max-w-xl">
                         <label htmlFor="invoice" className="block text-xs font-medium text-foreground mb-2 text-left">Nomor Invoice Kamu</label>
                         <div className="flex flex-col items-start">
-                            <input type="text" name="" id="" onChange={(e) => setInvoice(e.target.value)} className="relative block w-full appearance-none rounded-lg border border-border bg-input px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75 " />
+                            <input type="text" placeholder="EPOXXXXXXXXXXXX" name="" id="" onChange={(e) => setInvoice(e.target.value)} className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75 " />
                         </div>
                     </div>
                     <div className="mt-6 flex items-center justify-start gap-x-6">

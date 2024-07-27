@@ -11,22 +11,18 @@ const DetailProduct = async ({ params }: { params: { lang: string, slug: string 
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
     try {
-        // Mendapatkan data produk
         const product_response: any = await axios.post(`${API_URL}/products/${slug}`);
         const product = product_response.data;        
 
-        // Validasi product
         if (product && product.product_code) {
             const data = {
                 filter_type: 'game',
                 filter_value: product.product_code
             };
 
-            // Mendapatkan data produk terkait
             const listProduct_response: any = await axios.post(`${API_URL}/layanan/games`, data);
             const listProduct = listProduct_response.data.data;
 
-            // Mendapatkan data pembayaran
             const payment_response: any = await axios.post(`${API_URL}/payment/list`);
             const payment = payment_response.data;
 
