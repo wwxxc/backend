@@ -1,9 +1,13 @@
 import Countdown from "@/components/Countdown";
 import PaymentButton from "@/components/PaymentButton";
 import formatDateTime from "@/utils/formatDatetime";
+import addThousandSeparators from "@/utils/formatPrice";
+import {ChevronsUpDown} from 'lucide-react'
 import axios from "axios";
 import Link from "next/link";
 import React from "react";
+import Rincian from "@/components/Rincian";
+import Tutorial from "@/components/Tutorial";
 
 interface Instruction {
     title: string;
@@ -21,7 +25,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
         const data_tripay = JSON.parse(data.response_tripay);
 
         // Mencari instruksi QRIS
-        const qrisInstruction = data_tripay.data.instructions.find((instruction: Instruction) => instruction.title === "Pembayaran via QRIS");
+        const qrisInstruction = data_tripay.data.instructions.find((instruction: Instruction) => instruction.title === "Pembayaran via QRIS" || instruction.title === "Pembayaran via ALFAMART" || instruction.title === "Pembayaran via INDOMARET" || instruction.title === "Pembayaran via ALFAMIDI");
 
         // Mendapatkan kelas status berdasarkan status transaksi
         const getStatusClass = (status: string) => {
@@ -41,7 +45,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
         };
 
         return (
-            <main className="relative bg-[#393E46]">
+            <main className="relative bg-[#393E46] mb-20">
                 <div className="container pb-8 pt-12 md:pt-24">
                     <div className="mx-auto max-w-3xl text-center">
                         <h1 className="text-base font-semibold text-secondary-foreground print:text-black">
@@ -52,7 +56,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                         </p>
                         <p className="mt-3.5 text-base text-secondary-foreground print:text-black">
                             Pesanan kamu
-                            <button className="mx-1 rounded-md border border-border/75 bg-secondary/25 px-1 font-bold text-secondary-foreground print:text-black">
+                            <button className="mx-1 rounded-md border border-border/75 bg-muted/65 px-1 font-bold text-secondary-foreground print:text-black">
                                 {id}
                             </button>
                             {data.status_pembayaran === 'UNPAID' ? 'menunggu pembayaran sebelum dikirim.' : 'telah berhasil!'}
@@ -65,7 +69,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                     </button>
                 </div>
                 <div className="container grid grid-cols-3 gap-4">
-                    <div className="col-span-3 rounded-xl border border-border/75 bg-secondary/25 p-4 md:col-span-2">
+                    <div className="col-span-3 rounded-xl border border-border/75 bg-muted/55 p-4 md:col-span-2">
                         <div>
                             <h3 className="text-base font-semibold leading-7 text-secondary-foreground print:text-black">
                                 Detail Pembelian
@@ -116,15 +120,18 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                                     <dt className="text-sm font-medium leading-6 text-secondary-foreground print:text-black">
                                         Rincian Pembayaran
                                     </dt>
-                                    <div className="mt-1 flex items-center justify-between rounded-md bg-primary/25 p-4 text-sm leading-6 text-secondary-foreground sm:mt-0 print:py-0 print:text-black">
+                                    <div className="space-y-4 sm:col-span-2">
+                                        <Rincian dataTripay={data_tripay} />
+                                    <div className="mt-1 flex w-full items-center justify-between rounded-md bg-muted/55 p-4 text-sm leading-6 text-secondary-foreground sm:mt-0 print:py-0 print:text-black">
                                         <div>Total Pembayaran</div>
-                                        <div>Rp {data.harga}</div>
+                                        <div>Rp {addThousandSeparators(data_tripay.data.amount)}</div>
+                                    </div>
                                     </div>
                                 </div>
                             </dl>
                         </div>
                     </div>
-                    <div className="col-span-3 flex flex-col gap-4 rounded-xl border border-border/75 bg-secondary/25 p-4 md:col-span-1">
+                    <div className="col-span-3 flex flex-col gap-4 rounded-xl border border-border/75 bg-muted/55 p-4 md:col-span-1">
                         <div className="w-full text-center text-sm font-medium">
                             <dt className="text-secondary-foreground print:text-black">
                                 {data.status_pembayaran === 'UNPAID' ? 'Pesanan ini akan kedaluwarsa pada' : 'Transaksi ini dibuat pada'}
@@ -135,7 +142,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                                 </div>
                             </dd>
                         </div>
-                        <div className="rounded-md bg-secondary/50 p-4">
+                        <div className="rounded-md bg-muted/50 p-4">
                             <h2 className="text-sm font-semibold leading-6">
                                 Metode Pembayaran
                             </h2>
@@ -144,26 +151,8 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                             </h3>
                         </div>
                         <div className="prose prose-sm">
-                            {qrisInstruction && data.status_pembayaran === 'UNPAID' && (
-                                <button className="flex w-full justify-between rounded-lg bg-secondary/50 px-4 py-3 text-left text-sm font-medium text-secondary-foreground focus:outline-none print:text-black">
-                                    <span>Cara Melakukan Pembayaran</span>
-                                </button>
-                            )}
-                            <div className="mt-1 rounded-lg border border-border/75 bg-secondary/50 px-4 pb-1 pt-1 text-sm">
-                                <div>
-                                    {qrisInstruction && data.status_pembayaran === 'UNPAID' && (
-                                        <p className="selectable-text copyable-text x15bjb6t x1n2onr6">
-                                            {qrisInstruction.steps.map((step: string, stepIndex: number) => (
-                                                <span key={stepIndex} className="selectable-text copyable-text">
-                                                    {stepIndex + 1}. {step}
-                                                    <br />
-                                                </span>
-                                            ))}
-                                            <br />
-                                        </p>
-                                    )}
-                                </div>
-                                <div className="flex flex-col">
+                            <Tutorial qrisInstruction={qrisInstruction} data={data} />
+                            <div className="flex flex-col mt-4">
                                     {data_tripay.data.qr_url && data.status_pembayaran === 'UNPAID' && (
                                         <>
                                             <div className="relative flex h-64 w-64 items-center justify-center overflow-hidden rounded-lg bg-white sm:h-56 sm:w-56">
@@ -178,7 +167,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                                     )}
                                     {data_tripay.data.pay_code && data.status_pembayaran === 'UNPAID' && (
                                         <div className="flex flex-col items-center justify-between">
-                                            <div className="flex w-full items-center justify-between">
+                                            <div className="flex w-full items-center text-sm justify-between">
                                                 <div className="col-span-3 inline-flex items-center md:col-span-4">Nomor Pembayaran</div>
                                                 <button>{data_tripay.data.pay_code}</button>
                                             </div>
@@ -188,12 +177,11 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                                         <PaymentButton payUrl={data_tripay.data.pay_url} />
                                     )}
                                 </div>
-                            </div>
                         </div>
                     </div>
-                    <div className="col-span-3 rounded-xl border border-border/75 bg-secondary/25 p-4 md:col-span-3">
+                    <div className="col-span-3 rounded-xl border border-border/75 bg-muted/55 p-4 md:col-span-3">
                         <div className="flex flex-col gap-4 md:flex-row">
-                            <div className="grid w-full grid-cols-1 gap-4 rounded-md bg-secondary/25 p-4 md:grid-cols-2">
+                            <div className="grid w-full grid-cols-1 gap-4 rounded-md bg-muted/55 p-4 md:grid-cols-2">
                                 <div>
                                     <h3 className="text-sm font-semibold leading-6">Informasi Akun</h3>
                                     <div className="divide-secondary-700/50 mt-4 divide-y border-t border-border/75 text-sm font-medium text-secondary-foreground print:text-black">
