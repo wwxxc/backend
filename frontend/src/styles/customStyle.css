@@ -1,0 +1,9 @@
+.banner-container {
+    background-color: #27242d;
+    background-repeat: repeat-x;
+    background-image: url(../../public/assets/img/banner-svg.svg);
+    background-size: clamp(60em, 100rem, 100em) auto, cover;
+    background-position: top;
+    display: flex;
+    align-items: center;
+}

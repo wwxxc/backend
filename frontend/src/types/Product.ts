@@ -3,6 +3,7 @@ interface Product {
     product_name: string
     product_slug: string
     product_img: string
+    product_banner: string
     product_description: string
     product_code: string
     product_type: string
