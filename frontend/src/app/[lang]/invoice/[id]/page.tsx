@@ -5,10 +5,15 @@ import addThousandSeparators from "@/utils/formatPrice";
 import {ChevronsUpDown} from 'lucide-react'
 import axios from "axios";
 import Link from "next/link";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import { saveAs } from 'file-saver';
 import React from "react";
 import Rincian from "@/components/Rincian";
 import Tutorial from "@/components/Tutorial";
 import { getDictionary } from "../../dictionaries";
+import DownloadInvoice from "@/components/DownloadInvoice";
+import DownloadIQr from "@/components/DownloadQr";
 
 interface Instruction {
     title: string;
@@ -18,6 +23,26 @@ interface Instruction {
 const Invoice = async ({ params }: { params: { lang: string, id: string } }) => {
     const { id } = params;
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+    const downloadInvoicePDF = async () => {
+        const element = document.getElementById('invoice');
+        if (element) {
+            const canvas = await html2canvas(element);
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF();
+            const imgProps = pdf.getImageProperties(imgData);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save(`invoice_${id}.pdf`);
+        }
+    };
+
+    const downloadQRCode = (data_tripay: any) => {
+        if (data_tripay.data.qr_url) {
+            saveAs(data_tripay.data.qr_url, `qr_code_${id}.png`);
+        }
+    };
 
     try {
         // Mengambil data invoice dari API
@@ -65,11 +90,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                         </p>
                     </div>
                 </div>
-                <div className="container flex w-full justify-end pb-4 print:hidden">
-                    <button className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground duration-300 hover:bg-primary/75 disabled:cursor-not-allowed disabled:opacity-75">
-                        Download Invoice
-                    </button>
-                </div>
+                <DownloadInvoice invoiceId={id} />
                 <div className="container grid grid-cols-3 gap-4">
                     <div className="col-span-3 rounded-xl border border-border/75 bg-muted/55 p-4 md:col-span-2">
                         <div>
@@ -162,9 +183,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                                                     <img src={data_tripay.data.qr_url} alt="QR Code" />
                                                 </div>
                                             </div>
-                                            <div className="inline-flex items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground duration-300 hover:bg-primary/75 disabled:cursor-not-allowed disabled:opacity-75 mt-2 w-64 py-2 !text-xs sm:w-56 print:hidden">
-                                                Unduh Kode QR
-                                            </div>
+                                            <DownloadIQr invoiceId={data_tripay.data.merchant_ref} qrUrl={data_tripay.data.qr_url} />
                                         </>
                                     )}
                                     {data_tripay.data.pay_code && data.status_pembayaran === 'UNPAID' && (
