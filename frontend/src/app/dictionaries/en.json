@@ -30,5 +30,11 @@
     "invothree": "Payment Status",
     "invofour": "Message",
     "invofive": "Payment Details",
-    "invosix": "Total Payment"
+    "invosix": "Total Payment",
+    "rincione": "Price",
+    "rincitwo": "Quantity",
+    "rincithree": "Subtotal",
+    "rincifour": "Fee",
+    "expired": "This order will expire on",
+    "expired2": "This transaction was made on"
   }
