@@ -70,7 +70,7 @@ const Footer = (home: Home) => {
                         </div>
                     </div>
                     <div className="sm:flex sm:items-center pt-20 pb-3 sm:justify-between">
-                        <span className="text-sm text-white-500 sm:text-center dark:text-white-400">© 2024 Elpedia<Link href="/" className="hover:underline">{home.title}</Link>. All Rights Reserved.
+                        <span className="text-sm text-white-500 sm:text-center dark:text-white-400">© 2024 {home.title}<Link href="/" className="hover:underline"></Link>. All Rights Reserved.
                         </span>
                     </div>
                 </div>

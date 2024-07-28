@@ -4,7 +4,7 @@ import Link from "next/link";
 import SearchToggle from "./Search";
 import Image from "next/image";
 import LangSwitch from "./LangSwitch";
-import Logo from "../../public/assets/img/logo-1.png"
+import Logo from "../../public/assets/img/logo-2.png"
 import { useParams, usePathname } from "next/navigation";
 import CalcSwitch from "./CalcSwitch";
 import Drawer from 'react-modern-drawer'
