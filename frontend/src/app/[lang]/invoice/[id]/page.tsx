@@ -84,7 +84,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                             <dl className="divide-secondary-700/25 divide-y">
                                 <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
                                     <dt className="text-sm font-medium leading-6 text-secondary-foreground print:text-black">
-                                        Nomor Invoice
+                                        {dict.invoone}
                                     </dt>
                                     <dd className="mt-1 text-sm leading-6 text-secondary-foreground sm:col-span-2 sm:mt-0 print:text-black">
                                         {id}
@@ -92,7 +92,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                                 </div>
                                 <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
                                     <dt className="text-sm font-medium leading-6 text-secondary-foreground print:text-black">
-                                        Status Transaksi
+                                        {dict.invotwo}
                                     </dt>
                                     <dd className="mt-1 text-sm leading-6 text-secondary-foreground sm:col-span-2 sm:mt-0 print:text-black">
                                         <span className={`inline-flex rounded-sm px-2 text-xs font-semibold leading-5 print:p-0 ${getStatusClass(data.status_transaksi)}`}>
@@ -102,7 +102,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                                 </div>
                                 <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
                                     <dt className="text-sm font-medium leading-6 text-secondary-foreground print:text-black">
-                                        Status Pembayaran
+                                        {dict.invothree}
                                     </dt>
                                     <dd className="mt-1 text-sm leading-6 text-secondary-foreground sm:col-span-2 sm:mt-0 print:text-black">
                                         <span className={`inline-flex rounded-sm px-2 text-xs font-semibold leading-5 print:p-0 ${data.status_pembayaran === 'PAID' ? 'bg-green-300 text-green-800' : 'bg-rose-300 text-rose-800'}`}>
@@ -112,7 +112,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                                 </div>
                                 <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
                                     <dt className="text-sm font-medium leading-6 text-secondary-foreground print:text-black">
-                                        Pesan
+                                        {dict.invofour}
                                     </dt>
                                     <dd className="mt-1 text-sm leading-6 text-secondary-foreground sm:col-span-2 sm:mt-0 print:text-black">
                                         {data.pesan}
@@ -120,12 +120,12 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                                 </div>
                                 <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
                                     <dt className="text-sm font-medium leading-6 text-secondary-foreground print:text-black">
-                                        Rincian Pembayaran
+                                        {dict.invofive}
                                     </dt>
                                     <div className="space-y-4 sm:col-span-2">
-                                        <Rincian dataTripay={data_tripay} />
+                                        <Rincian dataTripay={data_tripay} dict={dict} />
                                     <div className="mt-1 flex w-full items-center justify-between rounded-md bg-muted/55 p-4 text-sm leading-6 text-secondary-foreground sm:mt-0 print:py-0 print:text-black">
-                                        <div>Total Pembayaran</div>
+                                        <div>{dict.invosix}</div>
                                         <div>Rp {addThousandSeparators(data_tripay.data.amount)}</div>
                                     </div>
                                     </div>
@@ -136,7 +136,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                     <div className="col-span-3 flex flex-col gap-4 rounded-xl border border-border/75 bg-muted/55 p-4 md:col-span-1">
                         <div className="w-full text-center text-sm font-medium">
                             <dt className="text-secondary-foreground print:text-black">
-                                {data.status_pembayaran === 'UNPAID' ? 'Pesanan ini akan kedaluwarsa pada' : 'Transaksi ini dibuat pada'}
+                                {data.status_pembayaran === 'UNPAID' ? `${dict.expired}` : `${dict.expired2}`}
                             </dt>
                             <dd className="text-primary-500 mt-2">
                                 <div className={`rounded-md ${data.status_pembayaran === 'UNPAID' ? 'bg-red-500' : 'bg-green-500'} px-4 py-2 text-center text-foreground print:p-0 print:text-left print:text-slate-800`}>
