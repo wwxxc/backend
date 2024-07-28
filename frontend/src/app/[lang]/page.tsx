@@ -8,8 +8,11 @@ import Image from "next/image";
 import Link from "next/link";
 import Api from '@/utils/service';
 import { useEffect, useState } from "react";
+type Props = {
+  params: { [lang: string]: string };
+};
 
-export default function HomePage() {
+export default function HomePage({ params: { lang } }: Props) {
  
   const [sliders, setSliders] = useState<Slider[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -58,10 +61,10 @@ export default function HomePage() {
       <main className="h-screen w-full bg-background">
         <div className="flex flex-col gap-y-8 pt-8">
           <div className="container">
-            <PopularPage PopularData={products} />
+            <PopularPage PopularData={products} currentLang={lang} />
           </div>
           <div className="container">
-            <Tabs ProductData={products} />
+            <Tabs ProductData={products} currentLang={lang} />
           </div>
         </div>
       </main>
