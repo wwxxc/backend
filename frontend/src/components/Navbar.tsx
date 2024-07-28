@@ -1,5 +1,5 @@
 'use client'
-import { HomeIcon, Search, Calculator, ChevronDown } from "lucide-react";
+import { HomeIcon, Search, Calculator, ChevronDown, XIcon } from "lucide-react";
 import Link from "next/link";
 import SearchToggle from "./Search";
 import Image from "next/image";
@@ -7,20 +7,26 @@ import LangSwitch from "./LangSwitch";
 import Logo from "../../public/assets/img/logo-1.png"
 import { useParams, usePathname } from "next/navigation";
 import CalcSwitch from "./CalcSwitch";
+import Drawer from 'react-modern-drawer'
+import { useState } from "react";
+import 'react-modern-drawer/dist/index.css'
 
 const Navbar = () => {
     const { lang, slug } = useParams() as { lang: string[], slug: string[] }; 
     const CurrentLang = lang ? lang.toString() : '';
     const asPath = usePathname();
     const currentPage = asPath ? asPath : null;
-    console.log(currentPage);
+    const [isOpen, setIsOpen] = useState(false)
+    const toggleDrawer = () => {
+        setIsOpen((prevState) => !prevState)
+    }
     
     return(
         <>
         <nav className="sticky top-0 z-40 w-full flex-none border-b border-[#000000]/50 bg-background-foreground/80 backdrop-blur print:hidden">
         <div className="container">
           <div className="flex h-[60px] items-center">
-            <button className="rounded-md bg-secondary p-2 text-foreground lg:hidden">
+            <button onClick={toggleDrawer} className="rounded-md bg-black p-2 text-foreground lg:hidden">
               <span className="sr-only">Open menu</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -83,6 +89,40 @@ const Navbar = () => {
                 </Link>
               </div>
             </div>
+            
+          </div>
+          <div className="lg:hidden">
+          <Drawer
+                open={isOpen}
+                onClose={toggleDrawer}
+                direction='left'
+                className='w-full'
+                lockBackgroundScroll={true}
+                size={300}
+            >
+                <div className="bg-muted h-full w-full overflow-hidden">
+                  <div className="flex flex-row-reverse items-center justify-between border-b border-dashed p-4">
+                    <button className="text-murky-400 -m-2 inline-flex items-center justify-center rounded-md p-2"><span className="sr-only">Close menu</span><XIcon onClick={toggleDrawer} className="h-6 w-6" /></button>
+                    <div className="flex items-center">
+                      <a className="relative w-24" href="/">
+                        <img src="http://192.168.1.15:3000/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-1.836fce09.png&w=96&q=75" alt="" className="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;" />
+                      </a>
+                    </div>
+                  </div>
+                  <div className="space-y-2 border-y border-background p-4">
+                    <div>
+                      <a className="group flex items-center justify-between rounded-md px-4 py-2 font-medium text-foreground hover:bg-muted" href={'/'}>
+                        <span>Beranda</span>
+                      </a>
+                    </div>
+                    <div>
+                      <a className="group flex items-center justify-between rounded-md px-4 py-2 font-medium text-foreground hover:bg-muted" href={'/invoice'}>
+                        <span>Cek Transaksi</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+            </Drawer>
           </div>
         </div>
       </nav>

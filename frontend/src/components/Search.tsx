@@ -19,25 +19,25 @@ import Link from "next/link"
 import { useParams } from "next/navigation"
 
 const SearchToggle = () => {
-//   const param = useParams();
-//   const CurrentLang = param.lang ? param.lang.toString() : '';
+  const param = useParams();
+  const CurrentLang = param.lang ? param.lang.toString() : '';
   const [open, setOpen] = useState(false);
-//   const [surah, setSurah] = useState<SurahItem[]>([]);
+  const [product, setProduct] = useState<Product[]>([]);
   
-//     useEffect(() => {
-//     fetch("https://api.quran.gading.dev/surah")
-//       .then(Response => Response.json())
-//       .then(data => setSurah(data.data))
-//       const down = (e: KeyboardEvent) => {
-//         if (e.key === "j" && (e.metaKey || e.ctrlKey)) {
-//           e.preventDefault();
-//           setOpen((open) => !open);
-//         }
-//       };
+    useEffect(() => {
+    fetch('http://192.168.1.15:4000/search')
+      .then(Response => Response.json())
+      .then(data => setProduct(data))
+      const down = (e: KeyboardEvent) => {
+        if (e.key === "j" && (e.metaKey || e.ctrlKey)) {
+          e.preventDefault();
+          setOpen((open) => !open);
+        }
+      };
 
-//       document.addEventListener("keydown", down);
-//       return () => document.removeEventListener("keydown", down);
-//     }, [])
+      document.addEventListener("keydown", down);
+      return () => document.removeEventListener("keydown", down);
+    }, [])
 
     return (
       <>
@@ -52,14 +52,14 @@ const SearchToggle = () => {
           <CommandList>
             <CommandEmpty>Produk tidak ditemukan.</CommandEmpty>
             <CommandGroup>
-              {/* {surah.map((item, index) => (
-                <Link onClick={() => setOpen(false)} key={index} href={`/${CurrentLang}/${item.name.transliteration[CurrentLang].toLocaleLowerCase().replace(/\s+/g, '-')}/${item.number}`}>
+              {product.map((item, index) => (
+                <Link onClick={() => setOpen(false)} key={index} href={`/${CurrentLang}/${item.product_slug}`}>
                 <CommandItem >
-                  <History className="mr-2 h-4 w-4" />
-                  <span>{item.name.transliteration[CurrentLang]}</span>
+                  <img className="w-[30%] h-[30%]" src={item.product_img} alt="" />
+                  <span>{item.product_name}</span>
                 </CommandItem>
                 </Link>
-              ))} */}
+              ))}
             </CommandGroup>
             <CommandSeparator />
           </CommandList>

@@ -1,22 +1,19 @@
 'use client'
-import axios from "axios"
+import { Search } from "lucide-react"
 import { useState } from "react"
 
 const invoicePage = () => {
     const [invoice, setInvoice] = useState('')
-    const API_URL = process.env.NEXT_PUBLIC_API_URL
-    
+    const [isLoading, setIsLoading] = useState(false)    
     const fetchInvoice = async () => {
-        try {
-            const response = await axios.post(`${API_URL}/invoice/`+invoice)
-            
-        } catch (error) {
-            console.log(error)
-        }
+        window.location.href = '/invoice/' + invoice
     }
 
     const submitbtn = () => {
-        fetchInvoice()
+        if (invoice !== '') {
+            setIsLoading(true)
+            fetchInvoice()
+        }
     }
     
     return ( 
@@ -37,7 +34,7 @@ const invoicePage = () => {
                         </div>
                     </div>
                     <div className="mt-6 flex items-center justify-start gap-x-6">
-                        <button onClick={submitbtn} className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground duration-300 hover:bg-primary/75 disabled:cursor-not-allowed disabled:opacity-75 space-x-2 !pl-3 !pr-4">Cari</button>
+                        <button disabled={isLoading} onClick={submitbtn} className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground duration-300 hover:bg-primary/75 disabled:cursor-not-allowed disabled:opacity-75 space-x-2 !pl-3 !pr-4"><Search size={18} className="mr-2" /> {isLoading ? ' Loading...' : ' Cari Transaksi'}</button>
                     </div>
                 </div>
             </div>
