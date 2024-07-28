@@ -48,7 +48,7 @@ const Navbar = () => {
               </svg>
             </button>
             <div className="ml-3 mr-2 flex lg:ml-0">
-              <Link href={"/"}>
+              <Link href={`/${lang}`}	>
                 <Image src={Logo.src} alt="Logo" width={90} height={90} />
               </Link>
             </div>
@@ -108,19 +108,19 @@ const Navbar = () => {
                   <div className="flex flex-row-reverse items-center justify-between border-b border-dashed p-4">
                     <button className="text-murky-400 -m-2 inline-flex items-center justify-center rounded-md p-2"><span className="sr-only">Close menu</span><XIcon onClick={toggleDrawer} className="h-6 w-6" /></button>
                     <div className="flex items-center">
-                      <a className="relative w-24" href="/">
+                      <a className="relative w-24" href={`/${lang}`}>
                         <img src="http://192.168.1.15:3000/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-1.836fce09.png&w=96&q=75" alt="" className="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;" />
                       </a>
                     </div>
                   </div>
                   <div className="space-y-2 border-y border-background p-4">
                     <div>
-                      <a className="group flex items-center justify-between rounded-md px-4 py-2 font-medium text-foreground hover:bg-muted" href={'/'}>
+                      <a className="group flex items-center justify-between rounded-md px-4 py-2 font-medium text-foreground hover:bg-muted" href={`/${lang}`}>
                         <span>Beranda</span>
                       </a>
                     </div>
                     <div>
-                      <a className="group flex items-center justify-between rounded-md px-4 py-2 font-medium text-foreground hover:bg-muted" href={'/invoice'}>
+                      <a className="group flex items-center justify-between rounded-md px-4 py-2 font-medium text-foreground hover:bg-muted" href={`/${lang}/invoice`}>
                         <span>Cek Transaksi</span>
                       </a>
                     </div>
