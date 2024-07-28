@@ -14,9 +14,10 @@ type Props = {
     product: Product;
     listProduct: ListProduk[];
     listPayment: ListPayment[];
+    dict: any
   };
 //   {slug:string, product:Product, listPayment:ListPayment[], listProduct:ListProduk[]}
-export default function Form({params, product, listProduct, listPayment }: Props) {
+export default function Form({params, product, listProduct, listPayment, dict }: Props) {
     const { lang } = params
     console.log(lang);
     
@@ -183,7 +184,7 @@ export default function Form({params, product, listProduct, listPayment }: Props
                                 1
                             </div>
                             <h1 className="px-4 py-2 text-sm/6 font-semibold text-card-foreground">
-                            Masukkan Data Akun
+                                {dict.numone}
                             </h1>
                         </div>
                         <div className="p-4">
@@ -191,14 +192,14 @@ export default function Form({params, product, listProduct, listPayment }: Props
                                 <div>
                                     <label htmlFor="" className="block text-xs font-medium text-foreground pb-2">ID</label>
                                     <div className="flex flex-col items-start">
-                                        <input onChange={(e) => setId(e.target.value)} type="number" placeholder="Masukkan ID" className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
+                                        <input onChange={(e) => setId(e.target.value)} type="number" placeholder={`${dict.typeid}`} className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
                                     </div>
                                 </div>
                                 {product?.isServer && (
                                 <div>
                                     <label htmlFor="" className="block text-xs font-medium text-foreground pb-2">Server</label>
                                     <div className="flex flex-col items-start">
-                                        <input onChange={(e) => setServer(e.target.value)} type="number" placeholder="Masukkan Server" className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
+                                        <input onChange={(e) => setServer(e.target.value)} type="number" placeholder={`${dict.typeserver}`} className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
                                     </div>
                                 </div>
                                 )}
@@ -210,7 +211,7 @@ export default function Form({params, product, listProduct, listPayment }: Props
                 <div className="flex h-10 w-10 items-center justify-center bg-primary font-semibold text-primary-foreground">
                     2
                 </div>
-                <h2 className="px-4 py-2 text-sm/6 font-semibold text-card-foreground">Pilih nominal</h2>
+                <h2 className="px-4 py-2 text-sm/6 font-semibold text-card-foreground">{dict.numtwo}</h2>
             </div>
             <div className="p-4">
                 <div className="flex flex-col space-y-4">
@@ -254,17 +255,17 @@ export default function Form({params, product, listProduct, listPayment }: Props
                     <section className="relative scroll-mt-20 rounded-xl bg-card/50 shadow-2xl md:scroll-mt-[5.75rem]">
                         <div className="flex items-center overflow-hidden rounded-t-xl bg-accent/60">
                             <div className="flex h-10 w-10 items-center justify-center bg-primary font-semibold text-primary-foreground">3</div>
-                            <h2 className="px-4 py-2 text-sm/6 font-semibold text-card-foreground">Kode Promo</h2>
+                            <h2 className="px-4 py-2 text-sm/6 font-semibold text-card-foreground">{dict.numthree}</h2>
                         </div>
                         <div className="p-4">
                             <div className="flex flex-col gap-4">
                                 <div className="flex items-center gap-x-4">
                                     <div className="flex-1">
                                         <div className="flex flex-col items-start">
-                                        <input type="text" placeholder="Masukkan Kode Voucher" className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
+                                        <input type="text" placeholder={`${dict.typepromo}`} className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
                                         </div>
                                     </div>
-                                    <button className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3">Gunakan</button>
+                                    <button className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3">{dict.apply}</button>
                                 </div>
                             </div>
                         </div>
@@ -273,7 +274,7 @@ export default function Form({params, product, listProduct, listPayment }: Props
                     <section className="relative rounded-xl bg-card/50 shadow-2xl">
                         <div className="flex items-center overflow-hidden rounded-t-xl bg-accent/60">
                             <div className="flex h-10 w-10 items-center justify-center bg-primary font-semibold text-primary-foreground">4</div>
-                            <h2 className="px-4 py-2 text-sm/6 font-semibold text-card-foreground">Pilih Pembayaran</h2>
+                            <h2 className="px-4 py-2 text-sm/6 font-semibold text-card-foreground">{dict.numfour}</h2>
                         </div>
                         <div className="p-4">
                             <div className="flex w-full flex-col space-y-4">
@@ -553,7 +554,7 @@ export default function Form({params, product, listProduct, listPayment }: Props
                     <section className="relative scroll-mt-20 rounded-xl bg-card/50 shadow-2xl md:scroll-mt-[5.75rem]">
                         <div className="flex items-center overflow-hidden rounded-t-xl bg-accent/60">
                             <div className="flex h-10 w-10 items-center justify-center bg-primary font-semibold text-primary-foreground">5</div>
-                            <h2 className="px-4 py-2 text-sm/6 font-semibold text-card-foreground">Detail Kontak</h2>
+                            <h2 className="px-4 py-2 text-sm/6 font-semibold text-card-foreground">{dict.numfive}</h2>
                         </div>
                         <div className="p-4">
                             <div className="flex flex-col gap-3">
@@ -562,7 +563,7 @@ export default function Form({params, product, listProduct, listPayment }: Props
                                     <div>
                                         <input onChange={(e) => setPhone(e.target.value)} type="number" placeholder="08xxxxxxxxx" className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
                                     </div>
-                                    <span className="text-xs italic text-card-foreground">**Nomor ini akan dihubungi jika terjadi masalah</span>
+                                    <span className="text-xs italic text-card-foreground">**{dict.numerror}</span>
                                 </div>
                             </div>
                         </div>
@@ -571,12 +572,12 @@ export default function Form({params, product, listProduct, listPayment }: Props
                         <div className="bottom-0 pb-4 flex flex-col gap-4 bg-background">
                         <div className="rounded-lg border border-dashed bg-secondary p-4 text-sm text-secondary-foreground">
                             <div className="text-center">
-                            Belum ada item produk yang dipilih.
+                                {dict.selectproduct}
                             </div>
                         </div>
                         <button type="submit" className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 w-full gap-2">
                                 <ShoppingBag className="h-4 w-4" />
-                                <span>Pesan Sekarang!</span>
+                                <span>{dict.order}</span>
                         </button>
                     </div>
                     ): (
@@ -597,7 +598,7 @@ export default function Form({params, product, listProduct, listPayment }: Props
                         {isLoading ? (
                                 <div className="loader border-t-transparent border-solid border-white border-4 rounded-full w-4 h-4 animate-spin"></div> 
                             ) : (
-                                <><ShoppingBag className="h-4 w-4" /><span>Pesan Sekarang!</span></>
+                                <><ShoppingBag className="h-4 w-4" /><span>{dict.order}</span></>
                         )}
                         </button>
                         
@@ -620,8 +621,8 @@ export default function Form({params, product, listProduct, listPayment }: Props
                             <Dialog.Panel>
                             <Dialog.Title className={'flex-1 text-lg items-center mb-2 justify-center text-center'}>
                                 <div className="flex items-center justify-center mb-2"><CheckCircle color="#00FF00" size={50} /></div>
-                                <h1 className="font-bold">Buat Pesanan</h1>
-                                <span className="text-sm">Pastikan data anda sudah benar!</span>
+                                <h1 className="font-bold">{dict.ordertitle}</h1>
+                                <span className="text-sm">{dict.orderdesc}</span>
                             </Dialog.Title>
                             <Dialog.Description className={'text-sm bg-background mb-4 rounded-lg p-4'}>
                                 <div className="flex flex-col gap-2">
@@ -662,12 +663,12 @@ export default function Form({params, product, listProduct, listPayment }: Props
                                 </div>
                             </Dialog.Description>
                             <div className="flex items-center justify-between gap-2">
-                            <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-muted/60 px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-muted/50" onClick={() => {setModalOpen(false), setIsLoading(false)}}>Batal </button>
-                            <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-primary/60 px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-primary/50" ref={completeButtonRef} onClick={completeOrder}>
+                            <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-muted/60 px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-muted/50" onClick={() => {setModalOpen(false), setIsLoading(false)}}>{dict.cancel} </button>
+                            <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-primary px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-primary/50" ref={completeButtonRef} onClick={completeOrder}>
                             {isLoading ? (
                                 <div className="loader border-t-transparent border-solid border-white border-4 rounded-full w-4 h-4 animate-spin"></div> 
                             ) : (
-                                <span>Pesan Sekarang!</span>
+                                <span>{dict.order}</span>
                             )}
                             </button>
                         </div>

@@ -7,18 +7,28 @@ import LangSwitch from "./LangSwitch";
 import Logo from "../../public/assets/img/logo-2.png"
 import { useParams, usePathname } from "next/navigation";
 import CalcSwitch from "./CalcSwitch";
+import { getDictionary } from "../app/[lang]/dictionaries";
 import Drawer from 'react-modern-drawer'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import 'react-modern-drawer/dist/index.css'
 
 const Navbar = () => {
     const { lang, slug } = useParams() as { lang: string[], slug: string[] }; 
+    const [dictionary, setDictionary] = useState<any>({});
     const CurrentLang = lang ? lang.toString() : '';
     const asPath = usePathname();
     const currentPage = asPath ? asPath : null;
     const asPath2 = usePathname().split('/');
     const CurrentUrl = asPath2[2] + '/' + asPath2[3];
     console.log(CurrentUrl);
+
+    useEffect(() => {
+      const loadDictionary = async () => {
+        const dict = await getDictionary(lang);
+        setDictionary(dict);
+      };
+      loadDictionary();
+    }, [lang]);
     
     const [isOpen, setIsOpen] = useState(false)
     const toggleDrawer = () => {
@@ -61,7 +71,7 @@ const Navbar = () => {
                 href={`/${lang}`}	
               >
                 <HomeIcon width={20} height={20} />
-                <span>Beranda</span>
+                <span>{dictionary.home}</span>
               </Link>
               <Link
                 className={`relative z-10 -mb-px flex items-center space-x-2 border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out ${
@@ -70,9 +80,9 @@ const Navbar = () => {
                 href={`/${lang}/invoice`}
               >
                 <Search width={20} height={20} />
-                <span>Cek Transaksi</span>
+                <span>{dictionary.invoice}</span>
               </Link>
-              <CalcSwitch />
+              <CalcSwitch dict={dictionary}  />
               </div>
             </div>
             <div className="ml-auto flex h-full items-center space-x-2 lg:space-x-6">
@@ -116,12 +126,12 @@ const Navbar = () => {
                   <div className="space-y-2 border-y border-background p-4">
                     <div>
                       <a className="group flex items-center justify-between rounded-md px-4 py-2 font-medium text-foreground hover:bg-muted" href={`/${lang}`}>
-                        <span>Beranda</span>
+                        <span>{dictionary.home}</span>
                       </a>
                     </div>
                     <div>
                       <a className="group flex items-center justify-between rounded-md px-4 py-2 font-medium text-foreground hover:bg-muted" href={`/${lang}/invoice`}>
-                        <span>Cek Transaksi</span>
+                        <span>{dictionary.invoice}</span>
                       </a>
                     </div>
                   </div>

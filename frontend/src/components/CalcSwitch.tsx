@@ -5,7 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 
-const CalcSwitch = () => {
+const CalcSwitch = ({dict}: {dict: any}) => {
     const { lang, slug } = useParams() as { lang: string[], slug: string[] }; 
     const CurrentLang = lang ? lang.toString() : '';
     const asPath = usePathname();
@@ -32,7 +32,7 @@ const CalcSwitch = () => {
                     }`}
                 >
                     <Calculator width={20} height={20} />
-                    <span>Kalkulator</span>
+                    <span>{dict.calculator}</span>
                 </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-black" align="end">
