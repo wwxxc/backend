@@ -16,6 +16,10 @@ const Navbar = () => {
     const CurrentLang = lang ? lang.toString() : '';
     const asPath = usePathname();
     const currentPage = asPath ? asPath : null;
+    const asPath2 = usePathname().split('/');
+    const CurrentUrl = asPath2[2] + '/' + asPath2[3];
+    console.log(CurrentUrl);
+    
     const [isOpen, setIsOpen] = useState(false)
     const toggleDrawer = () => {
         setIsOpen((prevState) => !prevState)
@@ -54,7 +58,7 @@ const Navbar = () => {
                 className={`relative z-10 -mb-px flex items-center space-x-2 border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out ${
                   currentPage === `/${lang}` ? 'border-primary text-primary' : 'text-foreground text-white hover:text-primary-300 border-transparent hover:border-primary'
                 }`}
-                href="/"
+                href={`/${lang}`}	
               >
                 <HomeIcon width={20} height={20} />
                 <span>Beranda</span>
@@ -63,7 +67,7 @@ const Navbar = () => {
                 className={`relative z-10 -mb-px flex items-center space-x-2 border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out ${
                   currentPage === `/${lang}/invoice` ? 'border-primary text-primary' : 'text-foreground text-white hover:text-primary-300 border-transparent hover:border-primary'
                 }`}
-                href="/invoice"
+                href={`/${lang}/invoice`}
               >
                 <Search width={20} height={20} />
                 <span>Cek Transaksi</span>
@@ -75,7 +79,7 @@ const Navbar = () => {
               <div className="flex flex-row-reverse items-center gap-x-2">
                 <div className="relative inline-block text-left">
                   <div>
-                    <LangSwitch lang={"id"} currentUrl={""} />
+                    <LangSwitch lang={CurrentLang} currentUrl={CurrentUrl} />
                   </div>
                 </div>
                 <SearchToggle />

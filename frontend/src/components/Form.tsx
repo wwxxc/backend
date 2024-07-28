@@ -6,8 +6,20 @@ import { motion } from "framer-motion"
 import { ChevronDown, ChevronUp, CheckCircle, ShoppingBag } from "lucide-react"
 import { Fragment, useRef, useState } from "react"
 import toast from "react-hot-toast"
-
-export default function Form({slug, product, listProduct,listPayment}:{slug:string, product:Product, listPayment:ListPayment[], listProduct:ListProduk[]}) {
+type Props = {
+    params: {
+      lang: string;
+      slug: string;
+    };
+    product: Product;
+    listProduct: ListProduk[];
+    listPayment: ListPayment[];
+  };
+//   {slug:string, product:Product, listPayment:ListPayment[], listProduct:ListProduk[]}
+export default function Form({params, product, listProduct, listPayment }: Props) {
+    const { lang } = params
+    console.log(lang);
+    
     const API_URL = process.env.NEXT_PUBLIC_API_URL
     const [id, setId] = useState('')
     const [server, setServer] = useState('')
@@ -79,7 +91,7 @@ export default function Form({slug, product, listProduct,listPayment}:{slug:stri
     async function completeOrder() {
         const data = await addOrder();
         setModalOpen(false);
-        window.location.href = '/invoice/' + data.data.merchant_ref
+        window.location.href = lang === 'id' ? '/id/invoice/' + data.data.merchant_ref : '/en/invoice/' + data.data.merchant_ref
     }
 
     const toggleCollapse1 = () => {
