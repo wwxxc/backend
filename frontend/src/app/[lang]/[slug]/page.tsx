@@ -5,10 +5,12 @@ import '@/styles/customStyle.css';
 import { Toaster } from 'react-hot-toast';
 import { Globe2, Headset, Zap, ChevronDown } from 'lucide-react'
 import Description from '@/components/Deskripsi';
+import { getDictionary } from '../dictionaries';
 
 const DetailProduct = async ({ params }: { params: { lang: string, slug: string } }) => {
     const { slug } = params;
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
+    const dict = await getDictionary(params.lang);
 
     try {
         const product_response: any = await axios.post(`${API_URL}/products/${slug}`);
@@ -61,11 +63,11 @@ const DetailProduct = async ({ params }: { params: { lang: string, slug: string 
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <Headset color='#2993C4' size={18} />
-                                        <span>Layanan Chat 24/7</span>
+                                        <span>{dict?.cs}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <Zap color='#ffd966' size={18} />
-                                        <span>Proses Cepat</span>
+                                        <span>{dict.process}</span>
                                     </div>
                                 </div>
                             </div>
@@ -82,7 +84,7 @@ const DetailProduct = async ({ params }: { params: { lang: string, slug: string 
                                 </div>
                             </div>
                         </div>
-                        <Form params={params} product={product} listPayment={payment} listProduct={listProduct} />
+                        <Form params={params} product={product} listPayment={payment} listProduct={listProduct} dict={dict}/>
                     </div>
                     <div className="z-40">
                         <Toaster />

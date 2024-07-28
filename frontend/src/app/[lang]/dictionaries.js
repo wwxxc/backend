@@ -1,4 +1,3 @@
-import "server-only";
 
 const dictionaries = {
   id: () => import("../dictionaries/id.json").then((module) => module.default),

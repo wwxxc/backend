@@ -8,6 +8,7 @@ import Link from "next/link";
 import React from "react";
 import Rincian from "@/components/Rincian";
 import Tutorial from "@/components/Tutorial";
+import { getDictionary } from "../../dictionaries";
 
 interface Instruction {
     title: string;
@@ -23,6 +24,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
         const response = await axios.post(`${API_URL}/invoice/${id}`);
         const data = response.data;
         const data_tripay = JSON.parse(data.response_tripay);
+        const dict = await getDictionary(params.lang);
 
         // Mencari instruksi QRIS
         const qrisInstruction = data_tripay.data.instructions.find((instruction: Instruction) => instruction.title === "Pembayaran via QRIS" || instruction.title === "Pembayaran via ALFAMART" || instruction.title === "Pembayaran via INDOMARET" || instruction.title === "Pembayaran via ALFAMIDI");
@@ -49,17 +51,17 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                 <div className="container pb-8 pt-12 md:pt-24">
                     <div className="mx-auto max-w-3xl text-center">
                         <h1 className="text-base font-semibold text-secondary-foreground print:text-black">
-                            Terima Kasih!
+                            {dict.thank}
                         </h1>
                         <p className="mt-2 text-2xl font-bold tracking-tight text-secondary-foreground md:text-4xl print:text-black">
-                            {data.status_pembayaran === 'UNPAID' ? 'Harap lengkapi pembayaran.' : 'Transaksi sudah selesai.'}
+                            {data.status_pembayaran === 'UNPAID' ? `${dict.thanktitle}` : `${dict.thanktitle2}`}
                         </p>
                         <p className="mt-3.5 text-base text-secondary-foreground print:text-black">
-                            Pesanan kamu
+                                {dict.thankdesc}
                             <button className="mx-1 rounded-md border border-border/75 bg-muted/65 px-1 font-bold text-secondary-foreground print:text-black">
                                 {id}
                             </button>
-                            {data.status_pembayaran === 'UNPAID' ? 'menunggu pembayaran sebelum dikirim.' : 'telah berhasil!'}
+                            {data.status_pembayaran === 'UNPAID' ? `${dict.thankdescnext}` : `${dict.thankdescnext2}`}
                         </p>
                     </div>
                 </div>
