@@ -1,12 +1,15 @@
 'use client'
 import { Search } from "lucide-react"
 import { useState } from "react"
+type Props = {
+    params: { [lang: string]: string };
+  };
 
-const invoicePage = () => {
+const invoicePage = ({ params: { lang } }: Props) => {
     const [invoice, setInvoice] = useState('')
     const [isLoading, setIsLoading] = useState(false)    
     const fetchInvoice = async () => {
-        window.location.href = '/invoice/' + invoice
+        window.location.href = `/${lang}` + '/invoice/' + invoice
     }
 
     const submitbtn = () => {
