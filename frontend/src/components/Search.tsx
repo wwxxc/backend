@@ -55,8 +55,8 @@ const SearchToggle = () => {
               {product.map((item, index) => (
                 <Link onClick={() => setOpen(false)} key={index} href={`/${CurrentLang}/${item.product_slug}`}>
                 <CommandItem >
-                  <img className="w-[30%] h-[30%]" src={item.product_img} alt="" />
-                  <span>{item.product_name}</span>
+                  <img className="aspect-square w-20 rounded-2xl object-cover" src={item.product_img} alt="" />
+                  <span className="ml-4">{item.product_name}</span>
                 </CommandItem>
                 </Link>
               ))}
