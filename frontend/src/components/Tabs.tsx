@@ -2,7 +2,7 @@
 import React from "react";
 import CardProduct from "./Card";
 
-const Tabs = ({ProductData}: {ProductData: Product[]}) => {
+const Tabs = ({ProductData, currentLang}: {ProductData: Product[], currentLang: string}) => {
   const [openTab, setOpenTab] = React.useState(1);
   return (
     <>
@@ -96,7 +96,7 @@ const Tabs = ({ProductData}: {ProductData: Product[]}) => {
             <div>
               <div className="mt-5">
                 <div className={openTab === 1 ? "block" : "hidden"} id="link1">
-                  <CardProduct ProductData={ProductData} />
+                  <CardProduct ProductData={ProductData} currentLang={currentLang} />
                 </div>
                 <div className={openTab === 2 ? "block" : "hidden"} id="link2">
                   <p>
