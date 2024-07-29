@@ -1,16 +1,18 @@
 'use client'
 import { useState } from "react";
+import Logo from "../../../../../public/assets/img/logo-2.png"
 
 const Winrate = () => {
 
     const [totalMatch, setTotalMatch] = useState(0);
     const [totalWinrate, setTotalWinrate] = useState(0);
     const [targetWinrate, setTargetWinrate] = useState(0);
+    const [targetWinrate2, setTargetWinrate2] = useState(0);
     const [result, setResult] = useState(0);
-
     const calculateWinrate = () => {
         const res = rumus(totalMatch, totalWinrate, targetWinrate);
         setResult(res);
+        setTargetWinrate2(targetWinrate);
     }
 
     function rumus(tMatch: number, tWr: number, wrReq: number) {
@@ -28,13 +30,13 @@ const Winrate = () => {
             <div className="mx-auto w-full max-w-xl space-y-8 px-4 pb-48 pt-24">
                 <div>
                     <a href="">
-                        <img src={""} className="mx-auto h-32 w-auto" alt="" />
+                        <img src={Logo.src} className="mx-auto h-32 w-auto" alt="" />
                     </a>
                     <h2 className="mt-2 text-center text-3xl font-bold tracking-tight text-foreground">
                         Kalkulator Win Rate
                     </h2>
                     <p className="mt-2 text-center text-sm text-foreground">
-                        Digunakan untuk menghitung total jumlah pertandingan yang harus diambil untuk mencapai target tingkat kemenangan yang diinginkan.
+                        Digunakan untuk menghitung total jumlah match yang harus diambil untuk mencapai target Win rate yang diinginkan.
                     </p>
                 </div>
                 <div className="mt-8 space-y-6">
@@ -65,7 +67,7 @@ const Winrate = () => {
                     </div>
                         {result !== 0 &&(
                             <div className="rounded-md border border-transparent bg-muted p-4 text-center text-sm font-semibold uppercase ring-1 ring-primary">
-                                You need about <strong className="text-primary">{result} Win without Lose</strong> to get a <strong className="text-primary">{targetWinrate} % Win Rate</strong>
+                                You need about <strong className="text-primary">{result} Win without Lose</strong> to get a <strong className="text-primary">{targetWinrate2}% Win Rate</strong>
                             </div>
                         )}
                 </div>

@@ -14,6 +14,7 @@ import Tutorial from "@/components/Tutorial";
 import { getDictionary } from "../../dictionaries";
 import DownloadInvoice from "@/components/DownloadInvoice";
 import DownloadIQr from "@/components/DownloadQr";
+import Custom404 from  "@/app/not-found";
 
 interface Instruction {
     title: string;
@@ -23,26 +24,6 @@ interface Instruction {
 const Invoice = async ({ params }: { params: { lang: string, id: string } }) => {
     const { id } = params;
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-    const downloadInvoicePDF = async () => {
-        const element = document.getElementById('invoice');
-        if (element) {
-            const canvas = await html2canvas(element);
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF();
-            const imgProps = pdf.getImageProperties(imgData);
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-            pdf.save(`invoice_${id}.pdf`);
-        }
-    };
-
-    const downloadQRCode = (data_tripay: any) => {
-        if (data_tripay.data.qr_url) {
-            saveAs(data_tripay.data.qr_url, `qr_code_${id}.png`);
-        }
-    };
 
     try {
         // Mengambil data invoice dari API
@@ -238,32 +219,14 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                 </div>
             </main>
         );
-    } catch (error) {
+    } catch (error: any) {
         console.error("Failed to fetch invoice data:", error);
         return (
-            <main className="relative bg-[#393E46]">
-                <div className="container pb-8 pt-12 md:pt-24">
-                    <div className="mx-auto max-w-3xl text-center">
-                        <h1 className="text-base font-semibold text-secondary-foreground print:text-black">
-                            Terjadi Kesalahan
-                        </h1>
-                        <p className="mt-2 text-2xl font-bold tracking-tight text-secondary-foreground md:text-4xl print:text-black">
-                            Kami tidak dapat memuat data invoice saat ini.
-                        </p>
-                        <p className="mt-3.5 text-base text-secondary-foreground print:text-black">
-                            Mohon coba lagi nanti.
-                        </p>
-                        <p>
-                            {error instanceof Error && error.message}
-                        </p>
-                        <Link href="/" className="inline-flex mt-20 items-center rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white duration-300 hover:bg-primary/75 print:hidden">
-                            Kembali ke Beranda
-                        </Link>
-                    </div>
-                </div>
-            </main>
+            <Custom404 />
         );
     }
 };
+
+
 
 export default Invoice;
