@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast';
 import { Globe2, Headset, Zap, ChevronDown } from 'lucide-react'
 import Description from '@/components/Deskripsi';
 import { getDictionary } from '../dictionaries';
+import Custom404 from  "@/app/not-found";
 
 const DetailProduct = async ({ params }: { params: { lang: string, slug: string } }) => {
     const { slug } = params;
@@ -92,7 +93,7 @@ const DetailProduct = async ({ params }: { params: { lang: string, slug: string 
                 </main>
             );
         } else {
-            return <div>Product not found or invalid data.</div>;
+            return <Custom404 />
         }
     } catch (error: any) {
         console.error('Error fetching product:', error);

@@ -115,7 +115,7 @@ const Navbar = () => {
                 size={300}
             >
                 <div className="bg-muted h-full w-full overflow-hidden">
-                  <div className="flex flex-row-reverse items-center justify-between border-b border-dashed p-4">
+                  <div className="flex flex-row-reverse items-center justify-between border-b border-background p-4">
                     <button className="text-murky-400 -m-2 inline-flex items-center justify-center rounded-md p-2"><span className="sr-only">Close menu</span><XIcon onClick={toggleDrawer} className="h-6 w-6" /></button>
                     <div className="flex items-center">
                       <a className="relative w-24" href={`/${lang}`}>
@@ -123,15 +123,20 @@ const Navbar = () => {
                       </a>
                     </div>
                   </div>
-                  <div className="space-y-2 border-y border-background p-4">
+                  <div className="space-y-2 border-background p-4">
                     <div>
-                      <a className="group flex items-center justify-between rounded-md px-4 py-2 font-medium text-foreground hover:bg-muted" href={`/${lang}`}>
+                      <a className="group flex items-center justify-between rounded-md px-4 py-2 font-medium text-foreground hover:bg-muted/20" href={`/${lang}`}>
                         <span>{dictionary.home}</span>
                       </a>
                     </div>
                     <div>
-                      <a className="group flex items-center justify-between rounded-md px-4 py-2 font-medium text-foreground hover:bg-muted" href={`/${lang}/invoice`}>
+                      <a className="group flex items-center justify-between rounded-md px-4 py-2 font-medium text-foreground hover:bg-muted/20" href={`/${lang}/invoice`}>
                         <span>{dictionary.invoice}</span>
+                      </a>
+                    </div>
+                    <div>
+                      <a className="group flex items-center justify-between rounded-md px-4 py-2 font-medium text-foreground hover:bg-muted/20" href={`/${lang}/invoice`}>
+                        <span>Kalkulator</span>
                       </a>
                     </div>
                   </div>
