@@ -12,7 +12,7 @@ export default function ClientLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const hideNavbarAndFooter = pathname === '/id/sign-up' || pathname === '/id/sign-in';
+  const hideNavbarAndFooter = pathname === '/id/sign-up' || pathname === '/id/sign-in' || pathname === '/404';
   const [home, setHome] = useState<Home>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
