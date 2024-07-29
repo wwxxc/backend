@@ -37,35 +37,19 @@ const CalcSwitch = ({dict}: {dict: any}) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-black" align="end">
                 <DropdownMenuItem className="">
-                    <Link href={"/id/"} className="w-full p-2 rounded-md inline-flex px-2 text-sm">
+                    <a href={`/${CurrentLang}/calculator/winrate`} className="w-full p-2 rounded-md inline-flex px-2 text-sm">
                         <Calculator width={20} height={20} />
-                        <span className="ml-3">
-                            <h1 className="text-md ">
+                        <div className="ml-3">
+                            <p className="text-md ">
                                 Win Rate
-                            </h1>
-                        </span>
-                    </Link>
+                            </p>
+                            <p className="text-sm h-sm">
+                            Digunakan untuk menghitung total jumlah <br /> match yang harus diambil untuk <br /> mencapai target win rate yang diinginkan.
+                            </p>
+                        </div>
+                    </a>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="">
-                    <Link href={"/id/"} className="w-full p-2 rounded-md inline-flex px-2 text-sm">
-                        <Calculator width={20} height={20} />
-                        <span className="ml-3">
-                            <h1 className="text-md ">
-                                Magic Wheel
-                            </h1>
-                        </span>
-                    </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="">
-                    <Link href={"/id/"} className="w-full p-2 rounded-md inline-flex px-2 text-sm">
-                        <Calculator width={20} height={20} />
-                        <span className="ml-3">
-                            <h1 className="text-md ">
-                                Zodiac
-                            </h1>
-                        </span>
-                    </Link>
-                </DropdownMenuItem>
+                
             </DropdownMenuContent>
         </DropdownMenu>
     )

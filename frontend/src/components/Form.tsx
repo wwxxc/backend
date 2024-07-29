@@ -19,7 +19,6 @@ type Props = {
 //   {slug:string, product:Product, listPayment:ListPayment[], listProduct:ListProduk[]}
 export default function Form({params, product, listProduct, listPayment, dict }: Props) {
     const { lang } = params
-    console.log(lang);
     
     const API_URL = process.env.NEXT_PUBLIC_API_URL
     const [id, setId] = useState('')
@@ -575,7 +574,7 @@ export default function Form({params, product, listProduct, listPayment, dict }:
                                 {dict.selectproduct}
                             </div>
                         </div>
-                        <button type="submit" className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 w-full gap-2">
+                        <button type="submit" disabled={!selectedProduct} className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 w-full gap-2">
                                 <ShoppingBag className="h-4 w-4" />
                                 <span>{dict.order}</span>
                         </button>
