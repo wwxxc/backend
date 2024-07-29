@@ -107,16 +107,22 @@ router.post('/add', async (req, res) => {
 
 router.post('/:id', async (req, res) => {
     try {
-        const data = await Invoice.findOne({ where : { no_refid : req.params.id }})
-        const response = await axios.post(`${BASE_URL}/transactions/${data.no_trxid}`)
+        const data = await Invoice.findOne({ where: { no_refid: req.params.id } });
+        if (!data) {
+            return res.status(404).json('Invoice not found');
+        } else {
+            const response = await axios.post(`${BASE_URL}/transactions/${data.no_trxid}`);
         if (response.data.data.result) {
-            if(response.data.data.data[0].status === 'success') {
-                await Invoice.update({status_transaksi: 'Completed'}, {
-                    where: {no_refid: req.params.id}
-                });   
+            if (response.data.data.data[0].status === 'success') {
+                await Invoice.update({ status_transaksi: 'Completed' }, {
+                    where: { no_refid: req.params.id }
+                });
             }
         }
+    
         res.json(data);
+        }
+        
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
