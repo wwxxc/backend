@@ -22,7 +22,7 @@ router.post('/add', async (req, res) => {
     const status_transaksi = 'Pending'
     const pesan = 'Menunggu pembayaran'
     try {
-        const { amount, harga, produk, item, method, customer_phone, username, userid, userserver, payment_name, payment_code, payment_grup, nomor_whatsapp, kode_game, kategori } = req.body;
+        const { amount, harga, produk, item, method, customer_phone, username, userid, userserver, payment_name, payment_code, payment_grup, nomor_whatsapp, kode_game, kode_promo, kategori } = req.body;
         console.log(customer_phone);
         const expiry = Math.floor(Date.now() / 1000) + 10800;
         var signature = crypto.createHmac('sha256', TRIPAY_PRIVATE_KEY)
@@ -76,6 +76,7 @@ router.post('/add', async (req, res) => {
                 nomor_whatsapp,
                 response_tripay: JSON.stringify(response.data),
                 kode_game,
+                kode_promo,
                 pesan,
                 kategori
             };

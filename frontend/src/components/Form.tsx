@@ -3,8 +3,8 @@ import calculateTotalWithFee from "@/utils/calculateWithFee"
 import { Dialog, Transition } from '@headlessui/react'
 import axios from "axios"
 import { motion } from "framer-motion"
-import { ChevronDown, ChevronUp, CheckCircle, ShoppingBag } from "lucide-react"
-import { Fragment, useRef, useState } from "react"
+import { ChevronDown, ChevronUp, CheckCircle, ShoppingBag, TicketPercent, X } from "lucide-react"
+import { Fragment, useEffect, useRef, useState } from "react"
 import toast from "react-hot-toast"
 type Props = {
     params: {
@@ -26,6 +26,8 @@ export default function Form({params, product, listProduct, listPayment, dict }:
     const [username, setUsername] = useState('')
     const [selectedProduct, setSelectedProduct] = useState<ListProduk>();
     const [selectedPayment, setSelectedPayment] = useState<ListPayment>();
+    const [promoCode, setPromoCode] = useState('');
+    const [promoCodeData, setPromoCodeData] = useState<Promo>();
     const [totalPrice, setTotalPrice] = useState('');
     const [isCollapsed1, setIsCollapsed1] = useState(true);
     const [isCollapsed2, setIsCollapsed2] = useState(true);
@@ -33,6 +35,9 @@ export default function Form({params, product, listProduct, listPayment, dict }:
     const [phone, setPhone] = useState('');
     const [isModalOpen, setModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingPromo, setIsLoadingPromo] = useState(false);
+    const [specialItems, setSpecialItems] = useState<ListProduk[]>([]);
+    const [initialSpecialItems, setInitialSpecialItems] = useState<ListProduk[]>([]);
     const lowestPricedProducts = Object.values(
         listProduct.reduce((acc: { [key: string]: ListProduk }, product) => {
           const name = product.name;
@@ -43,8 +48,72 @@ export default function Form({params, product, listProduct, listPayment, dict }:
         }, {})
       );
 
+    useEffect(() => {
+        let specialItems = product.isSpecial ? lowestPricedProducts.filter((produk) => product.product_special.includes(produk.name)) : []
+        setSpecialItems(specialItems)
+        setInitialSpecialItems(specialItems)
+    }, []);    
+
+    const Items = product.isSpecial ? lowestPricedProducts.filter((produk) => !product.product_special.includes(produk.name)) : lowestPricedProducts;    
+
     const notifyError = (msg: string) => toast.error(msg);
+    const notifySuccess = (msg: string) => toast.success(msg);
     let completeButtonRef = useRef(null)
+
+    async function handleApplyPromo () {
+        if (id === '') {
+            notifyError('Silahkan lengkapi data akun terlebih dahulu');
+            window.scrollTo({ top: 200, behavior: 'smooth' });
+        } else if (product?.isServer && server === '') {
+            notifyError('Silahkan lengkapi data akun terlebih dahulu');
+            window.scrollTo({ top: 200, behavior: 'smooth' });
+        } else if (selectedProduct === undefined) {
+            notifyError('Silahkan pilih item terlebih dahulu');
+        } else if (promoCodeData){
+            notifyError('Kode promo sedang digunakan')
+        } else {
+            if (promoCode === '') {
+                notifyError('Silahkan masukkan kode promo terlebih dahulu');
+            } else {
+                setIsLoadingPromo(true);
+                try {
+                    const form = {
+                        code: promoCode,
+                        productCode: selectedProduct.code,
+                        id: id,
+                        productPrice: selectedProduct.normal_price.basic
+                    }
+                    const data = await axios.post(`${API_URL}/promo/apply`, form );
+                    console.log(data);
+                    
+                    if (data.data.status === true) {
+                        // setTotalPrice(data.data);                        
+                        setPromoCodeData(data.data.data);
+                        notifySuccess(data.data.message);
+                        setSpecialItems((prevItems) =>
+                            prevItems.map((item) => ({
+                              ...item,
+                              normal_price: {
+                                ...item.normal_price,
+                                basic: data.data.data.productNewPrice,
+                              },
+                            }))
+                          );
+                        setSelectedProduct(undefined)
+                        setPromoCode('');
+                        setIsLoadingPromo(false);
+                    } else {
+                        notifyError(data.data.message);
+                        setIsLoadingPromo(false);
+                    }
+                } catch (error: any) {
+                    console.log(error);
+                    notifyError(error.message);
+                    setIsLoadingPromo(false);
+                }
+            }
+        }
+    }
     async function submitOrder() {
         if (id === '') {
             notifyError('Silahkan lengkapi data akun terlebih dahulu');
@@ -137,7 +206,8 @@ export default function Form({params, product, listProduct, listPayment, dict }:
             payment_code: selectedPayment?.code,
             payment_grup: selectedPayment?.group,
             nomor_whatsapp: phone,
-            kode_game: selectedProduct?.code
+            kode_game: selectedProduct?.code,
+            kode_promo: promoCodeData?.code
         }
 
         try {
@@ -149,6 +219,8 @@ export default function Form({params, product, listProduct, listPayment, dict }:
         }
     }
     const handleSelectProduct = (product: any) => {
+        setSelectedProduct(product);
+        
         const applicablePayment = listPayment.find(
             (data) =>
                 (data.group.includes(`${selectedPayment?.group}`))&&
@@ -163,7 +235,6 @@ export default function Form({params, product, listProduct, listPayment, dict }:
                 setTotalPrice(totalPrice);
             }
         }
-        setSelectedProduct(product);
     };
     const handleSelectPayment = (payment: any) => {
         setSelectedPayment(payment);
@@ -175,6 +246,7 @@ export default function Form({params, product, listProduct, listPayment, dict }:
             }
         }
     };
+    
     return (
         <div className="col-span-3 col-start-1 flex flex-col gap-4 mb-10 lg:col-span-2 lg:gap-8">
                     <section className="relative rounded-xl bg-card/50 shadow-2xl">
@@ -214,13 +286,64 @@ export default function Form({params, product, listProduct, listPayment, dict }:
             </div>
             <div className="p-4">
                 <div className="flex flex-col space-y-4">
-                    <section></section>
+                    <section>
+                    {product.isSpecial && (
+                        <><h3 className="pb-4 text-sm/6 font-semibold text-card-foreground">Special Items</h3><div>
+                                    <label className="sr-only">Select a variant list</label>
+                                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
+                                        {specialItems.map((data) => (
+                                            <label key={data.code} htmlFor={`product-${data.code}`} className={`relative flex cursor-pointer rounded-xl p-2.5 text-background shadow-sm outline-none bg-accent/60 md:p-4 ${selectedProduct?.code === data.code ? 'ring-2 ring-offset-background ring-offset-2 ring-primary' : 'border-transparent'}`}>
+                                                <input
+                                                    type="radio"
+                                                    id={`product-${data.code}`}
+                                                    name="product"
+                                                    value={data.code}
+                                                    checked={selectedProduct?.code === data.code}
+                                                    onChange={() => handleSelectProduct(data)}
+
+                                                    className="absolute opacity-0" />
+                                                <span className="flex flex-1">
+                                                    <span className="flex flex-col justify-between text-white">
+                                                        <span className="block text-xs font-semibold">{data.name}</span>
+                                                        <div>
+                                                            {promoCodeData ? (
+                                                                <>
+                                                                    <span className="flex items-center text-xs font-semibold italic line-through decoration-[0.9px] text-muted-foreground decoration-destructive">
+                                                                        {data.price.basic}
+                                                                    </span>
+                                                                    <span className='mt-1 flex items-center text-xs font-semibold text-primary'>
+                                                                        {promoCodeData.productNewPrice.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 })}
+                                                                    </span>
+                                                                    <div className="w-[4rem] absolute aspect-square -top-[9px] -right-[9px] overflow-hidden rounded-sm">
+                                                                        <div className="absolute top-0 left-0 bg-primary/50 h-2 w-2"></div>
+                                                                        <div className="absolute bottom-0 right-0 bg-primary/50 h-2 w-2"></div>
+                                                                        <div className="absolute block w-square-diagonal py-1 text-center text-[0.7rem] font-semibold uppercase bottom-0 w-[90px] right-0 rotate-45 origin-bottom-right shadow-sm bg-primary text-primary-foreground">
+                                                                        &nbsp;{promoCodeData.discount}% off &nbsp;
+                                                                        </div>
+                                                                    </div>
+                                                                </>
+                                                            ): (
+                                                                <>
+                                                                    <span className='mt-1 flex items-center text-xs font-semibold'>
+                                                                        {data.price.basic}
+                                                                    </span>
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    </span>
+                                                </span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div></>
+                    )}
+                    </section>
                     <section>
                         <h3 className="pb-4 text-sm/6 font-semibold text-card-foreground">Diamonds</h3>
                         <div>
                             <label className="sr-only">Select a variant list</label>
                             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
-                            {lowestPricedProducts.map((data) => (
+                            {Items.map((data) => (
                                     <label key={data.code} htmlFor={`product-${data.code}`} className={`relative flex cursor-pointer rounded-xl p-2.5 text-background shadow-sm outline-none bg-accent/60 md:p-4 ${selectedProduct?.code === data.code ? 'ring-2 ring-offset-background ring-offset-2 ring-primary' : 'border-transparent'}`}>
                                         <input
                                             type="radio"
@@ -261,11 +384,28 @@ export default function Form({params, product, listProduct, listPayment, dict }:
                                 <div className="flex items-center gap-x-4">
                                     <div className="flex-1">
                                         <div className="flex flex-col items-start">
-                                        <input type="text" placeholder={`${dict.typepromo}`} className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
+                                        <input type="text" value={promoCode} onChange={(e) => setPromoCode(e.target.value)} placeholder={`${dict.typepromo}`} className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
                                         </div>
                                     </div>
-                                    <button className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3">{dict.apply}</button>
+                                    <button onClick={handleApplyPromo} disabled={isLoadingPromo} className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3">{isLoadingPromo ?  <div className="loader border-t-transparent border-solid border-white border-4 rounded-full w-4 h-4 animate-spin"></div> : dict.apply}</button>
                                 </div>
+                                {promoCodeData && 
+                                <>
+                                    <div className="flex items-center gap-x-4">
+                                        <div className="flex-1">
+                                            <div className="flex flex-col">
+                                                <button className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3">
+                                                   <TicketPercent className="h-4 w-4 mr-1" /> {promoCodeData.code}
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <X className="h-4 w-4 inline-flex items-center justify-center whitespace-nowrap" onClick={() => {
+                                            setSpecialItems(initialSpecialItems)
+                                            setPromoCodeData(undefined) 
+                                            setSelectedProduct(undefined)
+                                        }} />
+                                    </div>
+                                </>}
                             </div>
                         </div>
                     </section>
@@ -294,7 +434,6 @@ export default function Form({params, product, listProduct, listPayment, dict }:
                                                             <div className="text-sm font-semibold sm:text-base w-full rounded-md border border-dashed py-1 text-center ">
                                                                 <span className="w-full md:text-sm">
                                                                     { selectedProduct ? (selectedProduct?.normal_price.basic <= data.minimum_amount ? `Min. Rp ${data.minimum_amount.toLocaleString('id-ID')}` :  'Rp ' + ( selectedProduct.normal_price.basic + data.total_fee.flat + (selectedProduct?.normal_price.basic * parseFloat(data.total_fee.percent) / 100)).toLocaleString('id-ID', {maximumFractionDigits: 0}) ): (<span className="text-red-400">Min. Rp 100</span>) }
-                                                                    
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -584,11 +723,11 @@ export default function Form({params, product, listProduct, listPayment, dict }:
                         <div className="rounded-lg border border-dashed bg-secondary p-4 text-sm text-secondary-foreground">
                             <div className="flex items-center gap-4">
                                 <div>
-                                    <img src={product?.product_img} alt="" className="rounded" width={50} />
+                                    <img src={product?.product_img} alt="" className="rounded aspect-square object-cover h-16 w-16"  />
                                 </div>
                                 <div>
                                     <div className="text-sm font-medium">{selectedProduct?.name}</div>
-                                    <div className="text-sm text-foreground/50">{!totalPrice ? selectedProduct?.price.basic : 'Rp ' + totalPrice} {selectedPayment && '- ' + selectedPayment?.name}</div>
+                                    <div className="text-sm text-foreground/50">{!totalPrice ? "Rp " + selectedProduct?.normal_price.basic.toLocaleString('id-ID') : 'Rp ' + totalPrice} {selectedPayment && '- ' + selectedPayment?.name}</div>
                                     <span className="text-[0.625rem] italic text-card-foreground">**Proses Otomatis</span>
                                 </div>
                             </div>
