@@ -65,6 +65,9 @@ const Invoice = sequelize.define('invoice', {
 	kode_game: {
 		type: DataTypes.TEXT,
 	},
+    kode_promo: {
+        type: DataTypes.TEXT
+    },
 	kategori: {
 		type: DataTypes.TEXT,
 	},

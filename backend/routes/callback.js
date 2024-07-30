@@ -87,6 +87,7 @@ router.post('/', async (request, res) => {
                         await Invoice.update({pesan: `Transaksi Berhasil di proses. Pembayaran selesai pada pada ${formatTimestamp(hasil.paid_at)}`}, {
                             where: {no_invoice: hasil.reference}
                         })
+                        await PromoUsage.create({ user_id: id, server_id: server, username: username, promo_code: code });
                     } else {
                         console.log('gagal');
                         await Invoice.update({status_transaksi: 'Failed'}, {
