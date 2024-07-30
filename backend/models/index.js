@@ -6,7 +6,7 @@ const Slider = require('./Slider');
 const Category = require('./Category');
 const Home = require('./Home');
 const Invoice = require('./invoice');
-const PromoCode = require('./PromoCode');
+const {PromoCode} = require('./PromoCode');
 
 sequelize.sync({ force: false, }).then(() => {
   console.log('Database & tables created!');

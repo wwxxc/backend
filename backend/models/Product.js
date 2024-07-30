@@ -31,6 +31,14 @@ const Product = sequelize.define('product', {
   product_provider: {
     type: DataTypes.STRING,
   },
+  product_special: {
+    type: DataTypes.STRING,
+  },
+  isSpecial: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
   isPopular: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
