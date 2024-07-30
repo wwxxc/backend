@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
 const Invoice = require('../models/invoice');
+const {PromoUsage} = require('../models/PromoCode');
 const formatTimestamp = require('../utils/formatTimestamp');
 const { default: axios } = require('axios');
 require('dotenv').config();
@@ -70,7 +71,7 @@ router.post('/', async (request, res) => {
             });
 
             if (data) {
-                const { userid: id, userserver: server, kode_game: code } = data;
+                const { userid: id, userserver: server, username: username, kode_game: code, kode_promo: promo } = data;
 
                 try {
                     const response = await axios.post(`${BASE_URL}/transactions/add`, {
@@ -87,7 +88,9 @@ router.post('/', async (request, res) => {
                         await Invoice.update({pesan: `Transaksi Berhasil di proses. Pembayaran selesai pada pada ${formatTimestamp(hasil.paid_at)}`}, {
                             where: {no_invoice: hasil.reference}
                         })
-                        await PromoUsage.create({ user_id: id, server_id: server, username: username, promo_code: code });
+                        if(promo) {
+                            await PromoUsage.create({ user_id: id, user_server: server, username: username, promo_code: code });
+                        }
                     } else {
                         console.log('gagal');
                         await Invoice.update({status_transaksi: 'Failed'}, {
@@ -96,6 +99,9 @@ router.post('/', async (request, res) => {
                         await Invoice.update({pesan: response.data.data.message}, {
                             where: {no_invoice: hasil.reference}
                         })
+                        if(promo) {
+                            await PromoUsage.create({ user_id: id, user_server: server, username: username, promo_code: code });
+                        }
                     }
 
                     console.log(response.data);

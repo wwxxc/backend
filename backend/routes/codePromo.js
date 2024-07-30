@@ -2,12 +2,12 @@ const express = require('express');
 const router = express.Router();
 const {PromoCode, PromoUsage} = require('../models/PromoCode');
 
-router.post('/', async (req,res) => {
+router.post('/apply', async (req,res) => {
     try {
-        const { code, id, server, productCode, productPrice } = req.body;
+        const { code, id, server, username, productCode, productPrice } = req.body;
         const promo = await PromoCode.findOne({ where: { code: code, product_code: productCode } });
         if(!promo) {
-            res.status(404).json({
+            res.status(200).json({
                 status: false,
                 message: 'Promo code not found',
             })
@@ -19,11 +19,16 @@ router.post('/', async (req,res) => {
                     message: 'Promo code already used',
                 })
             } else {
-                const insert = await PromoUsage.create({ user_id: id, server_id: server, promo_code: code });
                 res.status(200).json({
                     status: true,
-                    message: 'Promo code successfully used',
-                    data: insert
+                    message: 'Promo code has success generated',
+                    data: {
+                        code: promo.code,
+                        discount: promo.discount,
+                        productCode: productCode,
+                        productPrice: productPrice,
+                        productNewPrice: Math.round(productPrice - productPrice * (promo.discount / 100)),
+                    }
                 })
             }
         }
