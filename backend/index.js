@@ -15,6 +15,7 @@ const callbackRouter = require('./routes/callback');
 const transactionRouter = require('./routes/transactions');
 const searchRouter = require('./routes/search');
 const kodePromoRouter = require('./routes/codePromo');
+const ReviewRouter = require('./routes/review');
 const dashboardRouter = require('./routes/dashboard');
 
 const app = express();
@@ -45,6 +46,7 @@ app.use('/callback', callbackRouter);
 app.use('/transactions', transactionRouter);
 app.use('/search', searchRouter);
 app.use('/promo', kodePromoRouter);
+app.use('/review', ReviewRouter);
 // app.use('/dashboard', dashboardRouter);
 
 sequelize.authenticate().then(() => {
