@@ -8,6 +8,8 @@ interface Product {
     product_code: string
     product_type: string
     product_provider: string
+    product_special: string
+    isSpecial: boolean
     isPopular: boolean
     isServer: boolean
     isCheckUsername: boolean

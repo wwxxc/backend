@@ -20,7 +20,6 @@ const Navbar = () => {
     const currentPage = asPath ? asPath : null;
     const asPath2 = usePathname().split('/');
     const CurrentUrl = asPath2[2] + '/' + asPath2[3];
-    console.log(CurrentUrl);
 
     useEffect(() => {
       const loadDictionary = async () => {
