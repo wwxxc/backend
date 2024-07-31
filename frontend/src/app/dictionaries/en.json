@@ -36,5 +36,16 @@
     "rincithree": "Subtotal",
     "rincifour": "Fee",
     "expired": "This order will expire on",
-    "expired2": "This transaction was made on"
+    "expired2": "This transaction was made on",
+    "titleinvo": "Search Order",
+    "titleinvo2": "Track your transaction by entering the Invoice Number below:",
+    "titleinvo3": "Your Invoice Number",
+    "titleinvo4": "Search Invoice",
+    "calcwr": "Calculator",
+    "calcwr2": "Used to calculate the total number of matches needed to achieve the desired win rate.",
+    "calcwr3": "Your Current Total Matches",
+    "calcwr4": "Example",
+    "calcwr5": "Your Current Total Winrate",
+    "calcwr6": "The Total Win Rate You Desire",
+    "calcwr7": "Calculate"
   }
