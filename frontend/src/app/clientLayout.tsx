@@ -31,7 +31,7 @@ export default function ClientLayout({
     }
 
     fetchHome();
-  }, []);
+  }, [API_URL]);
   
 
   return (
