@@ -1,24 +1,43 @@
 'use client'
+import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 
 interface InfinitySliderProps {
   images: string[];
 }
 
-const Carousel = ({ images }: { images: Slider[] }) => {
+const Carousel = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [autoSlide, setAutoSlide] = useState(true);
     const [buttonEnabled, setButtonEnabled] = useState(true);
     const slideInterval = useRef<NodeJS.Timeout | null>(null);
     const transitionTimeout = useRef<NodeJS.Timeout | null>(null);
+    const [sliders, setSliders] = useState<Slider[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+    useEffect(() => {
+      const fetchImg = async () => {
+        try {
+          const response = await axios.get(API_URL + '/slider');
+          setSliders(response.data);
+          setLoading(false);
+        } catch (error) {
+          // setLoading(false);
+          setError('Failed to fetch images');
+        }
+      };
+      fetchImg();
+    }, []);
   
     const handleTransitionEnd = () => {
       setIsTransitioning(false);
-      if (currentIndex >= images.length) {
+      if (currentIndex >= sliders.length) {
         setCurrentIndex(0);
       } else if (currentIndex < 0) {
-        setCurrentIndex(images.length - 1);
+        setCurrentIndex(sliders.length - 1);
       }
     };
   
@@ -68,10 +87,10 @@ const Carousel = ({ images }: { images: Slider[] }) => {
     }, [autoSlide]);
   
     useEffect(() => {
-      if (!isTransitioning && currentIndex === images.length) {
+      if (!isTransitioning && currentIndex === sliders.length) {
         setCurrentIndex(0);
       }
-    }, [currentIndex, isTransitioning, images.length]);
+    }, [currentIndex, isTransitioning, sliders.length]);
   
     useEffect(() => {
       if (!autoSlide) {
@@ -83,7 +102,12 @@ const Carousel = ({ images }: { images: Slider[] }) => {
     }, [autoSlide]);
   
     return (
-      <div className="relative overflow-hidden">
+      <>
+        {loading ? (
+          <div className="w-full h-full flex items-center justify-center">
+          </div>
+        ) : (
+          <div className="relative overflow-hidden">
         <div
           className="flex transition-transform duration-500"
           style={{
@@ -92,7 +116,7 @@ const Carousel = ({ images }: { images: Slider[] }) => {
           }}
           onTransitionEnd={handleTransitionEnd}
         >
-          {images.concat(images[0]).map((image, index) => (
+          {sliders.concat(sliders[0]).map((image, index) => (
             <div key={index} className="min-w-full">
               <img src={image.slider_img} alt={`Slide ${index}`} className="relative w-full h-full lg:h-[500px] rounded-lg object-cover" />
             </div>
@@ -113,6 +137,8 @@ const Carousel = ({ images }: { images: Slider[] }) => {
           &gt;
         </button>
       </div>
+      )}
+      </>
     );
   };
   

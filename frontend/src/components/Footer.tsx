@@ -22,10 +22,10 @@ const Footer = (home: Home) => {
                     <div className="md:flex mt-6">
                         <div className="mb-6 md:mb-0 lg:w-[35%]">
                             <Link href="/" className="flex items-center mb-3">
-                                <Image src={Logo.src} alt="Logo" width={100} height={100} />
+                                <img src={home.url_logo} alt="Logo" width={100} height={100} />
                                 {/* <span className="self-center text-2xl font-semibold whitespace-nowrap">Yustore</span> */}
                             </Link>
-                            <span className="text-gray-500">{home.description}</span>
+                            <span className="text-gray-500">{home.title} adalah {home.description}</span>
                         </div>
                         <div className="grid grid-cols-2 gap-8 sm:gap-6 md:ml-20 sm:grid-cols-3">
                             <div>
