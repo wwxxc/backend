@@ -14,7 +14,6 @@ router.post('/apply', async (req,res) => {
         } else {
             const data = await PromoUsage.findOne({ where: { user_id: id } });
             const data_max = await PromoUsage.findAll({ where: { promo_code: promo.code } });
-            console.log(data_max);
             if(data) {
                 res.status(200).json({
                     status: false,
