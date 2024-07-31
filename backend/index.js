@@ -35,9 +35,9 @@ const checkOrigin = (req, res, next) => {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/auth', checkOrigin, authRouter);
-app.use('/slider', checkOrigin, sliderRouter);
+app.use('/slider',  sliderRouter);
 app.use('/products', productRouter);
-app.use('/home', checkOrigin, HomeRouter);
+app.use('/home', HomeRouter);
 app.use('/layanan',  layananRouter);
 app.use('/payment',  paymentRouter);
 app.use('/account',  accountRouter);
