@@ -79,7 +79,7 @@ export default function Form({params, product, listProduct, listPayment, dict }:
                 try {
                     const form = {
                         code: promoCode,
-                        productCode: selectedProduct.code,
+                        productCode: selectedProduct.name,
                         id: id,
                         productPrice: selectedProduct.normal_price.basic
                     }
@@ -160,6 +160,10 @@ export default function Form({params, product, listProduct, listPayment, dict }:
     async function completeOrder() {
         const data = await addOrder();
         setModalOpen(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setId('');
+        setServer('');
+        setPhone('');
         window.location.href = lang === 'id' ? '/id/invoice/' + data.data.merchant_ref : '/en/invoice/' + data.data.merchant_ref
     }
 
@@ -801,8 +805,8 @@ export default function Form({params, product, listProduct, listPayment, dict }:
                                 </div>
                             </Dialog.Description>
                             <div className="flex items-center justify-between gap-2">
-                            <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-muted/60 px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-muted/50" onClick={() => {setModalOpen(false), setIsLoading(false)}}>{dict.cancel} </button>
-                            <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/100 bg-primary px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-primary/50" ref={completeButtonRef} onClick={completeOrder}>
+                            <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-muted/60 px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-muted/50" onClick={() => {setModalOpen(false), setIsLoading(false)}}>{dict.cancel} </button>
+                            <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-2 py-2 text-sm font-semibold text-foreground duration-300 ease-in-out hover:bg-primary/50" ref={completeButtonRef} onClick={completeOrder}>
                             {isLoading ? (
                                 <div className="loader border-t-transparent border-solid border-white border-4 rounded-full w-4 h-4 animate-spin"></div> 
                             ) : (
