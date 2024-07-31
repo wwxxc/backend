@@ -2,12 +2,7 @@ import Countdown from "@/components/Countdown";
 import PaymentButton from "@/components/PaymentButton";
 import formatDateTime from "@/utils/formatDatetime";
 import addThousandSeparators from "@/utils/formatPrice";
-import {ChevronsUpDown} from 'lucide-react'
 import axios from "axios";
-import Link from "next/link";
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
-import { saveAs } from 'file-saver';
 import React from "react";
 import Rincian from "@/components/Rincian";
 import Tutorial from "@/components/Tutorial";
@@ -15,6 +10,7 @@ import { getDictionary } from "../../dictionaries";
 import DownloadInvoice from "@/components/DownloadInvoice";
 import DownloadIQr from "@/components/DownloadQr";
 import Custom404 from  "@/app/not-found";
+import Rating from "@/components/Rating";
 
 interface Instruction {
     title: string;
@@ -32,13 +28,16 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
         const data_tripay = JSON.parse(data.response_tripay);
         const dict = await getDictionary(params.lang);
 
+        const response_review = await axios.get(`${API_URL}/review/invoice/${id}`);
+        const review = response_review.data
+        
         // Mencari instruksi QRIS
         const qrisInstruction = data_tripay.data.instructions.find((instruction: Instruction) => instruction.title === "Pembayaran via QRIS" || instruction.title === "Pembayaran via ALFAMART" || instruction.title === "Pembayaran via INDOMARET" || instruction.title === "Pembayaran via ALFAMIDI");
 
         // Mendapatkan kelas status berdasarkan status transaksi
         const getStatusClass = (status: string) => {
             switch (status) {
-                case 'Completed':
+                case 'Success':
                     return 'bg-green-300 text-green-800';
                 case 'Processing':
                     return 'bg-blue-300 text-blue-800';
@@ -213,6 +212,16 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                                         </div>
                                     </div>
                                 </div>
+                                {data.status_transaksi === 'Success' && (
+                                    <div>
+                                        <div>
+                                            <a href="" className="print:text-black-foreground bg-primary hover:bg-primary/50 flex w-full items-center justify-center rounded-lg py-2 text-sm font-semibold leading-6 text-secondary-foreground duration-200 ease-in-out">Beli Lagi</a>
+                                        </div>
+                                        <div className="pt-8 print:hidden">
+                                            <Rating data={data} review={review} />
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
