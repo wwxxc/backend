@@ -11,15 +11,43 @@ import DownloadInvoice from "@/components/DownloadInvoice";
 import DownloadIQr from "@/components/DownloadQr";
 import Custom404 from  "@/app/not-found";
 import Rating from "@/components/Rating";
+import { Metadata, ResolvingMetadata } from "next";
 
 interface Instruction {
     title: string;
     steps: string[];
 }
 
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+type Props = {
+    params: { id: string, [key: string]: string }
+    searchParams: { [key: string]: string | string[] | undefined }
+  }
+ 
+export async function generateMetadata(
+    { params, searchParams }: Props,
+    parent: ResolvingMetadata
+  ): Promise<Metadata> {
+
+    const home: Home = await fetch(API_URL + '/home').then((res) => res.json())
+    const previousImages = (await parent).openGraph?.images || []
+    return {
+      title: 'Invoice ' + params.id + ' - ' + home.title + ' - ' + home.description,
+      description: home.description,
+      keywords: home.title,
+      icons: {
+        icon: home.url_favicon,
+      },
+      openGraph: {
+        images: ['/.jpg', ...previousImages],
+      },
+    }
+  }
+
 const Invoice = async ({ params }: { params: { lang: string, id: string } }) => {
     const { id } = params;
-    const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
     try {
         // Mengambil data invoice dari API
