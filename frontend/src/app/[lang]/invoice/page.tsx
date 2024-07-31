@@ -5,7 +5,7 @@ type Props = {
     params: { [lang: string]: string };
   };
 
-const invoicePage = ({ params: { lang } }: Props) => {
+const InvoicePage = ({ params: { lang } }: Props) => {
     const [invoice, setInvoice] = useState('')
     const [isLoading, setIsLoading] = useState(false)    
     const fetchInvoice = async () => {
@@ -45,4 +45,4 @@ const invoicePage = ({ params: { lang } }: Props) => {
     )
 }
 
-export default invoicePage
+export default InvoicePage

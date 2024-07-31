@@ -229,7 +229,6 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
             </main>
         );
     } catch (error: any) {
-        console.error("Failed to fetch invoice data:", error);
         return (
             <Custom404 />
         );
