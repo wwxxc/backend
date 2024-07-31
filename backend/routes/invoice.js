@@ -14,6 +14,7 @@ function addThousandSeparators(value) {
   const TRIPAY_MERCHANT_CODE = process.env.TRIPAY_MERCHANT_CODE
   const APP_NAME = process.env.APP_NAME
   const BASE_URL = process.env.BASE_URL;
+  const FRONT_END_URL = process.env.FRONT_END_URL;
 
 router.post('/add', async (req, res) => {
     const merchant_ref = generateInvoice('EPO', 8);
@@ -48,6 +49,7 @@ router.post('/add', async (req, res) => {
                     image_url: 'https://tokokamu.com/product/nama-produk-1.jpg',
                 }
             ],
+            return_url: `${FRONT_END_URL}/invoice/${merchant_ref}`,
             expired_time: expiry,
             signature
         };
