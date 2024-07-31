@@ -36,6 +36,18 @@
     "rincithree": "Subtotal",
     "rincifour": "Biaya",
     "expired": "Transaksi ini kadaluarsa pada",
-    "expired2": "Transaksi ini dibuat pada"
+    "expired2": "Transaksi ini dibuat pada",
+    "titleinvo": "Cari Pesanan",
+    "titleinvo2": "Lacak transaksi kamu dengan cara memasukkan Nomor Invoice dibawah ini:",
+    "titleinvo3": "Nomor Invoice Kamu",
+    "titleinvo4": "Cari Transaksi",
+    "calcwr": "Kalkulator",
+    "calcwr2": "Digunakan untuk menghitung total jumlah match yang harus diambil untuk mencapai target Win rate yang diinginkan.",
+    "calcwr3": "Total Pertandingan Anda Saat Ini",
+    "calcwr4": "Contoh",
+    "calcwr5": "Total Winrate Anda Saat Ini",
+    "calcwr6": "Win Rate Total yang Anda Inginkan",
+    "calcwr7": "Hitung"
+    
   }
   

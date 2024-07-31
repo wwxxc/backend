@@ -1,7 +1,8 @@
 import Link from "next/link"
-import Image from "next/image"
-import Logo from "../../public/assets/img/logo-1.png"
+import { useParams } from "next/navigation";
+
 const Footer = (home: Home) => {
+    const { lang, slug } = useParams() as { lang: string[], slug: string[] }; 
     return(
         <><div>
         <svg
@@ -35,13 +36,13 @@ const Footer = (home: Home) => {
                                         <Link href="/" className="hover:underline">Beranda</Link>
                                     </li>
                                     <li className="mb-4">
-                                        <Link href="/invoice" className="hover:underline">Cek Transaksi</Link>
+                                        <Link href={`/${lang}/invoice`} className="hover:underline">Cek Transaksi</Link>
                                     </li>
                                     <li className="mb-4">
-                                        <Link href="/auth/login" className="hover:underline">Masuk</Link>
+                                        <Link href="/sign-in" className="hover:underline">Masuk</Link>
                                     </li>
                                     <li className="mb-4">
-                                        <Link href="/auth/register" className="hover:underline">Daftar</Link>
+                                        <Link href="/sign-up" className="hover:underline">Daftar</Link>
                                     </li>
                                 </ul>
                             </div>
@@ -49,10 +50,10 @@ const Footer = (home: Home) => {
                                 <h2 className="mb-6 text-md text-white">Dukungan</h2>
                                 <ul className="text-gray-500 dark:text-gray-400 font-sm">
                                     <li className="mb-4">
-                                        <Link href="https://github.com/themesberg/flowbite" className="hover:underline ">Whatsapp</Link>
+                                        <Link href="https://wa.me/6285786144772" target="_blank" className="hover:underline ">Whatsapp</Link>
                                     </li>
                                     <li>
-                                        <Link href="https://discord.gg/4eeurUVvTy" className="hover:underline">Instagram</Link>
+                                        <Link href="https://instagram.com/whyuwid_" target="_blank" className="hover:underline">Instagram</Link>
                                     </li>
                                 </ul>
                             </div>
@@ -60,10 +61,10 @@ const Footer = (home: Home) => {
                                 <h2 className="mb-6 text-md text-white">Legalitas</h2>
                                 <ul className="text-gray-500 dark:text-gray-400 font-sm">
                                     <li className="mb-4">
-                                        <Link href="#" className="hover:underline">Privacy Policy</Link>
+                                        <Link href={`/${lang}/privacy-policy`} className="hover:underline">Privacy Policy</Link>
                                     </li>
                                     <li>
-                                        <Link href="#" className="hover:underline">Terms &amp; Conditions</Link>
+                                        <Link href={`/${lang}/term-conditions`} className="hover:underline">Terms &amp; Conditions</Link>
                                     </li>
                                 </ul>
                             </div>
