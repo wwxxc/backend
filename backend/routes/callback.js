@@ -89,7 +89,7 @@ router.post('/', async (request, res) => {
                             where: {no_invoice: hasil.reference}
                         })
                         if(promo) {
-                            await PromoUsage.create({ user_id: id, user_server: server, username: username, promo_code: code });
+                            await PromoUsage.create({ user_id: id, user_server: server, username: username, promo_code: promo, product_code: code, current_usage: +1 });
                         }
                     } else {
                         console.log('gagal');
@@ -100,7 +100,7 @@ router.post('/', async (request, res) => {
                             where: {no_invoice: hasil.reference}
                         })
                         if(promo) {
-                            await PromoUsage.create({ user_id: id, user_server: server, username: username, promo_code: code });
+                            await PromoUsage.create({ user_id: id, user_server: server, username: username, promo_code: promo, product_code: code, current_usage: +1 });
                         }
                     }
 
