@@ -86,7 +86,7 @@ const Rating = ({data, review}:{data:any, review:any}) => {
                 );
               })}
             </div>
-            <p className='text-murky-20 mt-1 space-y-6 text-xs italic'>"{review.comment}"</p>
+            <p className='text-murky-20 mt-1 space-y-6 text-xs italic'>&quot;{review.comment}&quot;</p>
           </div>
         ): (
           <form className="border flex flex-col gap-y-3 rounded-lg border p-4">
