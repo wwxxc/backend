@@ -1,5 +1,5 @@
 .banner-container {
-    background-color: #27242d;
+    background-color: #222831;
     background-repeat: repeat-x;
     background-image: url(../../public/assets/img/banner-svg.svg);
     background-size: clamp(60em, 100rem, 100em) auto, cover;
@@ -7,3 +7,12 @@
     display: flex;
     align-items: center;
 }
+
+.scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Opera */
+  }
