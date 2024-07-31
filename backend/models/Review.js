@@ -2,6 +2,10 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
 const Review = sequelize.define('Review', {
+  no_invoice: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   product_name: {
     type: DataTypes.STRING,
     allowNull: false,

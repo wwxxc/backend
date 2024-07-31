@@ -19,6 +19,9 @@ const PromoCode = sequelize.define('promocode', {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    max_usage: {
+      type: DataTypes.INTEGER,
+    },
   });
 
   const PromoUsage = sequelize.define('PromoUsage', {
@@ -36,8 +39,16 @@ const PromoCode = sequelize.define('promocode', {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    product_code: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     used_at: {
       type: DataTypes.DATE,
+    },
+    current_usage: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
     },
   });
 
