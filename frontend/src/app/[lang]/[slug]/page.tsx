@@ -20,22 +20,19 @@ export async function generateMetadata(
     { params, searchParams }: Props,
     parent: ResolvingMetadata
   ): Promise<Metadata> {
-    
-    // fetch data
-    const product = await fetch(API_URL + '/home').then((res) => res.json())
-   
-    // optionally access and extend (rather than replace) parent metadata
+
+    const home: Home = await fetch(API_URL + '/home').then((res) => res.json())
     const previousImages = (await parent).openGraph?.images || []
-   
+    const slug = params.slug.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
     return {
-      title: 'testes' + product.title,
-      description: 'testes' + product.description,
-      keywords: 'testes' + product.keywords,
+      title: 'TopUp ' + slug + ' Termurah' + ' - ' + home.title + ' - ' + home.description,
+      description: home.description,
+      keywords: home.title,
       icons: {
-        icon: '/favicondd.ico',
+        icon: home.url_favicon,
       },
       openGraph: {
-        images: ['/some-specific-page-image.jpg', ...previousImages],
+        images: ['/.jpg', ...previousImages],
       },
     }
   }

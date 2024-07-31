@@ -13,21 +13,18 @@ export async function generateMetadata(
   ): Promise<Metadata> {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
    
-    // fetch data
-    const product = await fetch(API_URL + '/home').then((res) => res.json())
-   
-    // optionally access and extend (rather than replace) parent metadata
+    const home: Home = await fetch(API_URL + '/home').then((res) => res.json())   
     const previousImages = (await parent).openGraph?.images || []
    
     return {
-      title: 'hahay' + product.title,
-      description: 'hahay' + product.description,
-      keywords: 'hahay' + product.keywords,
+      title: home.title + ' - ' + home.description,
+      description: home.description,
+      keywords: home.title,
       icons: {
-        icon: '/favicondd.ico',
+        icon: home.url_favicon,
       },
       openGraph: {
-        images: ['/some-specific-page-image.jpg', ...previousImages],
+        images: ['/.jpg', ...previousImages],
       },
     }
   }
