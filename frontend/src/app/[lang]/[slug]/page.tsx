@@ -7,10 +7,41 @@ import { Globe2, Headset, Zap, ChevronDown } from 'lucide-react'
 import Description from '@/components/Deskripsi';
 import { getDictionary } from '../dictionaries';
 import Custom404 from  "@/app/not-found";
+import { ResolvingMetadata, Metadata } from 'next';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+type Props = {
+    params: { id: string, [key: string]: string }
+    searchParams: { [key: string]: string | string[] | undefined }
+  }
+ 
+export async function generateMetadata(
+    { params, searchParams }: Props,
+    parent: ResolvingMetadata
+  ): Promise<Metadata> {
+    
+    // fetch data
+    const product = await fetch(API_URL + '/home').then((res) => res.json())
+   
+    // optionally access and extend (rather than replace) parent metadata
+    const previousImages = (await parent).openGraph?.images || []
+   
+    return {
+      title: 'testes' + product.title,
+      description: 'testes' + product.description,
+      keywords: 'testes' + product.keywords,
+      icons: {
+        icon: '/favicondd.ico',
+      },
+      openGraph: {
+        images: ['/some-specific-page-image.jpg', ...previousImages],
+      },
+    }
+  }
+  
 const DetailProduct = async ({ params }: { params: { lang: string, slug: string } }) => {
     const { slug } = params;
-    const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const dict = await getDictionary(params.lang);
 
     try {
