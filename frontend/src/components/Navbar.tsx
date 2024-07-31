@@ -30,8 +30,13 @@ const Navbar = () => {
     }, [lang]);
     
     const [isOpen, setIsOpen] = useState(false)
+    const [isOpenCalc, setIsOpenCalc] = useState(false)
     const toggleDrawer = () => {
         setIsOpen((prevState) => !prevState)
+    }
+
+    const toggleDrawerCalc = () => {
+        setIsOpenCalc((prevState) => !prevState)
     }
     
     return(
@@ -117,8 +122,8 @@ const Navbar = () => {
                   <div className="flex flex-row-reverse items-center justify-between border-b border-background p-4">
                     <button className="text-murky-400 -m-2 inline-flex items-center justify-center rounded-md p-2"><span className="sr-only">Close menu</span><XIcon onClick={toggleDrawer} className="h-6 w-6" /></button>
                     <div className="flex items-center">
-                      <a className="relative w-24" href={`/${lang}`}>
-                        <img src="http://192.168.1.15:3000/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-1.836fce09.png&w=96&q=75" alt="" className="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;" />
+                      <a className="relative w-24 h-10" href={`/${lang}`}>
+                        <img src={Logo.src} alt="" className="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;" />
                       </a>
                     </div>
                   </div>
@@ -134,10 +139,15 @@ const Navbar = () => {
                       </a>
                     </div>
                     <div>
-                      <a className="group flex items-center justify-between rounded-md px-4 py-2 font-medium text-foreground hover:bg-muted/20" href={`/${lang}/invoice`}>
+                      <button type="button" className="group flex items-center justify-between rounded-md px-4 py-2 font-medium text-foreground hover:bg-muted/20" onClick={toggleDrawerCalc}>
                         <span>Kalkulator</span>
-                      </a>
+                      </button>
                     </div>
+                    {isOpenCalc && (
+                      <div>
+                         <a href={`/${CurrentLang}/calculator/winrate`}  className="group flex items-center justify-between rounded-md px-8 py-2 font-medium text-foreground hover:bg-muted/20">Win Rate</a>
+                      </div>
+                    )}
                   </div>
                 </div>
             </Drawer>
