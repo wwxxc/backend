@@ -159,12 +159,20 @@ export default function Form({params, product, listProduct, listPayment, dict }:
     
     async function completeOrder() {
         const data = await addOrder();
-        setModalOpen(false);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
         setId('');
         setServer('');
         setPhone('');
-        window.location.href = lang === 'id' ? '/id/invoice/' + data.data.merchant_ref : '/en/invoice/' + data.data.merchant_ref
+        if(data){
+            setModalOpen(false);
+            window.location.href = lang === 'id' ? '/id/invoice/' + data.data.merchant_ref : '/en/invoice/' + data.data.merchant_ref
+        } else {
+            setModalOpen(false);
+            setIsLoading(false);
+            notifyError('Terjadi kesalahan, silahkan coba sesaat lagi');
+            setId('');
+            setServer('');
+            setPhone('');
+        }
     }
 
     const toggleCollapse1 = () => {
@@ -267,14 +275,14 @@ export default function Form({params, product, listProduct, listPayment, dict }:
                                 <div>
                                     <label htmlFor="" className="block text-xs font-medium text-foreground pb-2">ID</label>
                                     <div className="flex flex-col items-start">
-                                        <input onChange={(e) => setId(e.target.value)} type="number" placeholder={`${dict.typeid}`} className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
+                                        <input onChange={(e) => setId(e.target.value)} type="number" value={id} placeholder={`${dict.typeid}`} className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
                                     </div>
                                 </div>
                                 {product?.isServer && (
                                 <div>
                                     <label htmlFor="" className="block text-xs font-medium text-foreground pb-2">Server</label>
                                     <div className="flex flex-col items-start">
-                                        <input onChange={(e) => setServer(e.target.value)} type="number" placeholder={`${dict.typeserver}`} className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
+                                        <input onChange={(e) => setServer(e.target.value)} value={server} type="number" placeholder={`${dict.typeserver}`} className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
                                     </div>
                                 </div>
                                 )}
@@ -703,7 +711,7 @@ export default function Form({params, product, listProduct, listPayment, dict }:
                                 <div className="flex flex-col gap-2">
                                     <label className="block text-xs font-medium text-foreground">No. WhatsApp</label>
                                     <div>
-                                        <input onChange={(e) => setPhone(e.target.value)} type="number" placeholder="08xxxxxxxxx" className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
+                                        <input onChange={(e) => setPhone(e.target.value)} value={phone} type="number" placeholder="085xxxxxxxx" className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
                                     </div>
                                     <span className="text-xs italic text-card-foreground">**{dict.numerror}</span>
                                 </div>

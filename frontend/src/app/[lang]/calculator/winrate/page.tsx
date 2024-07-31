@@ -6,7 +6,13 @@ import { getDictionary } from "../../dictionaries";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
  
+type Props = {
+    params: { id: string, [key: string]: string }
+    searchParams: { [key: string]: string | string[] | undefined }
+  }
+ 
 export async function generateMetadata(
+    { params, searchParams }: Props,
     parent: ResolvingMetadata
   ): Promise<Metadata> {
 
