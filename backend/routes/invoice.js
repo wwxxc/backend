@@ -115,7 +115,7 @@ router.post('/:id', async (req, res) => {
             const response = await axios.post(`${BASE_URL}/transactions/${data.no_trxid}`);
         if (response.data.data.result) {
             if (response.data.data.data[0].status === 'success') {
-                await Invoice.update({ status_transaksi: 'Completed' }, {
+                await Invoice.update({ status_transaksi: 'Success' }, {
                     where: { no_refid: req.params.id }
                 });
             }
