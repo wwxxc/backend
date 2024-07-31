@@ -24,11 +24,6 @@ export default async function RootLayout({
     console.error("Error fetching data:", error);
     data = null;
   }
-
-  const metadata: Metadata = {
-    title: `${data.title} - ${data.description}` ?? "",
-    description: data !== null && data !== undefined ? data.description : "",
-  };
   
   
   return (
