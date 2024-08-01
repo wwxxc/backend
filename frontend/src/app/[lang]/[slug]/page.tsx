@@ -40,9 +40,9 @@ export async function generateMetadata(
 const DetailProduct = async ({ params }: { params: { lang: string, slug: string } }) => {
     const { slug } = params;
     const dict = await getDictionary(params.lang);
-
     try {
         const product_response: any = await axios.post(`${API_URL}/products/${slug}`);
+        const home: Home = await fetch(API_URL + '/home?timestamp=' + Date.now()).then((res) => res.json());
         const product = product_response.data;        
 
         if (product && product.product_code) {
@@ -106,7 +106,7 @@ const DetailProduct = async ({ params }: { params: { lang: string, slug: string 
                         <div className="col-span-3 lg:col-span-1">
                             <div className="sticky top-[90px] flex flex-col gap-8">
                                 <div className="space-y-2">
-                                    <Description product={product} />
+                                    <Description product={product} home={home} />
                                 </div>
                                 <div className="hidden lg:block">
                                     {/* Ulasan */}

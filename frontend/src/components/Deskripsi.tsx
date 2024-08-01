@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react'; 
 
-const Description = ({ product }: { product: Product }) => {
+const Description = ({ product, home }: { product: Product, home: Home }) => {
   const [isOpen, setIsOpen] = useState(true);
 
   const toggleCollapse = () => {
@@ -23,7 +23,7 @@ const Description = ({ product }: { product: Product }) => {
           <div className='rounded-xl bg-muted/50 px-4 pb-4 pt-2 shadow-2xl'>
             <div className='prose prose-sm text-xs text-foreground'>
               <div>
-                <p dir='ltr'>Elpedia mempersembahkan penawaran istimewa untuk para gamers sejati! Kami hadir dengan layanan Top Up resmi dan 100% legal untuk 
+                <p dir='ltr'>{home.title} mempersembahkan penawaran istimewa untuk para gamers sejati! Kami hadir dengan layanan Top Up resmi dan 100% legal untuk 
                   <strong> {product.product_name}</strong>
                   , yang dirancang khusus untuk meningkatkan pengalaman bermain game Anda. Nikmati kemudahan, keamanan, dan harga yang terjangkau dalam setiap transaksi Top Up Anda. 
                 </p>
