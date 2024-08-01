@@ -31,7 +31,7 @@ export async function generateMetadata(
     parent: ResolvingMetadata
   ): Promise<Metadata> {
 
-    const home: Home = await fetch(API_URL + '/home').then((res) => res.json())
+    const home: Home = await fetch(API_URL + '/home?timestamp=' + Date.now()).then((res) => res.json());
     const previousImages = (await parent).openGraph?.images || []
     return {
       title: 'Invoice ' + params.id + ' - ' + home.title + ' - ' + home.description,
