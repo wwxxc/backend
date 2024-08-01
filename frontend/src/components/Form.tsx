@@ -16,6 +16,14 @@ type Props = {
     listPayment: ListPayment[];
     dict: any
   };
+
+  const serverMapping: { [key: string]: string } = {
+    os_asia: 'Asia',
+    os_usa: 'America',
+    os_euro: 'Europe',
+    os_cht: 'TK, HK, MO'
+  };
+  
 //   {slug:string, product:Product, listPayment:ListPayment[], listProduct:ListProduk[]}
 export default function Form({params, product, listProduct, listPayment, dict }: Props) {
     const { lang } = params
@@ -23,6 +31,8 @@ export default function Form({params, product, listProduct, listPayment, dict }:
     const API_URL = process.env.NEXT_PUBLIC_API_URL
     const [id, setId] = useState('')
     const [server, setServer] = useState('')
+    const [selectedServer, setSelectedServer] = useState('');
+    const selectedLabel = serverMapping[server] || '';
     const [username, setUsername] = useState('')
     const [selectedProduct, setSelectedProduct] = useState<ListProduk>();
     const [selectedPayment, setSelectedPayment] = useState<ListPayment>();
@@ -130,8 +140,8 @@ export default function Form({params, product, listProduct, listPayment, dict }:
             notifyError('Silahkan lengkapi No Whatsapp terlebih dahulu');
             window.scrollTo({ top: 2200, behavior: 'smooth' });
         } else {
-            setIsLoading(true);
             if (product?.isCheckUsername) {
+                setIsLoading(true);
                 try {
                     const data = await checkUsername(product.checkUsername_code, id, server);
                     if(data.result) {
@@ -282,7 +292,17 @@ export default function Form({params, product, listProduct, listPayment, dict }:
                                 <div>
                                     <label htmlFor="" className="block text-xs font-medium text-foreground pb-2">Server</label>
                                     <div className="flex flex-col items-start">
-                                        <input onChange={(e) => setServer(e.target.value)} value={server} type="number" placeholder={`${dict.typeserver}`} className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
+                                        {product.product_name === 'Genshin Impact' || product.product_name === 'Honkai Star Rail' ? (
+                                            <select onChange={(e) => setServer(e.target.value)} className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75">
+                                                <option>Pilih Server</option>
+                                                <option value="os_asia">Asia</option>
+                                                <option value="os_usa">America</option>
+                                                <option value="os_euro">Europe</option>
+                                                <option value="os_cht">TK, HK, MO</option>
+                                            </select>
+                                        ): (
+                                            <input onChange={(e) => setServer(e.target.value)} value={server} type="number" placeholder={`${dict.typeserver}`} className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
+                                        )}
                                     </div>
                                 </div>
                                 )}
@@ -792,7 +812,7 @@ export default function Form({params, product, listProduct, listPayment, dict }:
                                         <div className="flex flex-row">
                                         <span className="w-24">server</span>
                                         <span className="w-4 text-center">:</span>
-                                        <span>{server}</span>
+                                        <span>{product.product_name === 'Genshin Impact' ? selectedLabel : server}</span>
                                     </div>
                                     )}
                                     <div className="flex flex-row">

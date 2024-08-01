@@ -14,8 +14,10 @@ const PopularPage = ({currentLang}:{currentLang: string}) => {
     useEffect(() => {
       const fetchProducts = async () => {
         try {
-          const response = await axios.get(`${API_URL}/products`);
-          setProducts(response.data);
+          const response = await axios.get(`${API_URL}/products`) 
+          const allProducts = response.data;
+          const popularProducts = allProducts.filter((product: Product) => product.isPopular);
+          setProducts(popularProducts);
           setLoading(false);
         } catch (error) {
           // setLoading(false);
@@ -44,14 +46,14 @@ const PopularPage = ({currentLang}:{currentLang: string}) => {
             variants={{
               visible: {
                 transition: {
-                  staggerChildren: 0.2, // Delay between each item's animation
-                  when: "beforeChildren", // Stagger children before animating the parent
+                  staggerChildren: 0.2,
+                  when: "beforeChildren", 
                 },
               },
               hidden: {
                 transition: {
-                  staggerChildren: 0.2, // Ensure consistency
-                  when: "afterChildren", // Stagger children after animating the parent
+                  staggerChildren: 0.2, 
+                  when: "afterChildren",
                 },
               },
             }}
