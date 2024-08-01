@@ -4,7 +4,7 @@ import { getDictionary } from "../../dictionaries";
 
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
+let home: Home
  
 type Props = {
     params: { id: string, [key: string]: string }
@@ -16,7 +16,7 @@ export async function generateMetadata(
     parent: ResolvingMetadata
   ): Promise<Metadata> {
 
-    const home: Home = await fetch(API_URL + '/home').then((res) => res.json())
+     const home: Home = await fetch(API_URL + '/home?timestamp=' + Date.now()).then((res) => res.json());
     const previousImages = (await parent).openGraph?.images || []
     return {
       title: 'Winrate Calculator' + ' / ' + home.title + ' - ' + home.description,
@@ -32,7 +32,7 @@ export async function generateMetadata(
   }
   
 const Winrate = async ({ params: { lang } }: { params: { lang: string } }) => {
-    const home: Home = await fetch(API_URL + '/home').then((res) => res.json())
+  const home: Home = await fetch(API_URL + '/home?timestamp=' + Date.now()).then((res) => res.json());
     const dict = await getDictionary(lang);
     return (
         <main>

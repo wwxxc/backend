@@ -23,7 +23,6 @@ export async function generateMetadata(
 
     const home: Home = await fetch(API_URL + '/home?timestamp=' + Date.now()).then((res) => res.json());
     const previousImages = (await parent).openGraph?.images || []
-    console.log('Fetched Home Data:', home);
     const slug = params.slug.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
     return {
       title: 'TopUp ' + slug + ' Termurah' + ' - ' + home.title + ' - ' + home.description,
