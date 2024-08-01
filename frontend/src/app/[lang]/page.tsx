@@ -13,7 +13,7 @@ export async function generateMetadata(
   ): Promise<Metadata> {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
    
-    const home: Home = await fetch(API_URL + '/home').then((res) => res.json())   
+    const home: Home = await fetch(API_URL + '/home?timestamp=' + Date.now()).then((res) => res.json());
     const previousImages = (await parent).openGraph?.images || []
    
     return {
