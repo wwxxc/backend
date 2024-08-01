@@ -16,3 +16,10 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none; /* Chrome, Safari, and Opera */
   }
+
+select {
+  background-image: url('../../public/assets/images/ChevronDown.svg');
+  background-position: right .8rem center;
+  background-repeat: no-repeat;
+  background-size: 1em 1em;
+}
