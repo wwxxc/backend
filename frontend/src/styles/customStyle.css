@@ -1,7 +1,7 @@
 .banner-container {
     background-color: #222831;
     background-repeat: repeat-x;
-    background-image: url(../../public/assets/img/banner-svg.svg);
+    background-image: url(../../public/assets/images/banner/banner-pendukung.svg);
     background-size: clamp(60em, 100rem, 100em) auto, cover;
     background-position: top;
     display: flex;

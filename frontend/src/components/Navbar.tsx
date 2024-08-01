@@ -4,7 +4,6 @@ import Link from "next/link";
 import SearchToggle from "./Search";
 import Image from "next/image";
 import LangSwitch from "./LangSwitch";
-import Logo from "../../public/assets/img/logo-2.png"
 import { useParams, usePathname } from "next/navigation";
 import CalcSwitch from "./CalcSwitch";
 import { getDictionary } from "../app/[lang]/dictionaries";
@@ -12,7 +11,7 @@ import Drawer from 'react-modern-drawer'
 import { useEffect, useState } from "react";
 import 'react-modern-drawer/dist/index.css'
 
-const Navbar = () => {
+const Navbar = (home: Home) => {
     const { lang, slug } = useParams() as { lang: string[], slug: string[] }; 
     const [dictionary, setDictionary] = useState<any>({});
     const CurrentLang = lang ? lang.toString() : '';
@@ -63,7 +62,7 @@ const Navbar = () => {
             </button>
             <div className="ml-3 mr-2 flex lg:ml-0">
               <Link href={`/${lang}`}	>
-                <Image src={Logo.src} alt="Logo" width={90} height={90} />
+                <img src={home.url_logo} alt="Logo" width={90} height={90} />
               </Link>
             </div>
             <div className="hidden lg:ml-[250px] lg:block lg:self-stretch">
@@ -123,7 +122,7 @@ const Navbar = () => {
                     <button className="text-murky-400 -m-2 inline-flex items-center justify-center rounded-md p-2"><span className="sr-only">Close menu</span><XIcon onClick={toggleDrawer} className="h-6 w-6" /></button>
                     <div className="flex items-center">
                       <a className="relative w-24 h-10" href={`/${lang}`}>
-                        <img src={Logo.src} alt="" className="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;" />
+                        <Image src={home.url_logo} alt="" width={90} height={90} className="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;" />
                       </a>
                     </div>
                   </div>
