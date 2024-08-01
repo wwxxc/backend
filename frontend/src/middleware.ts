@@ -1,5 +1,7 @@
 import { URL } from 'url';
+
 let locales = ["id", "en"];
+
 interface RequestType {
   url: string | URL | undefined;
   nextUrl: {
@@ -8,9 +10,20 @@ interface RequestType {
   };
   // Add other properties here if needed
 }
+
 export function middleware(request: RequestType) {
-  // Check if there is any supported locale in the pathname
   const { pathname } = request.nextUrl;
+  
+  // Skip static files and Next.js internal paths
+  if (
+    pathname.startsWith('/_next') || 
+    pathname.startsWith('/assets') || 
+    pathname.match(/^\/[^\/]+\.[^\/]+$/)
+  ) {
+    return; // Do nothing for static file requests
+  }
+
+  // Check if there is any supported locale in the pathname
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
@@ -20,15 +33,14 @@ export function middleware(request: RequestType) {
   // Redirect if there is no locale
   const locale = "id";
   request.nextUrl.pathname = `/${locale}${pathname}`;
-  // e.g. if the incoming request is /products
-  // the new URL iwill be /en/products
-  return Response.redirect(new globalThis.URL(request.nextUrl.pathname, request.url))
+  
+  return Response.redirect(new globalThis.URL(request.nextUrl.pathname, request.url));
 }
 
 export const config = {
   matcher: [
-    // Skip all internal paths (_next)
-    "/((?!_next).*)",
+    // Skip all internal paths (_next) and static files
+    "/((?!_next|assets).*)",
     // Only run on root (/) URL
     "/",
   ],
