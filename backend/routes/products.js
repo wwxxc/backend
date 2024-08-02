@@ -1,11 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
+const Category = require('../models/Category');
 
 // Get all products
 router.get('/', async (req, res) => {
   try {
-    const products = await Product.findAll();
+    const products = await Product.findAll({
+        include: [
+          {
+            model: Category,
+            attributes: ['Category_name'], 
+          },
+        ],
+      });
     res.json(products);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -15,7 +23,14 @@ router.get('/', async (req, res) => {
 // Get a product by slug
 router.post('/:id', async (req, res) => {
   try {
-    const product = await Product.findOne({ where: { product_slug: req.params.id } });
+    const product = await Product.findOne({ where: { product_slug: req.params.id },
+        include: [
+            {
+              model: Category,
+              attributes: ['Category_name'], 
+            },
+          ], 
+        });
     res.json(product);
   } catch (error) {
     res.status(500).json({ error: error.message });
