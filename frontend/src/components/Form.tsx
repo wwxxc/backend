@@ -63,7 +63,7 @@ export default function Form({params, product, listProduct, listPayment, dict }:
         setSpecialItems(specialItems)
         setInitialSpecialItems(specialItems)
     }, []);    
-
+    
     const Items = product.isSpecial ? lowestPricedProducts.filter((produk) => !product.product_special.includes(produk.name)) : lowestPricedProducts;    
 
     const notifyError = (msg: string) => toast.error(msg);

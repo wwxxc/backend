@@ -25,7 +25,7 @@ const PopularPage = ({currentLang}:{currentLang: string}) => {
         }
       };
       fetchProducts();
-    }, [])
+    }, [])    
 
     return ( 
         <>
