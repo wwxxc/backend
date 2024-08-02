@@ -14,4 +14,7 @@ interface Product {
     isServer: boolean
     isCheckUsername: boolean
     checkUsername_code: string
+    category: {
+        Category_name: string
+    }
 }
