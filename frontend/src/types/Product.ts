@@ -16,5 +16,8 @@ interface Product {
     checkUsername_code: string
     category: {
         Category_name: string
-    }
+    },
+    title_product1: string
+    title_product2: string
+    title_product3: string
 }

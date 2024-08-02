@@ -31,7 +31,6 @@ export default function Form({params, product, listProduct, listPayment, dict }:
     const API_URL = process.env.NEXT_PUBLIC_API_URL
     const [id, setId] = useState('')
     const [server, setServer] = useState('')
-    const [selectedServer, setSelectedServer] = useState('');
     const selectedLabel = serverMapping[server] || '';
     const [username, setUsername] = useState('')
     const [selectedProduct, setSelectedProduct] = useState<ListProduk>();
@@ -229,7 +228,8 @@ export default function Form({params, product, listProduct, listPayment, dict }:
             payment_grup: selectedPayment?.group,
             nomor_whatsapp: phone,
             kode_game: selectedProduct?.code,
-            kode_promo: promoCodeData?.code
+            kode_promo: promoCodeData?.code,
+            kategori: product?.category.Category_name
         }
 
         try {
@@ -283,10 +283,15 @@ export default function Form({params, product, listProduct, listPayment, dict }:
                         <div className="p-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label htmlFor="" className="block text-xs font-medium text-foreground pb-2">ID</label>
+                                    <label htmlFor="" className="block text-xs font-medium text-foreground pb-2">{product.product_name === 'Clash Of Clans' ? 'Player Tag' : product.category.Category_name === 'Voucher' || product.category.Category_name === 'Pulsa Data' ? 'No HP' : 'ID' }</label>
                                     <div className="flex flex-col items-start">
-                                        <input onChange={(e) => setId(e.target.value)} type="number" value={id} placeholder={`${dict.typeid}`} className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
+                                        <input onChange={(e) => setId(e.target.value)} type="number" value={id} placeholder={`${dict.typeid} ${product.product_name === 'Clash Of Clans' ? 'Player Tag' : product.category.Category_name === 'Voucher' || product.category.Category_name === 'Pulsa Data' ? 'No HP' : 'ID' }`} className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
                                     </div>
+                                    {product.category.Category_name === 'Voucher' && (
+                                        <span className='text-xs italic mt-2'>
+                                        Contoh: 08574321212
+                                        </span>
+                                    )}
                                 </div>
                                 {product?.isServer && (
                                 <div>
@@ -320,7 +325,7 @@ export default function Form({params, product, listProduct, listPayment, dict }:
                 <div className="flex flex-col space-y-4">
                     <section>
                     {product.isSpecial && (
-                        <><h3 className="pb-4 text-sm/6 font-semibold text-card-foreground">Special Items</h3><div>
+                        <><h3 className="pb-4 text-sm/6 font-semibold text-card-foreground">{product.title_product1 !== null ? product.title_product1 : 'Special Items'}</h3><div>
                                     <label className="sr-only">Select a variant list</label>
                                     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
                                         {specialItems.map((data) => (
@@ -371,9 +376,11 @@ export default function Form({params, product, listProduct, listPayment, dict }:
                     )}
                     </section>
                     <section>
-                        <h3 className="pb-4 text-sm/6 font-semibold text-card-foreground">Diamonds</h3>
+                        {Items.length !== 0 && (
+                            <h3 className="pb-4 text-sm/6 font-semibold text-card-foreground">{product.title_product2 !== null ? product.title_product2 : 'Top Up Instant'}</h3>
+                        )}
                         <div>
-                            <label className="sr-only">Select a variant list</label>
+                <label className="sr-only">Select a variant list</label>
                             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
                             {Items.map((data) => (
                                     <label key={data.code} htmlFor={`product-${data.code}`} className={`relative flex cursor-pointer rounded-xl p-2.5 text-background shadow-sm outline-none bg-accent/60 md:p-4 ${selectedProduct?.code === data.code ? 'ring-2 ring-offset-background ring-offset-2 ring-primary' : 'border-transparent'}`}>
@@ -804,7 +811,7 @@ export default function Form({params, product, listProduct, listPayment, dict }:
                                     </div>
                                     )}
                                     <div className="flex flex-row">
-                                        <span className="w-24">id</span>
+                                        <span className="w-24">{product.category.Category_name === 'Voucher' ? 'No Hp': product.category.Category_name === 'Pulsa Data' ? 'No Hp' : 'ID'}</span>
                                         <span className="w-4 text-center">:</span>
                                         <span>{id}</span>
                                     </div>

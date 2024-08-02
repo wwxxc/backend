@@ -15,6 +15,7 @@ const Tabs = ({ currentLang }: { currentLang: string }) => {
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(`${API_URL}/products`);
         setProducts(response.data);
@@ -24,7 +25,7 @@ const Tabs = ({ currentLang }: { currentLang: string }) => {
       }
     };
     fetchProducts();
-  }, []);
+  }, [openTab]);
 
   const TopupGamesData = products.filter((product: Product) => product.category.Category_name === "Topup Games");
   const VoucherData = products.filter((product: Product) => product.category.Category_name === "Voucher");
