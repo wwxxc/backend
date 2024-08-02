@@ -41,7 +41,7 @@ export default async function HomePage({ params: { lang } }: Props) {
           </div>
         </section>
       </main>
-      <main className="h-screen w-full bg-background">
+      <main className="h-screen w-full lg:mb-[120px] mb-[450px] bg-background">
         <div className="flex flex-col gap-y-8 pt-8">
           <div className="container">
             <PopularPage currentLang={lang} />
