@@ -32,6 +32,15 @@ const Product = sequelize.define('product', {
   product_provider: {
     type: DataTypes.STRING,
   },
+  title_product1: {
+    type: DataTypes.STRING,
+  },
+  title_product2: {
+    type: DataTypes.STRING,
+  },
+  title_product3: {
+    type: DataTypes.STRING,
+  },
   product_special: {
     type: DataTypes.STRING,
   },
