@@ -60,7 +60,9 @@ const DetailProduct = async ({ params }: { params: { lang: string, slug: string 
             return (
                 <main className="relative bg-[#393E46]">
                     <div className="relative h-56 w-full bg-muted lg:h-[340px]">
-                        <img src={product.product_banner} alt="" className='object-cover object-center' style={{position:'absolute',height:'100%',width:'100%',left:0,top:0,right:0,bottom:0,color:'transparent'}} />
+                        {product.product_banner !== null ? 
+                        <img src={product.product_banner} alt="" className='object-cover object-center' style={{position:'absolute',height:'100%',width:'100%',left:0,top:0,right:0,bottom:0,color:'transparent'}} />: null}
+                        
                     </div>
                     <div className="z-20 banner-container flex min-h-32 w-full border-y items-center bg-[#393E46] lg:min-h-[160px]">
                         <div className="container flex items-center gap-2">

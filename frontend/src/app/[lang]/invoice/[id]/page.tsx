@@ -214,6 +214,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                                 <div>
                                     <h3 className="text-sm font-semibold leading-6">Informasi Akun</h3>
                                     <div className="divide-secondary-700/50 mt-4 divide-y border-t border-border/75 text-sm font-medium text-secondary-foreground print:text-black">
+                                        {data.username && (
                                         <div className="grid grid-cols-3 gap-x-4 py-2">
                                             <dt className="col-span-3 text-sm font-medium leading-6 text-secondary-foreground md:col-span-1 print:text-black">
                                                 Nickname
@@ -222,15 +223,17 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                                                 {data.username}
                                             </dd>
                                         </div>
+                                        )}
                                         <div className="grid grid-cols-3 gap-x-4 py-2">
                                             <dt className="col-span-3 text-sm font-medium leading-6 text-secondary-foreground md:col-span-1 print:text-black">
-                                                ID
+                                                {data.kategori === 'Voucher' ? 'No Hp': data.kategori === 'Pulsa Data' ? 'No Hp' : 'ID'}
                                             </dt>
                                             <dd className="col-span-3 text-xs leading-6 text-secondary-foreground sm:col-span-2 md:text-sm print:text-black">
                                                 {data.userid}
                                             </dd>
                                         </div>
-                                        <div className="grid grid-cols-3 gap-x-4 py-2">
+                                    {data.server && (
+                                            <div className="grid grid-cols-3 gap-x-4 py-2">
                                             <dt className="col-span-3 text-sm font-medium leading-6 text-secondary-foreground md:col-span-1 print:text-black">
                                                 Server
                                             </dt>
@@ -238,6 +241,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                                                 {data.userserver}
                                             </dd>
                                         </div>
+                                        )}
                                     </div>
                                 </div>
                                 {data.status_transaksi === 'Success' && (
