@@ -24,7 +24,6 @@ type Props = {
     os_cht: 'TK, HK, MO'
   };
   
-//   {slug:string, product:Product, listPayment:ListPayment[], listProduct:ListProduk[]}
 export default function Form({params, product, listProduct, listPayment, dict }: Props) {
     const { lang } = params
     
@@ -47,21 +46,31 @@ export default function Form({params, product, listProduct, listPayment, dict }:
     const [isLoadingPromo, setIsLoadingPromo] = useState(false);
     const [specialItems, setSpecialItems] = useState<ListProduk[]>([]);
     const [initialSpecialItems, setInitialSpecialItems] = useState<ListProduk[]>([]);
-    const lowestPricedProducts = Object.values(
-        listProduct.reduce((acc: { [key: string]: ListProduk }, product) => {
-          const name = product.name;
-          if (!acc[name] || product.price.basic < acc[name].price.basic) {
-            acc[name] = product;
-          }
-          return acc;
-        }, {})
-      );
+    const [lowestPricedProducts, setLowestPricedProducts] = useState<ListProduk[]>([]);
 
     useEffect(() => {
-        let specialItems = product.isSpecial ? lowestPricedProducts.filter((produk) => product.product_special.includes(produk.name)) : []
-        setSpecialItems(specialItems)
-        setInitialSpecialItems(specialItems)
-    }, []);    
+        if (product.category.Category_name !== 'Pulsa Data' && Array.isArray(listProduct)) {
+            const lowestPricedProducts = Object.values(
+                listProduct.reduce((acc: { [key: string]: ListProduk }, product) => {
+                  const name = product.name;
+                  if (!acc[name] || product.price.basic < acc[name].price.basic) {
+                    acc[name] = product;
+                  }
+                  return acc;
+                }, {})
+              );
+              setLowestPricedProducts(lowestPricedProducts) 
+        } else {
+            setLowestPricedProducts(listProduct)
+        }
+      }, [listProduct, product]);
+      
+    useEffect(() => {
+          let specialItems = product.isSpecial ? lowestPricedProducts.filter((produk) => product.product_special.includes(produk.name)) : []
+          setSpecialItems(specialItems)
+          setInitialSpecialItems(specialItems)
+      }, [lowestPricedProducts, product]);   
+        
     
     const Items = product.isSpecial ? lowestPricedProducts.filter((produk) => !product.product_special.includes(produk.name)) : lowestPricedProducts;    
 
@@ -287,7 +296,7 @@ export default function Form({params, product, listProduct, listPayment, dict }:
                                     <div className="flex flex-col items-start">
                                         <input onChange={(e) => setId(e.target.value)} type="number" value={id} placeholder={`${dict.typeid} ${product.product_name === 'Clash Of Clans' ? 'Player Tag' : product.category.Category_name === 'Voucher' || product.category.Category_name === 'Pulsa Data' ? 'No HP' : 'ID' }`} className="relative block w-full appearance-none rounded-lg border border-border bg-[#7F8487] px-3 py-2 text-xs text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-75" />
                                     </div>
-                                    {product.category.Category_name === 'Voucher' && (
+                                    {product.category.Category_name === 'Voucher' || product.category.Category_name === 'Pulsa Data' && (
                                         <span className='text-xs italic mt-2'>
                                         Contoh: 08574321212
                                         </span>
@@ -377,7 +386,7 @@ export default function Form({params, product, listProduct, listPayment, dict }:
                     </section>
                     <section>
                         {Items.length !== 0 && (
-                            <h3 className="pb-4 text-sm/6 font-semibold text-card-foreground">{product.title_product2 !== null ? product.title_product2 : 'Top Up Instant'}</h3>
+                            <h3 className="pb-4 text-sm/6 font-semibold text-card-foreground">{product.title_product2 !== null ? product.title_product2 : product.category.Category_name === 'Voucher' ? 'Vouchers' : 'Isi Pulsa Instant' }</h3>
                         )}
                         <div>
                 <label className="sr-only">Select a variant list</label>
