@@ -43,16 +43,22 @@ const DetailProduct = async ({ params }: { params: { lang: string, slug: string 
     try {
         const product_response: any = await axios.post(`${API_URL}/products/${slug}`);
         const home: Home = await fetch(API_URL + '/home?timestamp=' + Date.now()).then((res) => res.json());
-        const product = product_response.data;        
+        const product: Product = product_response.data;        
 
         if (product && product.product_code) {
             const data = {
                 filter_type: 'game',
                 filter_value: product.product_code
             };
+            
+            const PulsaData = {
+                brand: product.product_code
+            }
 
-            const listProduct_response: any = await axios.post(`${API_URL}/layanan/games`, data);
+            const type = product.category.Category_name === 'Pulsa Data' ? 'prepaid' : 'games';
+            const listProduct_response: any = await axios.post(`${API_URL}/layanan/${type}`, product.category.Category_name === 'Pulsa Data' ? PulsaData : data);
             const listProduct = listProduct_response.data.data;
+            const listPulsaProduct = listProduct_response.data
 
             const payment_response: any = await axios.post(`${API_URL}/payment/list`);
             const payment = payment_response.data;
@@ -115,7 +121,7 @@ const DetailProduct = async ({ params }: { params: { lang: string, slug: string 
                                 </div>
                             </div>
                         </div>
-                        <Form params={params} product={product} listPayment={payment} listProduct={listProduct} dict={dict}/>
+                        <Form params={params} product={product} listPayment={payment} listProduct={product.category.Category_name === 'Pulsa Data' ? listPulsaProduct : listProduct} dict={dict}/>
                     </div>
                     <div className="z-40">
                         <Toaster />
