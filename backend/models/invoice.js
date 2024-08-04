@@ -73,6 +73,9 @@ const Invoice = sequelize.define('invoice', {
 	},
     pesan: {
         type: DataTypes.TEXT
+    },
+    slug: {
+        type: DataTypes.TEXT
     }
 });
 

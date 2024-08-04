@@ -41,7 +41,7 @@ router.post('/', async (request, res) => {
                 case 'UNPAID':
                     return 'Menunggu pembayaran';
                 case 'PAID':
-                    return `Transaksi Sedang di proses. Pembayaran selesai pada ${formatTimestamp(hasil.paid_at)}`;
+                    return `Transaksi Sedang di proses. Mohon tunggu sebentar`;
                 case 'EXPIRED':
                     return `Transaksi tidak bisa diproses. Pembayaran hangus pada ${formatTimestamp(hasil.paid_at)}`;
                 case 'FAILED':
@@ -71,21 +71,23 @@ router.post('/', async (request, res) => {
             });
 
             if (data) {
-                const { userid: id, userserver: server, username: username, kode_game: code, kode_promo: promo } = data;
+                const { userid: id, userserver: server, username: username, kode_game: code, kode_promo: promo, kategori: kategori } = data;
 
                 try {
                     const response = await axios.post(`${BASE_URL}/transactions/add`, {
                         id,
                         server,
-                        code
+                        code,
+                        kategori
                     });
 
                     if (response.data.data.result) {
+                        console.log(response.data);
                         console.log('berhasil');
                         await Invoice.update({no_trxid: response.data.data.data.trxid}, {
                             where: {no_invoice: hasil.reference}
                         });
-                        await Invoice.update({pesan: `Transaksi Berhasil di proses. Pembayaran selesai pada pada ${formatTimestamp(hasil.paid_at)}`}, {
+                        await Invoice.update({pesan: `Transaksi Sedang di proses. Mohon tunggu sebentar`}, {
                             where: {no_invoice: hasil.reference}
                         })
                         if(promo) {
