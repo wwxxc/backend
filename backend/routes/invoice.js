@@ -4,6 +4,7 @@ const Invoice = require('../models/invoice');
 const crypto = require('crypto');
 const axios = require('axios');
 const generateInvoice = require('../utils/generateInvoice')
+const formatTimestamp = require('../utils/formatTimestamp');
 
 function addThousandSeparators(value) {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -23,7 +24,7 @@ router.post('/add', async (req, res) => {
     const status_transaksi = 'Pending'
     const pesan = 'Menunggu pembayaran'
     try {
-        const { amount, harga, produk, item, method, customer_phone, username, userid, userserver, payment_name, payment_code, payment_grup, nomor_whatsapp, kode_game, kode_promo, kategori } = req.body;
+        const { amount, harga, produk, item, method, customer_phone, username, userid, userserver, payment_name, payment_code, payment_grup, nomor_whatsapp, kode_game, kode_promo, kategori, slug } = req.body;
         console.log(customer_phone);
         const expiry = Math.floor(Date.now() / 1000) + 10800;
         var signature = crypto.createHmac('sha256', TRIPAY_PRIVATE_KEY)
@@ -80,7 +81,8 @@ router.post('/add', async (req, res) => {
                 kode_game,
                 kode_promo,
                 pesan,
-                kategori
+                kategori,
+                slug
             };
 
             await Invoice.create(order_detail);
@@ -114,12 +116,32 @@ router.post('/:id', async (req, res) => {
         if (!data) {
             return res.status(404).json('Invoice not found');
         } else {
-            const response = await axios.post(`${BASE_URL}/transactions/${data.no_trxid}`);
+            const dataKategori = {
+                kategori: data.kategori
+            }
+            const response = await axios.post(`${BASE_URL}/transactions/${data.no_trxid}`, dataKategori);
         if (response.data.data.result) {
+            console.log(response.data.data.data[0]);
             if (response.data.data.data[0].status === 'success') {
                 await Invoice.update({ status_transaksi: 'Success' }, {
                     where: { no_refid: req.params.id }
                 });
+                console.log(data.kategori);
+                await Invoice.update({pesan: `Transaksi Berhasil di proses. Silahkan berikan ulasan di bawah ini, Terima kasih`}, {
+                    where: { no_refid: req.params.id }
+                })
+                if(data.kategori === 'Voucher') {
+                    await Invoice.update({pesan: `KODE VOUCHER: ${extractCode(response.data.data.data[0].message)}`}, {
+                        where: { no_refid: req.params.id }
+                    })
+                }
+            } else if (response.data.data.data[0].status === 'error') {
+                await Invoice.update({ status_transaksi: 'Error' }, {
+                    where: { no_refid: req.params.id }
+                });
+                await Invoice.update({ pesan: response.data.data.data[0].note }, {
+                    where: { no_refid: req.params.id }
+                })
             }
         }
     
@@ -130,6 +152,12 @@ router.post('/:id', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 })
+
+const extractCode = (text) => {
+    const regex = /(\d{12})/;
+    const match = text.match(regex);
+    return match ? match[0] : null;
+  };
 
 
 module.exports = router
