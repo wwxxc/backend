@@ -121,7 +121,7 @@ const DetailProduct = async ({ params }: { params: { lang: string, slug: string 
                                 </div>
                             </div>
                         </div>
-                        <Form params={params} product={product} listPayment={payment} listProduct={product.category.Category_name === 'Pulsa Data' ? listPulsaProduct : listProduct} dict={dict}/>
+                        <Form params={params} product={product} listPayment={payment} listProduct={product.category.Category_name === 'Pulsa Data' ? listPulsaProduct : listProduct} dict={dict} slug={slug}/>
                     </div>
                     <div className="z-40">
                         <Toaster />

@@ -247,7 +247,7 @@ const Invoice = async ({ params }: { params: { lang: string, id: string } }) => 
                                 {data.status_transaksi === 'Success' && (
                                     <div>
                                         <div>
-                                            <a href="" className="print:text-black-foreground bg-primary hover:bg-primary/50 flex w-full items-center justify-center rounded-lg py-2 text-sm font-semibold leading-6 text-secondary-foreground duration-200 ease-in-out">Beli Lagi</a>
+                                            <a href={`/${params.lang}/${data.slug}`} className="print:text-black-foreground bg-primary hover:bg-primary/50 flex w-full items-center justify-center rounded-lg py-2 text-sm font-semibold leading-6 text-secondary-foreground duration-200 ease-in-out">Beli Lagi</a>
                                         </div>
                                         <div className="pt-8 print:hidden">
                                             <Rating data={data} review={review} />
