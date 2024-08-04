@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Star } from 'lucide-react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 interface StarWrapperProps {
     $active: boolean;
@@ -23,6 +24,7 @@ const Rating = ({data, review}:{data:any, review:any}) => {
   const [selectedOption, setSelectedOption] = useState('');
   const [customReview, setCustomReview] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const notifyError = (msg: string) => toast.error(msg);
   const options = [
     'Pelayanan ramah',
     'Proses cepat',
@@ -61,6 +63,9 @@ const Rating = ({data, review}:{data:any, review:any}) => {
                 if(res.data) {
                     window.location.reload();
                 }                
+            } else {
+                notifyError('Ulasan harus diisi!');
+                setIsLoading(false);
             }
         } catch (error) {
             console.log(error);

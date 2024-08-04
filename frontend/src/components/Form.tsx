@@ -14,7 +14,8 @@ type Props = {
     product: Product;
     listProduct: ListProduk[];
     listPayment: ListPayment[];
-    dict: any
+    dict: any, 
+    slug: string
   };
 
   const serverMapping: { [key: string]: string } = {
@@ -24,7 +25,7 @@ type Props = {
     os_cht: 'TK, HK, MO'
   };
   
-export default function Form({params, product, listProduct, listPayment, dict }: Props) {
+export default function Form({params, product, listProduct, listPayment, dict, slug }: Props) {
     const { lang } = params
     
     const API_URL = process.env.NEXT_PUBLIC_API_URL
@@ -238,7 +239,8 @@ export default function Form({params, product, listProduct, listPayment, dict }:
             nomor_whatsapp: phone,
             kode_game: selectedProduct?.code,
             kode_promo: promoCodeData?.code,
-            kategori: product?.category.Category_name
+            kategori: product?.category.Category_name,
+            slug: slug
         }
 
         try {
